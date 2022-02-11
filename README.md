@@ -1,7 +1,7 @@
 # Almost There
 <img alt="logo" src="https://user-images.githubusercontent.com/91545626/153361050-e065c1b8-69c1-4056-8c4d-4b99bb3d5bd2.png" width="400" height="300" />
 
-### 30분째 거의 다 왔다고만 하는 친구 때문에 더 이상 애태우지 마세요!
+### 친구들이 약속한 대로 잘 오고 있는지, 약속한 장소에 도착했는지 확인해보세요
 - :people_holding_hands: **그룹을 생성하여 약속을 잡으세요.**
   - 원하는 친구를 초대할 수 있습니다.
   - 만날 시간과 장소를 설정할 수 있습니다.
