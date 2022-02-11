@@ -21,13 +21,14 @@
 ### :triangular_flag_on_post: FRONT
 <img alt="React" src="https://img.shields.io/static/v1?logo=React&logoColor=61DAFB&label=Front&message=React&color=61DAFB&style=for-the-badge" />
 <img alt="Styled-components" src="https://img.shields.io/static/v1?logo=Styled-components&logoColor=D87DBD&label=Front&message=Styled-components&color=D87DBD&style=for-the-badge" />
+<img alt="Socket.IO" src="https://img.shields.io/static/v1?logo=Socket.IO&logoColor=black&label=Back&message=Socket.IO&color=black&style=for-the-badge" />
 
 ### :black_flag: BACK
 <img alt="Node" src="https://img.shields.io/static/v1?logo=Node.js&logoColor=339933&label=Back&message=Node&color=339933&style=for-the-badge" />
 <img alt="Express" src="https://img.shields.io/static/v1?logo=Express&logoColor=DAE9DA&label=Back&message=Express&color=DAE9DA&style=for-the-badge" />
 <img alt="MySQL" src="https://img.shields.io/static/v1?logo=MySQL&logoColor=F29221&label=Back&message=MySQL&color=F29221&style=for-the-badge" />
 <img alt="Sequelize" src="https://img.shields.io/static/v1?logo=Sequelize&logoColor=48AFEF&label=Back&message=Sequelize&color=48AFEF&style=for-the-badge" />
-<img alt="Sequelize" src="https://img.shields.io/static/v1?logo=Socket.IO&logoColor=black&label=Back&message=Socket.IO&color=black&style=for-the-badge" />
+<img alt="Socket.IO" src="https://img.shields.io/static/v1?logo=Socket.IO&logoColor=black&label=Back&message=Socket.IO&color=black&style=for-the-badge" />
 
 ## :wrench: 프로젝트 제작자
 ### :punch: TEAM JDE
