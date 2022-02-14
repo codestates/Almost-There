@@ -1,3 +1,7 @@
 .env
 /node_modules
 package-lock.json
+
+# https 인증서
+cert.pem
+key.pem
