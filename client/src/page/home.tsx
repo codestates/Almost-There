@@ -6,9 +6,7 @@ function Home () {
   return (
     <>
       <Header login={true} />
-      <body>
-        dfs
-      </body>
+      <div>home</div>
     </>
   )
 }
