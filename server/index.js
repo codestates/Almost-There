@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 4000;
 const userRouter = require('./routes/user');
 const groupRouter = require('./routes/group');
 const notificationRouter = require('./routes/notification');
+const socialRouter = require('./routes/social');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
+app.use('/social', socialRouter);
 app.listen(PORT, () => {
   console.log(`HTTPS server listen on ${PORT}`);
 });
