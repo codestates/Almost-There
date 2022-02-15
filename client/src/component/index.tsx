@@ -1,3 +1,4 @@
 import Header from './header'
+import LoginModal from './modal/loginmodal'
 
-export { Header }
+export { Header, LoginModal }

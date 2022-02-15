@@ -1,5 +1,7 @@
 function EditInfo () {
-  return
+  return (
+    <div></div>
+  )
 }
 
 export default EditInfo;
