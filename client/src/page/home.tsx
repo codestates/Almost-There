@@ -5,7 +5,6 @@ import './CSS/home.css'
 function Home () {
   return (
     <>
-      <Header login={true} />
       <div>home</div>
     </>
   )

@@ -1,15 +1,20 @@
 import React from 'react';
 import './App.css';
-import { Mypage } from './page/index'
-import Header from './component/header';
+import { Home, Mypage } from './page/index';
+import { Header } from './component/index';
+import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 
 
 function App() {
   return (
     <div className="App">
-      <Header login={true}  />
-      <Mypage />
-      
+      <Router>
+        <Header login={true}  />
+        <Routes>
+          <Route path= '/' element={<Home />} />
+          <Route path= '/mypage' element={<Mypage />} /> 
+        </Routes>
+      </Router>
     </div>
   );
 }
