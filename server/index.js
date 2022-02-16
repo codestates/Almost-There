@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: true,
+    origin: 'https://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   })
@@ -29,5 +29,5 @@ app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
 app.listen(PORT, () => {
-  console.log(`HTTPS server listen on ${PORT}`);
+  console.log(`HTTP server listen on ${PORT}`);
 });
