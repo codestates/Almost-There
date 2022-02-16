@@ -1,37 +1,90 @@
+import axios, { AxiosResponse } from 'axios';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { logoN, logoK, logoG } from '../../data';
+import url from '../../url';
 
 interface ShowList {
   login: boolean,
   signin: boolean
 }
 
+interface Info {
+  userId: string,
+  password: string
+}
+
+interface User {
+  userId: string,
+  userEm: string,
+  userNm: string
+}
+
 type LoginModalProps = {
   setLogin: React.Dispatch<React.SetStateAction<boolean>>
   setShow: React.Dispatch<React.SetStateAction<ShowList>>
+  setUser: React.Dispatch<React.SetStateAction<User>>
 }
 
-function LoginModal ({ setLogin, setShow }: LoginModalProps) {
+function LoginModal ({ setLogin, setShow, setUser }: LoginModalProps) {
+const [info, setInfo] = useState<Info>({
+  userId: '',
+  password: ''
+});
+const [msg, setMsg] = useState<boolean>(false);
+
+const clickBack = () => {
+  setShow({
+    login: false,
+    signin: false
+  });
+}
+
+const handleLogin = async() => {
+  try {
+    const result: AxiosResponse<any, any> = await axios.post(url, {
+      userId: info.userId,
+      password: info.password
+    }, { withCredentials: true });
+    setLogin(true);
+    setUser({...result.data.data});
+  } catch {
+    setMsg(true);
+  }
+}
+
+const clickSign = () => {
+  setShow({
+    login: false,
+    signin: true
+  })
+}
 
   return (
-    <Background>
-      <Container>
+    <Background onClick={clickBack}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>Almost There</Title>
         <Inputs>
           <div>
-            <Input placeholder='아이디'></Input>
+            <Input placeholder='아이디' value={info.userId} 
+            onChange={(e) => setInfo({...info, userId: e.target.value})}></Input>
           </div>
           <div>
-            <Input placeholder='비밀번호'></Input>
+            <Input placeholder='비밀번호' value={info.password}
+            onChange={(e) => setInfo({...info, password: e.target.value})}></Input>
           </div>
+          { 
+            msg 
+              ? <Message>아이디 또는 비밀번호가 올바르지 않습니다.</Message>
+              : <Message></Message>
+          }
         </Inputs>
-        <div></div>
-        <div>
-          <Button>로그인</Button>
-        </div>
+        <Inputs>
+          <Button onClick={handleLogin}>로그인</Button>
+        </Inputs>
         <Links>
           <div>아직 회원이 아니신가요?</div>
-          <a>회원가입하기</a>
+          <Anchor onClick={clickSign}>회원가입하기</Anchor>
         </Links>
         <Logos>
           <Img src={logoG}/>
@@ -52,19 +105,25 @@ const Background = styled.div`
   width: 100%;
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.3);
+  display:flex;
+  justify-content:center;
+  align-items:center;
 `
 const Container = styled.div`
   position: fixed;
   z-index: 11;
-  top:10%;
-  left:30%;
-  width:40%;
-  height:80%;
+  width: 400px;
+  height: 600px;
   background-color: #eeeeee;
   display: flex;
+  place-items: center;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+
+  @media screen and (max-width: 760px) {
+    width: 300px;
+  }
 `
 
 const Title = styled.div`
@@ -79,23 +138,40 @@ const Inputs = styled.div`
 const Input = styled.input`
   width: 100%;
   height: 50px;
+  margin: 5px 0px;
+`
+
+const Message = styled.div`
+  width: 80%;
+  height: 20px;
+  display:flex;
+  justify-content: left;
+  font-size: 15px;
+  color: red;
 `
 
 const Button = styled.button`
-  width: 200px;
+  width: 100%;
   height: 50px;
   background-color:#448aff;
   font-weight: bold;
+  cursor: pointer;
 `
 
 const Links = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: center;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 760px) {
     flex-direction: column;
   }
+`
+
+const Anchor = styled.a`
+  padding: 0px 10px;
+  color: #448aff;
+  cursor: pointer;
 `
 
 const Logos = styled.div`
@@ -108,8 +184,8 @@ const Logos = styled.div`
 const Img = styled.img`
   background-color: #448aff;
   border-radius: 5px;
-  width: 50px;
-  height: 50px; 
+  width: 60px;
+  height: 60px; 
   padding: 2px;
 `
 

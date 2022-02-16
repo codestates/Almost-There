@@ -8,6 +8,11 @@ interface ShowList {
   login: boolean,
   signin: boolean,
 }
+interface User {
+  userId: string,
+  userEm: string,
+  userNm: string
+}
 
 function App() {
   const [login, setLogin] = useState<boolean>(false);
@@ -15,6 +20,11 @@ function App() {
     login: false,
     signin: false
   });
+  const [user, setUser] = useState<User>({
+    userId: '',
+    userEm: '',
+    userNm: ''
+  })
   useEffect(() => {
     setLogin(true);
   }, [])
@@ -33,7 +43,7 @@ function App() {
         </Routes>
         {
           show.login
-            ? <LoginModal setShow={setShow} setLogin={setLogin}/>
+            ? <LoginModal setShow={setShow} setLogin={setLogin} setUser={setUser}/>
             : <></>
         }
         {
