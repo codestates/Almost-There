@@ -1,5 +1,7 @@
 function EditPW () {
-  return
+  return (
+    <div></div>
+  )
 }
 
 export default EditPW;

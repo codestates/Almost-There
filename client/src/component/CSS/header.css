@@ -2,6 +2,14 @@
   box-sizing: border-box;
 }
 
+img {
+  height: 50px;
+}
+
+img:hover {
+  color: white;
+}
+
 header {
   display: flex;
   position: sticky;
@@ -22,7 +30,7 @@ header {
 }
 
 .logo {
-  padding: 10px 20px 10px 20px;
+  display: flex;
 }
 
 .tap {
@@ -31,6 +39,22 @@ header {
 
 .lastap {
   padding: 10px 40px 10px 20px;
+}
+
+.tap:hover {
+  background-color: #004d40;
+  color: white;
+  cursor: pointer;
+}
+
+.lastap:hover {
+  background-color: #004d40;
+  color: white;
+  cursor: pointer;
+}
+
+.logo:hover {
+  cursor: pointer;
 }
 
 .menu {
