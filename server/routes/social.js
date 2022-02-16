@@ -6,5 +6,4 @@ const { socialController } = require('../controller');
 // router.post('/kakaotalk', socialController.kakaotalk.post);
 router.post('/naver', socialController.naver.post);
 
-
 module.exports = router;

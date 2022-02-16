@@ -14,8 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   notifications.init({
-    userId: DataTypes.STRING,
-    sendUser: DataTypes.STRING,
     contents: DataTypes.STRING
   }, {
     sequelize,
