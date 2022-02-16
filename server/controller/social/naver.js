@@ -29,9 +29,9 @@ module.exports = {
         // ! 소셜 로그인한 회원정보 조회 또는 추가(users 모델)
         if (!result.data) { return res.status(404).send({ message: 'Not Found' }); } else {
           const [userInfo] = await users.findOrCreate({
-            where: { userId: result.data.response.id },
+            where: { userId: result.data.response.id }, // userId -> email로 수정
             defaults: {
-              userId: result.data.response.id,
+              userId: result.data.response.id, // email
               name: result.data.response.nickname,
               email: result.data.response.email,
               social: 'naver'
