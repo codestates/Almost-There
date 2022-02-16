@@ -1,21 +1,24 @@
 'use strict';
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('notifications_users', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('_groups', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      from: {
+      name: {
         type: Sequelize.STRING
       },
-      to: {
+      time: {
+        type: Sequelize.DATE
+      },
+      leaderId: {
         type: Sequelize.STRING
       },
-      notifyId: {
-        type: Sequelize.INTEGER
+      place: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -27,7 +30,7 @@ module.exports = {
       }
     });
   },
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('notifications_users');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('_groups');
   }
 };
