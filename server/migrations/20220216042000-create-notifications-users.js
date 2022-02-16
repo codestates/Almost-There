@@ -1,24 +1,21 @@
 'use strict';
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('notifications_users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
+      from: {
         type: Sequelize.STRING
       },
-      name: {
+      to: {
         type: Sequelize.STRING
       },
-      password: {
-        type: Sequelize.STRING
-      },
-      email: {
-        type: Sequelize.STRING
+      notifyId: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -30,7 +27,7 @@ module.exports = {
       }
     });
   },
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('notifications_users');
   }
 };
