@@ -17,6 +17,8 @@
 - :eyes: **가입을 하지 않더라도 어떤 서비스인지 체험해볼 수 있어요.**
   - 가입 전에 Almost There의 기능을 체험해볼 수 있습니다.
 
+:point_right: [지금 바로 이용하기](https://client.almosthere.tk)
+
 ## :toolbox: 사용한 기술
 ![Almost There](https://user-images.githubusercontent.com/89420103/153975765-00541300-a5e5-4f6b-afc4-b799b44253e7.png)
 
