@@ -3,7 +3,7 @@ import React from 'react';
 import '../App.css';
 // import { Mypage } from '../page/index'
 // import {EditInfo} from 'react-modal';
-import { EditInfo } from '../page/index';
+import { Deactivate, EditInfo, EditPW } from '../page/index';
 import { useState, useCallback } from "react";
 import styled from "styled-components";
 
@@ -11,16 +11,28 @@ import styled from "styled-components";
 function Mypage () {
 
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-
   const onClickToggleModal: () => void = useCallback(() => {
     setOpenModal(!isOpenModal);
   }, [isOpenModal]);
+
+  const [isOpenModalPW, setOpenModalPW] = useState<boolean>(false);
+  const onClickToggleModalPW: () => void = useCallback(() => {
+    setOpenModalPW(!isOpenModalPW);
+  }, [isOpenModalPW]);
+
+  const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
+  const onClickToggleModalDeact: () => void = useCallback(() => {
+    setOpenModalDeact(!isOpenModalDeact);
+  }, [isOpenModalDeact]);
+
+
 
   return (
   
   <MypageStyle>
     <Userinfo>
       <UserinfoTitle> 회원정보</UserinfoTitle>
+      
       <UserinfoDetail>
         <div> 00000님 환영합니다 </div>  
         <div> 아이디</div>
@@ -28,10 +40,34 @@ function Mypage () {
       </UserinfoDetail>
       <Buttons>
         <div>
-          <button> 회원정보 수정</button>
-          <button> 비밀번호 변경</button>
+        <div >
+          {isOpenModal && (
+          <EditInfo onClickToggleModal={onClickToggleModal}>
+          </EditInfo>
+          )}
+      <DialogButton onClick={onClickToggleModal}>회원정보 수정</DialogButton>  
+        </div>
         </div>
       </Buttons>
+
+
+
+      <Buttons>
+      <div>
+        <div >
+          {isOpenModalPW && (
+          <EditPW onClickToggleModalPW={onClickToggleModalPW}>
+          </EditPW>
+          )}
+      <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
+        </div>
+        
+        </div>
+
+      </Buttons>
+
+
+
     </Userinfo>
   
     <Groupinfo>
@@ -67,16 +103,16 @@ function Mypage () {
         </GroupName>
       </GroupBox>  
     </Groupinfo>
-    <Delete>회원탈퇴</Delete>
-
-
-    <div >
-      {isOpenModal && (
-        <EditInfo onClickToggleModal={onClickToggleModal}>
-        </EditInfo>
+    <Delete>
+      <div >
+      {isOpenModalDeact && (
+        <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
+        </Deactivate>
       )}
-      <DialogButton onClick={onClickToggleModal}>회원정보 수정</DialogButton>  
+      <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
     </div>
+
+      </Delete>
 
   </MypageStyle>
   

@@ -23,7 +23,7 @@ function EditInfo ({
   // import EditInfo
 
 
-
+// mypage 이동
   const [users, setUsers] = useState({
     name: "",
     email: "",
@@ -85,7 +85,11 @@ function EditInfo ({
 
   return(
     <div>
-  
+
+{/* <Background onClick={clickBack}>
+      <Container onClick={(e) => e.stopPropagation()}></Container> */}
+
+
     {/* <ModalContainer> */}
       <Backdrop onClick={(e: React.MouseEvent) => {
           e.preventDefault();
@@ -95,7 +99,7 @@ function EditInfo ({
           }
         }}
       >
-      <DialogBox>
+      <DialogBox onClick={(e) => e.stopPropagation()}>
 
       <div className="mypage-input-box">  
     <div> 모달창구성</div>
@@ -106,6 +110,7 @@ function EditInfo ({
           type="email"
           placeholder="변경할 이메일"
           // onChange={handleInputValue}
+          // value >> state로 
         />
       </div>
       <div className="mypage-input-box-name">      
