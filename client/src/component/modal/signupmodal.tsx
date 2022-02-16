@@ -26,7 +26,7 @@ type SigninModalProps = {
   setShow: React.Dispatch<React.SetStateAction<ShowList>>
 }
 
-function SignInModal ({setShow}: SigninModalProps) {
+function SignUpModal ({setShow}: SigninModalProps) {
   const [info, setInfo] = useState<Info>({
     userId: '',
     password: '',
@@ -176,4 +176,4 @@ const Anchor = styled.a`
   cursor: pointer;
 `
 
-export default SignInModal;
+export default SignUpModal;

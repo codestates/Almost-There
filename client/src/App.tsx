@@ -3,7 +3,7 @@ import './App.css';
 import { Home, Mypage } from './page/index';
 import { Header, LoginModal } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
-import SignInModal from './component/modal/signupmodal';
+import SignUpModal from './component/modal/signupmodal';
 interface ShowList {
   login: boolean,
   signin: boolean,
@@ -48,7 +48,7 @@ function App() {
         }
         {
           show.signin
-            ? <SignInModal setShow={setShow}/>
+            ? <SignUpModal setShow={setShow}/>
             : <></>
         }
       </Router>
