@@ -3,10 +3,15 @@ import './App.css';
 import { Home, Mypage } from './page/index';
 import { Header, LoginModal } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
-import SignInModal from './component/modal/signinmodal';
+import SignInModal from './component/modal/signupmodal';
 interface ShowList {
   login: boolean,
   signin: boolean,
+}
+interface User {
+  userId: string,
+  userEm: string,
+  userNm: string
 }
 
 function App() {
@@ -15,6 +20,11 @@ function App() {
     login: false,
     signin: false
   });
+  const [user, setUser] = useState<User>({
+    userId: '',
+    userEm: '',
+    userNm: ''
+  })
   useEffect(() => {
     setLogin(true);
   }, [])
@@ -33,12 +43,12 @@ function App() {
         </Routes>
         {
           show.login
-            ? <LoginModal/>
+            ? <LoginModal setShow={setShow} setLogin={setLogin} setUser={setUser}/>
             : <></>
         }
         {
           show.signin
-            ? <SignInModal />
+            ? <SignInModal setShow={setShow}/>
             : <></>
         }
       </Router>
