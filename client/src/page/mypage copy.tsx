@@ -55,12 +55,6 @@ function Mypage () {
       </div>  
     </div>
     <div className="delete">회원탈퇴</div>
-
-
-
-
-
-
   </div>
   
   )
