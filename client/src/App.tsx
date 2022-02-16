@@ -33,12 +33,12 @@ function App() {
         </Routes>
         {
           show.login
-            ? <LoginModal/>
+            ? <LoginModal setShow={setShow} setLogin={setLogin}/>
             : <></>
         }
         {
           show.signin
-            ? <SignInModal />
+            ? <SignInModal setShow={setShow}/>
             : <></>
         }
       </Router>
