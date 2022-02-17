@@ -9,8 +9,17 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate (models) {
       // define association here
+      models.users.hasMany(models.users_groups, {
+        foreignKey: 'userId', sourceKey: 'userId'
+      });
+      models.users.hasMany(models.notifications_users, {
+        foreignKey: 'from', sourceKey: 'userId'
+      });
+      models.users.hasMany(models.notifications_users, {
+        foreignKey: 'to', sourceKey: 'userId'
+      });
     }
   }
   users.init({
@@ -21,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     social: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'users',
+    modelName: 'users'
   });
+
   return users;
 };

@@ -3,7 +3,8 @@ import './App.css';
 import { Home, Mypage } from './page/index';
 import { Header, LoginModal } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
-import SignInModal from './component/modal/signupmodal';
+import SignUpModal from './component/modal/signupmodal';
+
 interface ShowList {
   login: boolean,
   signin: boolean,
@@ -25,6 +26,7 @@ function App() {
     userEm: '',
     userNm: ''
   })
+
   useEffect(() => {
     setLogin(true);
   }, [])
@@ -43,12 +45,12 @@ function App() {
         </Routes>
         {
           show.login
-            ? <LoginModal setShow={setShow} setLogin={setLogin} setUser={setUser}/>
+            ? <LoginModal setShow={setShow} setLogin={setLogin} setUser={setUser} />
             : <></>
         }
         {
           show.signin
-            ? <SignInModal setShow={setShow}/>
+            ? <SignUpModal setShow={setShow}/>
             : <></>
         }
       </Router>

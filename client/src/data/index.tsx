@@ -1,6 +1,6 @@
-import logoN from './btnG_icon_square.png';
-import logoG from './g-logo.png';
-import logoK from './kakaolink_btn_medium.png'
+import logoN from './naver_login.png';
+import logoG from './google_login.png';
+import logoK from './kakao_login.png'
 import projectLogo from './atlogo.png';
 
 export { projectLogo, logoN, logoG, logoK }
