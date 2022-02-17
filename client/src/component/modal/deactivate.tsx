@@ -16,7 +16,7 @@ function Deactivate ({
     // const { PW, newPW} = changePW;
     axios
       .delete(
-        `http://localhost:3000/user`,{data:{
+        `http://localhost:4000/user`,{data:{
           // PW: PW,
           // ID: ID,
         }}

@@ -1,11 +1,7 @@
 import atlogo from '../data/atlogo.png'
 import { useRef } from 'react';
-<<<<<<< HEAD
-import { type } from 'os';
-=======
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import './CSS/header.css';
->>>>>>> codestates/dev
 
 interface ShowList {
   login: boolean,

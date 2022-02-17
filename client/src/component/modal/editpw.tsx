@@ -1,5 +1,5 @@
 import axios from "axios";
-import { userInfo } from "os";
+// import { userInfo } from "os";
 import React, { useState } from "react";
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
@@ -36,9 +36,10 @@ function EditPW ({
       setPWErrorMessage("비밀번호가 일치하지 않습니다");
     }
     const { PW, newPW} = changePW;
+    //userpassword
     axios
       .put(
-        `http://localhost:3000/user`,
+        `http://localhost:4000/user/password`,
         // url 변수로 변경예정
         {
           PW: PW,
