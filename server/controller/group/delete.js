@@ -29,7 +29,7 @@ module.exports = {
         // 그 그룹과 관련된 데이터 삭제(users_groups) - groupId로 조회
 
         // 그룹 삭제는 알림이 가는건가?
-            // 
+        //
       } catch (err) {
         res.status(500).send({ message: 'server error' });
       }

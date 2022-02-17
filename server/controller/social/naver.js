@@ -12,7 +12,7 @@ module.exports = {
       console.log('naver login start');
       // ! 인증한 코드 이용하여 접근 토큰 발급
       const [code, state] = [req.body.code, req.body.state];
-      console.log(req.body)
+      console.log(req.body);
       console.log(code, state);
       const tokenURL = `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${clientID}&client_secret=${clientSecret}&code=${code}&state=${state}`;
       const result = await axios.get(tokenURL);
