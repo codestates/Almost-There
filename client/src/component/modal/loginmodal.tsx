@@ -243,6 +243,7 @@ const GImgFrame = styled.div`
 
 const Img = styled.img`
   padding: 2px;
+  cursor: pointer;
 `
 
 

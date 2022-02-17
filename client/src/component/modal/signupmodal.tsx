@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useImperativeHandle, useState } from 'react';
 import styled from 'styled-components';
+import url from '../../url';
 
 interface ShowList {
   login: boolean,
@@ -36,11 +38,19 @@ function SignUpModal ({setShow}: SigninModalProps) {
   })
 
   const [check, setCheck] = useState<Check>({
-    userId: true,
+    userId: false,
     password: true,
     checkpw: true,
     name: true,
     email: true
+  })
+
+  const [msg, setMsg] = useState<Info>({
+    userId: '',
+    password: '',
+    checkpw: '',
+    name: '',
+    email: ''
   })
 
   const clickBack = () => {
@@ -48,6 +58,55 @@ function SignUpModal ({setShow}: SigninModalProps) {
       login: false,
       signin: false
     });
+  }
+
+  const validId = async (item: string) => {
+    const regExp = /^[a-z0-9][^@]{3,20}$/;
+    if (regExp.test(item)) {
+      try {
+        const res = await axios.post(`${url}/user/check-id`, {
+          userId: info.userId
+        },{withCredentials: true});
+        setCheck({
+          ...check, 
+          userId: true
+        });
+      } catch {
+        setCheck({
+          ...check, 
+          userId: false
+        });
+      }
+    } else {
+      setCheck({
+        ...check, 
+        userId: false
+      });
+    }
+  };
+
+  const validPw = (item: string) => {
+    const regExp = /^.{4,20}$/;
+    return regExp.test(item);
+  };
+
+  const validEmail = (item: string) => {
+    const regExp =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+    return regExp.test(item);
+  };
+
+  const sendSignup = async () => {
+    const {userId, password, checkpw, name, email} = info;
+    const res = await axios.post(url, {
+      userId, password, name, email
+    });
+    if (res) {
+      setShow({
+        login: false,
+        signin: false
+      })
+    }
   }
 
   return (
@@ -58,39 +117,40 @@ function SignUpModal ({setShow}: SigninModalProps) {
           <Input placeholder='아이디'
           value={info.userId}
           onChange={e => setInfo({...info, userId: e.target.value})}
+          onBlur={e => validId(e.target.value)}
           ></Input>
-          <Desc valid={check.userId}>abc</Desc>
+          <Desc valid={check.userId}>{msg.userId}</Desc>
         </div>
         <div>
           <Input placeholder='비밀번호'
           value={info.password}
           onChange={e => setInfo({...info, password: e.target.value})}
           ></Input>
-          <Desc valid={check.password}></Desc>
+          <Desc valid={check.password}>{msg.password}</Desc>
         </div>
         <div>
           <Input placeholder='비밀번호 확인'
           value={info.checkpw}
           onChange={e => setInfo({...info, checkpw: e.target.value})}
           ></Input>
-          <Desc valid={check.checkpw}></Desc>
+          <Desc valid={check.checkpw}>{msg.checkpw}</Desc>
         </div>
         <div>
           <Input placeholder='이름'
           value={info.name}
           onChange={e => setInfo({...info, name: e.target.value})}
           ></Input>
-          <Desc valid={check.name}></Desc>
+          <Desc valid={check.name}>{msg.name}</Desc>
         </div>
         <div>
           <Input placeholder='이메일'
           value={info.email}
           onChange={e => setInfo({...info, email: e.target.value})}
           ></Input>
-          <Desc valid={check.email}></Desc>
+          <Desc valid={check.email}>{msg.email}</Desc>
         </div>
         <div></div>
-        <Button>회원가입</Button>
+        <Button onClick={sendSignup}>회원가입</Button>
         <ToLogin>
           <div>이미 회원이신가요?</div>
           <Anchor>로그인하기</Anchor>

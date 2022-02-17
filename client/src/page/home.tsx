@@ -19,7 +19,7 @@ function Home () {
         console.log(code);
         const sendNaver = async () => {
           try {
-            const result = await axios.post(`${url}/social/naver`, { 
+            await axios.post(`${url}/social/naver`, { 
               code: code, 
               state: userState
             }, { 
@@ -35,7 +35,7 @@ function Home () {
         break;
       case 'kakao' :
         const sendKakao = async () => {
-          const result2 = await axios.post(`${url}/social/kakaotalk`, { 
+          await axios.post(`${url}/social/kakaotalk`, { 
             authorizationCode: code,
           }, { 
             withCredentials: true 
@@ -47,7 +47,7 @@ function Home () {
         break;
       case 'google' :
         const sendGoogle = async () => {
-          const result3 = await axios.post(`${url}/social/google`, { 
+          await axios.post(`${url}/social/google`, { 
             authorizationCode: code
           }, { 
             withCredentials: true 
