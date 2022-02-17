@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: 'https://localhost:3000',
+    origin: 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   })
@@ -31,3 +31,22 @@ app.use('/social', socialRouter);
 app.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
 });
+
+// const fs = require("fs");
+// const https = require("https");
+
+// let server;
+// if(fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")){
+
+//   const privateKey = fs.readFileSync(__dirname + "/key.pem", "utf8");
+//   const certificate = fs.readFileSync(__dirname + "/cert.pem", "utf8");
+//   const credentials = { key: privateKey, cert: certificate };
+
+//   server = https.createServer(credentials, app);
+//   server.listen(PORT, () => console.log("server runnning"));
+
+// } else {
+//   server = app.listen(PORT)
+// }
+
+// module.exports = server;
