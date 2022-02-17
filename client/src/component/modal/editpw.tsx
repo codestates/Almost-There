@@ -15,50 +15,50 @@ function EditPW ({
 }: PropsWithChildren<ModalDefaultType>)  {
 
 
-  // const [changePW, setchangePW] = useState({
-  //   PW: "",
-  //   newPW: "",
-  // });
+  const [changePW, setchangePW] = useState({
+    PW: "",
+    newPW: "",
+  });
 
-  // const [PWerrorMessage, setPWErrorMessage] = useState("");
+  const [PWerrorMessage, setPWErrorMessage] = useState("");
 
-  // const handleInputValue2 = (key) => (e) => {
-  //   setchangePW({ ...changePW, [key]: e.target.value });
-  // };
+  const handleInputValue2 = (key :string) => (e:React.ChangeEvent<HTMLInputElement>) => {
+    setchangePW({ ...changePW, [key]: e.target.value });
+  };
 
-  // const handlePW = () => {
-  //   if (
-  //     userInfo.PW === "" ||
-  //     userInfo.newPW === ""
-  //   ) {
-  //     setErrorMessage("모든 항목은 필수입니다");
-  //   } else if (userInfo.PW!== userInfo.newPW) {
-  //     setPWErrorMessage("비밀번호가 일치하지 않습니다");
-  //   }
-  //   const { PW, newPW} = userInfo;
-  //   axios
-  //     .patch(
-  //       `http://localhost:4000/userinfo2`,
-  //       // url 변수로 변경예정
-  //       {
-  //         PW: PW,
-  //         newPW: newPW,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${localStorage.accessToken}`,
-  //         },
-  //       }
-  //     )
-  //     // async/await 변경
-  //     .then(() => {
-  //       console.log("password successfully updated");
-  //     })
-  //     .catch((err) => {
-  //       if (err) throw err;
-  //     });
-  // };
+  const handlePW = () => {
+    if (
+      changePW.PW === "" ||
+      changePW.newPW === ""
+    ) {
+      setPWErrorMessage("모든 항목은 필수입니다");
+    } else if (changePW.PW!== changePW.newPW) {
+      setPWErrorMessage("비밀번호가 일치하지 않습니다");
+    }
+    const { PW, newPW} = changePW;
+    axios
+      .put(
+        `http://localhost:3000/user`,
+        // url 변수로 변경예정
+        {
+          PW: PW,
+          newPW: newPW,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.accessToken}`,
+          },
+        }
+      )
+      // async/await 변경
+      .then(() => {
+        console.log("password successfully updated");
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  };
 
 
   return(
@@ -75,14 +75,25 @@ function EditPW ({
       <DialogBox onClick={(e) => e.stopPropagation()}>
 
       <div className="mypage-input-box">  
-    <div> 모달창구성</div>
+      <div> 모달창구성</div>
+      <div >      
+        <input
+          
+          type="password"
+          placeholder="현재 비밀번호"
+          onChange={handleInputValue2('newPW')}
+        />
+        {/* <div>{PWerrorMessage}</div> */}
+      </div>
+
       <div className="mypage-input-box-email">      
         <input
           className="mypage-input"
           type="email"
           placeholder="변경할 비밀번호"
-          // onChange={handleInputValue}
+          onChange={handleInputValue2('PW')}
         />
+        <div>{PWerrorMessage}</div>
       </div>
       <div className="mypage-input-box-name">      
         <input
@@ -93,7 +104,7 @@ function EditPW ({
 
         />
       </div>
-      <button className="mypage-button" > 
+      <button className="mypage-button" onClick={handlePW} > 
           변경완료
       </button>
 

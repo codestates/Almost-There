@@ -12,6 +12,31 @@ function Deactivate ({
   children,
 }: PropsWithChildren<ModalDefaultType>) {
 
+  const deactivateID = () => {
+    console.log('회원탈퇴')
+    // const { PW, newPW} = changePW;
+    axios
+      .delete(
+        `http://localhost:3000/user`,{data:{
+          // PW: PW,
+          // ID: ID,
+        }}
+        // url 변수로 변경예정
+        
+        ,
+        
+      )
+      // async/await 변경
+      .then(() => {
+        console.log("password successfully updated");
+      })
+      .catch((err) => {
+        if (err) throw err;
+      });
+  };
+
+
+
   return (
     <div>
     <Backdrop onClick={(e: React.MouseEvent) => {
@@ -26,7 +51,7 @@ function Deactivate ({
 
       <div className="mypage-input-box">  
     <div> 정말로 회원탈퇴하시겠습니까?</div>
-      <button className="mypage-button" > 
+      <button onClick={deactivateID} > 
           회원탈퇴
       </button>
 
