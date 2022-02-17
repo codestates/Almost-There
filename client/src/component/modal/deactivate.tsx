@@ -11,7 +11,6 @@ function Deactivate ({
   onClickToggleModalDeact,
   children,
 }: PropsWithChildren<ModalDefaultType>) {
-
   const deactivateID = () => {
     console.log('회원탈퇴')
     // const { PW, newPW} = changePW;
@@ -21,8 +20,7 @@ function Deactivate ({
           // PW: PW,
           // ID: ID,
         }}
-        // url 변수로 변경예정
-        
+        // url 변수로 변경예정        
         ,
         
       )

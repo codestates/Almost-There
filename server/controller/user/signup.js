@@ -12,12 +12,13 @@ module.exports = {
       const hashPassword = crypto.createHash('sha512').update(password).digest('hex');
       const [userInfo, created] = await users.findOrCreate({
         where: { userId },
-        defaults: { userId, password: hashPassword, name, email },
+        defaults: { userId, password: hashPassword, name, email, social:'AT' },
         raw: true
       });
-      if (!created) {
-        return res.status(409).send({ message: 'Id already exists' });
-      }
+      // if (!created) {
+      //   return res.status(409).send({ message: 'Id already exists' });
+      // }
+      console.log(userInfo.dataValues)
       delete userInfo.dataValues.password;
       const jwt = generateAccessToken(userInfo.dataValues);
       sendAccessToken(res, jwt);
