@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   users_groups.init({
-    groupId: DataTypes.STRING,
+    groupId: DataTypes.INTEGER,
     userId: DataTypes.STRING,
     overtime: DataTypes.INTEGER
   }, {

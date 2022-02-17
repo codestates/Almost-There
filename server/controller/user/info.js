@@ -5,7 +5,7 @@ module.exports = {
   get: async (req, res) => {
     try {
       const userInfo = isAuthorized(req);
-      console.log(userInfo)
+      console.log(userInfo);
       if (!userInfo) {
         return res.status(400).send({ message: 'bad request' });
       } else {

@@ -10,6 +10,9 @@ const groupRouter = require('./routes/group');
 const notificationRouter = require('./routes/notification');
 const socialRouter = require('./routes/social');
 
+// const models = require('./models');
+// models.sequelize.sync({ force: false });
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
