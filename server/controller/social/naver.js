@@ -30,7 +30,7 @@ module.exports = {
         // ! 소셜 로그인한 회원정보 조회 또는 추가(users 모델)
         if (!result.data) { return res.status(404).send({ message: 'Not Found' }); } else {
           const [userInfo] = await users.findOrCreate({
-            where: { email: result.data.response.email },
+            where: { userId: result.data.response.email },
             defaults: {
               userId: result.data.response.email,
               name: result.data.response.nickname,

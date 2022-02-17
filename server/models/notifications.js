@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.notifications.hasMany(models.notifications_users, {
+        foreignKey: 'notifyId', sourceKey: 'id'
+      });
     }
   }
   notifications.init({
