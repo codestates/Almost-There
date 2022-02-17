@@ -27,9 +27,6 @@ type LoginModalProps = {
 }
 
 function LoginModal ({ setLogin, setShow, setUser }: LoginModalProps) {
-  const naverClientID = process.env.REACT_APP_NAVER_CLIENT_ID;
-  const naverState = Math.floor((Math.random() * (99999 - 10000)) + 10000); // RAMDOM_STATE
-  const naverRedirectURI = process.env.REACT_APP_NAVER_REDIRECT_URI;
 
 const [info, setInfo] = useState<Info>({
   userId: '',
@@ -64,93 +61,31 @@ const clickSign = () => {
   })
 }
 
-/* GOOGLE LOGIN */
-const handleGoogleLogin = async () => {
-  console.log('naver login');
-  // ! 네이버 API로 로그인 인증
-  // 네이버 로그인 버튼을 누르면 로그인 인증 요청
-  const naverLoginURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientID}&state=${naverState}&redirect_uri=${naverRedirectURI}`;
-  window.location.assign(naverLoginURL);
-  // window.location.assign(naverLoginURL) -> 바로 이동, window.open(naverLoginURL) -> 팝업
-  const newURL = new URL(window.location.href);
-  // window.location.href -> 현재 주소(URL) 가져오기
-  let code = newURL.searchParams.get('code');
-  let userState = newURL.searchParams.get('state');
-
-  // ! 인증한 코드 이용하여 접근 토큰 발급 -> 회원정보 조회 후 jwt 토큰 발급
-  const result = await axios.post('http://localhost:4000/social/naver',
-    { 
-      code: code,
-      state: userState
-    },
-    { 
-      withCredentials: true 
-    });
-  console.log(result);
- };
-
  /* NAVER LOGIN */
 const handleNaverLogin = async () => {
-  console.log('naver login');
-  
-/* SOCIAL LOGIN */
-  console.log(naverClientID);
-  console.log(naverState);
-  console.log(naverRedirectURI);
-  // ! 네이버 API로 로그인 인증
-  // 네이버 로그인 버튼을 누르면 로그인 인증 요청
-  const naverLoginURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientID}&state=${naverState}&redirect_uri=${naverRedirectURI}`;
+  const naverLoginURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${
+    process.env.REACT_APP_NAVER_CLIENT_ID
+  }&state=${
+    Math.floor((Math.random() * (99999 - 10000)) + 10000)
+  }&redirect_uri=${
+    process.env.REACT_APP_REDIRECT_URI
+  }`;
+  localStorage.setItem('social', 'naver');
   window.location.assign(naverLoginURL);
-  // window.open(naverLoginURL);
-  // window.location.assign(naverLoginURL) -> 바로 이동, window.open(naverLoginURL) -> 팝업
-  // window.open하면 위 콘솔 내용(환경변수 적용되는지) 확인 가능
-  
-  /*
-  ! URL에서 code, state 추출하여 social/naver로 POST 요청, 토큰 발급받기
-  * .env에서 REACT_APP_NAVER_REDIRECT_URI=http://localhost:3000/oauth/naver
-  * oauth/naver로 라우팅되는 컴포넌트에서 아래 작업 처리
-  let code = new URL(window.location.href).searchParams.get('code');
-  let userState = new URL(window.location.href).searchParams.get('state');
-  // window.location.href -> 현재 주소(URL) 가져오기
-  console.log(code, userState)
-
-  // ! 인증한 코드 이용하여 접근 토큰 발급 -> 회원정보 조회 후 jwt 토큰 발급
-  const result = await axios.post(`${url}/social/naver`,
-    { 
-      code: code,
-      state: userState
-    },
-    { 
-      withCredentials: true 
-    });
-  console.log(result);
-  */
  };
-/* NAVER LOGIN */
 
  /* KAKAO LOGIN */
 const handleKakaoLogin = async () => {
-  console.log('naver login');
-  // ! 네이버 API로 로그인 인증
-  // 네이버 로그인 버튼을 누르면 로그인 인증 요청
-  const naverLoginURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientID}&state=${naverState}&redirect_uri=${naverRedirectURI}`;
-  window.location.assign(naverLoginURL);
-  // window.location.assign(naverLoginURL) -> 바로 이동, window.open(naverLoginURL) -> 팝업
-  const newURL = new URL(window.location.href);
-  // window.location.href -> 현재 주소(URL) 가져오기
-  let code = newURL.searchParams.get('code');
-  let userState = newURL.searchParams.get('state');
+  const kakaoLoginURL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
+  localStorage.setItem('social', 'kakao');
+  window.location.assign(kakaoLoginURL);
+ };
 
-  // ! 인증한 코드 이용하여 접근 토큰 발급 -> 회원정보 조회 후 jwt 토큰 발급
-  const result = await axios.post('http://localhost:4000/social/naver',
-    { 
-      code: code,
-      state: userState
-    },
-    { 
-      withCredentials: true 
-    });
-  console.log(result);
+ /* GOOGLE LOGIN */
+const handleGoogleLogin = async () => {
+  const googleLoginURL = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
+  localStorage.setItem('social', 'google');
+  window.location.assign(googleLoginURL);
  };
 
   return (
@@ -180,9 +115,15 @@ const handleKakaoLogin = async () => {
           <Anchor onClick={clickSign}>회원가입하기</Anchor>
         </Links>
         <Logos>
-          <Img src={logoG} onClick={handleGoogleLogin} />
-          <Img src={logoN} onClick={handleNaverLogin} />
-          <Img src={logoK} onClick={handleKakaoLogin} />
+          <ImgFrame>
+            <Img src={logoN} onClick={handleNaverLogin} />
+          </ImgFrame>
+          <ImgFrame>
+            <Img src={logoK} onClick={handleKakaoLogin} />
+          </ImgFrame>
+          <GImgFrame>
+            <Img src={logoG} onClick={handleGoogleLogin} />
+          </GImgFrame>
         </Logos>
       </Container>
     </Background>
@@ -269,16 +210,38 @@ const Anchor = styled.a`
 
 const Logos = styled.div`
   background-color: #eeeeee;
-  width: 100%;
+  width: 180px;
+  overflow: hidden;
   display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
+`
+
+const ImgFrame = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 180px;
+  height: 40px;
+  margin: 5px;
+  border-bottom: solid rgba(0, 0, 0, 0.4) 1px;
+  border-radius: 5px;
+`
+const GImgFrame = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 180px;
+  height: 40px;
+  margin-top: 5px;
+  border-bottom: solid rgba(0, 0, 0, 0.4) 1px;
+  border-radius: 5px;
 `
 
 const Img = styled.img`
-  background-color: #448aff;
-  border-radius: 5px;
-  width: 60px;
-  height: 60px; 
   padding: 2px;
 `
 
