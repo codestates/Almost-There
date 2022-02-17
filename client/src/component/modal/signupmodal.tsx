@@ -141,11 +141,11 @@ const Input = styled.input`
   height: 50px;
 `
 
-interface Desc {
+interface DescI {
   valid: boolean;
 }
 
-const Desc = styled.div<Desc>`
+const Desc = styled.div<DescI>`
   height: 20px;
   padding: 5px 0 0 0;
   font-size: 14px;
