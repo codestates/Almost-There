@@ -15,8 +15,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  users_groups.init(
-    {}, 
+  users_groups.init({
+    groupId:DataTypes.INTEGER,
+    userId:DataTypes.INTEGER,
+    overtime:DataTypes.TIME
+    // overtime: DataTypes.TIME
+    }, 
     {
       sequelize,
       modelName: 'users_groups',

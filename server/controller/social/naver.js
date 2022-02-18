@@ -12,7 +12,7 @@ module.exports = {
       console.log('naver login start');
       // ! 인증한 코드 이용하여 접근 토큰 발급
       const [code, state] = [req.body.code, req.body.state];
-      console.log(req.body)
+      console.log(req.body);
       console.log(code, state);
       const tokenURL = `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${clientID}&client_secret=${clientSecret}&code=${code}&state=${state}`;
       const result = await axios.get(tokenURL);
@@ -30,7 +30,7 @@ module.exports = {
         // ! 소셜 로그인한 회원정보 조회 또는 추가(users 모델)
         if (!result.data) { return res.status(404).send({ message: 'Not Found' }); } else {
           const [userInfo] = await users.findOrCreate({
-            where: { email: result.data.response.email },
+            where: { userId: result.data.response.email },
             defaults: {
               userId: result.data.response.email,
               name: result.data.response.nickname,
