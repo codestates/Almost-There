@@ -1,10 +1,12 @@
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = {
-  post: (req, res) => {
+  post: async (req, res) => {
     try {
-      const userInfo = isAuthorized(req);
-      if (userInfo) {
+      const userInfo = await isAuthorized(req);
+      if (!userInfo) {
+        return res.status(401).send({ message: 'not authorized' });
+      } else {
         return res.clearCookie('jwt').status(205).send({ message: 'Logged out successfully' });
       }
     } catch (err) {
