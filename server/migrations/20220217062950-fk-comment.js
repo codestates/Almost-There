@@ -21,9 +21,9 @@ module.exports = {
     });
 
     await queryInterface.addConstraint('notifications_users', {
-      fields: ['from'],
+      fields: ['sender'],
       type: 'foreign key',
-      name: 'notification_from_user_id_fk',
+      name: 'notification_sender_user_id_fk',
       references: {
         table: 'users',
         field: 'userId'
@@ -33,9 +33,9 @@ module.exports = {
     });
 
     await queryInterface.addConstraint('notifications_users', {
-      fields: ['to'],
+      fields: ['receiver'],
       type: 'foreign key',
-      name: 'notification_to_user_id_fk',
+      name: 'notification_receiver_user_id_fk',
       references: {
         table: 'users',
         field: 'userId'
