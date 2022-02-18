@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { Home, Mypage } from './page/index';
 import { Header, LoginModal } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
+import axios from 'axios';
+import url from './url';
 
 interface ShowList {
   login: boolean,
@@ -11,8 +13,8 @@ interface ShowList {
 }
 interface User {
   userId: string,
-  userEm: string,
-  userNm: string
+  email: string,
+  name: string
 }
 
 function App() {
@@ -23,20 +25,33 @@ function App() {
   });
   const [user, setUser] = useState<User>({
     userId: '',
-    userEm: '',
-    userNm: ''
+    email: '',
+    name: ''
   })
 
   useEffect(() => {
-    setLogin(true);
-  }, [])
+    const getUserInfo = async () => {
+      try {
+        const res = await axios.get(`${url}/user/info`, { withCredentials: true });
+        const {userId, name, email} = res.data.user;
+        setUser({
+          userId,
+          name,
+          email
+        })
+      } catch (err) {
+         console.log(err);
+      }
+    };
+    getUserInfo();
+  }, [login]);
 
   return (
     <div className="App">
       <Router>
         <Header login={login} setLogin={setLogin} setShow={setShow} />
         <Routes>
-          <Route path= '/' element={<Home />} />
+          <Route path= '/' element={<Home setLogin={setLogin}/>} />
           {
             login 
               ? <Route path= '/mypage' element={<Mypage />} /> 

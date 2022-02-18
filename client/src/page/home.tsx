@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import url from '../url';
 import './CSS/home.css'
 
 type HomeProps = {
-  
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function Home () {
+function Home ({setLogin}: HomeProps) {
   let code = new URL(window.location.href).searchParams.get('code');
   let userState = new URL(window.location.href).searchParams.get('state');
   const navigate = useNavigate();
@@ -18,16 +18,10 @@ function Home () {
       case 'naver' :
         console.log(code);
         const sendNaver = async () => {
-          try {
-            await axios.post(`${url}/social/naver`, { 
-              code: code, 
-              state: userState
-            }, { 
-              withCredentials: true 
-            });
-          } catch (err) {
-            console.log(err);
-          }
+          await axios.post(`${url}/social/naver`, { 
+            code: code, state: userState
+          }, { withCredentials: true });
+          setLogin(true);
         }
         sendNaver();
         break;
@@ -35,9 +29,8 @@ function Home () {
         const sendKakao = async () => {
           await axios.post(`${url}/social/kakaotalk`, { 
             authorizationCode: code,
-          }, { 
-            withCredentials: true 
-          });
+          }, { withCredentials: true });
+          setLogin(true);
         }
         sendKakao();
         break;
@@ -45,9 +38,8 @@ function Home () {
         const sendGoogle = async () => {
           await axios.post(`${url}/social/google`, { 
             authorizationCode: code
-          }, { 
-            withCredentials: true 
-          });
+          }, { withCredentials: true });
+          setLogin(true);
         }
         sendGoogle();
         break;

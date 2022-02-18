@@ -1,5 +1,5 @@
 import atlogo from '../data/atlogo.png'
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import './CSS/header.css';
 import axios from 'axios';

@@ -16,8 +16,8 @@ interface Info {
 
 interface User {
   userId: string,
-  userEm: string,
-  userNm: string
+  name: string,
+  email: string
 }
 
 type LoginModalProps = {
