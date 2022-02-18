@@ -30,8 +30,6 @@ function Home () {
           }
         }
         sendNaver();
-        // localStorage.removeItem('social');
-        // navigate('/');
         break;
       case 'kakao' :
         const sendKakao = async () => {
@@ -42,8 +40,6 @@ function Home () {
           });
         }
         sendKakao();
-        // localStorage.removeItem('social');
-        // navigate('/');
         break;
       case 'google' :
         const sendGoogle = async () => {
@@ -54,8 +50,6 @@ function Home () {
           });
         }
         sendGoogle();
-        // localStorage.removeItem('social');
-        // navigate('/');
         break;
       default:
         break;
