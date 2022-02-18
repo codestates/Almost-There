@@ -7,13 +7,9 @@ const clientSecret = process.env.NAVER_CLIENT_SECRET;
 
 module.exports = {
   post: async (req, res) => {
-    // token -> 유저 정보 업데이트 -> jwt 토큰 -> cookie
     try {
-      console.log('naver login start');
       // ! 인증한 코드 이용하여 접근 토큰 발급
       const [code, state] = [req.body.code, req.body.state];
-      console.log(req.body);
-      console.log(code, state);
       const tokenURL = `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${clientID}&client_secret=${clientSecret}&code=${code}&state=${state}`;
       const result = await axios.get(tokenURL);
       const accessToken = result.data.access_token;
@@ -38,13 +34,11 @@ module.exports = {
               social: 'naver'
             }
           });
-          console.log(userInfo.dataValues);
 
-          // ! jwt 토큰 발급
+          // ! jwt 토큰 발급(쿠키)
           delete userInfo.dataValues.password;
           const jwt = generateAccessToken(userInfo.dataValues);
           sendAccessToken(res, jwt);
-          // console.log(res.get('Set-cookie'))
           return res.send({
             data: userInfo.dataValues
           });
