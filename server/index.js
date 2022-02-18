@@ -9,6 +9,7 @@ const userRouter = require('./routes/user');
 const groupRouter = require('./routes/group');
 const notificationRouter = require('./routes/notification');
 const socialRouter = require('./routes/social');
+const models = require('./models');
 
 // const models = require('./models');
 // models.sequelize.sync({ force: false });
@@ -31,6 +32,7 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
+models.sequelize.sync({ force: true });
 app.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
 });

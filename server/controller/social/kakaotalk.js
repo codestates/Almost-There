@@ -25,15 +25,17 @@ module.exports = {
         }
       );
       console.log(result.data.access_token);
+      console.log('여기까진 되는데요?')
       //   받아온 회원정보 users테이블에 추가
       const userInfo = await users.findOrCreate({
         where: {
-          email: kakaoUserInfo.data.kakao_account.email,
+          userId: kakaoUserInfo.data.kakao_account.email,
           social: 'kakao'
         },
         defaults: {
+          userId: kakaoUserInfo.data.kakao_account.email,
           email: kakaoUserInfo.data.kakao_account.email,
-          userId: kakaoUserInfo.data.kakao_account.profile.nickname,
+          name: kakaoUserInfo.data.kakao_account.profile.nickname,
           password: '',
           social: 'kakao'
         }
