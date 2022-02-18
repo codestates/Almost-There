@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      // define association here
+      _groups.hasOne(models.users_groups, { foreignKey: "groupId", sourceKey: "id", onDelete: 'cascade'})
     }
   }
   _groups.init({

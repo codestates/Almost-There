@@ -18,7 +18,6 @@ module.exports = {
       // if (!created) {
       //   return res.status(409).send({ message: 'Id already exists' });
       // }
-      console.log(userInfo.dataValues);
       delete userInfo.dataValues.password;
       const jwt = generateAccessToken(userInfo.dataValues);
       sendAccessToken(res, jwt);
