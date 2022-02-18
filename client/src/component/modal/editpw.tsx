@@ -16,7 +16,7 @@ function EditPW ({
 
 
   const [changePW, setchangePW] = useState({
-    password: "",
+    password: null,
     newPassword: "",
   });
 
@@ -27,36 +27,65 @@ function EditPW ({
   };
 
   const handlePW = () => {
-    if (
-      changePW.password === "" ||
-      changePW.newPassword === ""
-    ) {
-      setPWErrorMessage("모든 항목입력은 필수입니다");
-    } else if (changePW.password!== changePW.newPassword) {
-      setPWErrorMessage("비밀번호가 일치하지 않습니다");
-    }
+    console.log('비밀번호변경')
+    console.log(changePW)
+    // if (
+    //   changePW.password === ""
+    // ) {
+    //   console.log('password empty')
+    //   setPWErrorMessage("password empty");
+    // } 
+    // else if (
+    //   changePW.newPassword === ""
+    // ) {
+    //   console.log('newPassword empty')
+    //   setPWErrorMessage("newPassword empty");
+    // } 
+
+    // if (
+    //   changePW.password === "" ||
+    //   changePW.newPassword === ""
+    // ) {
+    //   setPWErrorMessage("모든 항목입력은 필수입니다");
+    //   else if (changePW.password!== changePW.newPassword) {
+    //     console.log('비밀번호 불일치')
+    //   setPWErrorMessage("비밀번호가 일치하지 않습니다");
+    // }
     const { password, newPassword} = changePW;
     //userpassword
+    // axios
+    //   .get(
+    //     `${url}/user/info`,
+    //     // url 변수로 변경예정
+    //     {
+    //       password: password,
+    //       newpassword: newPassword,
+    //     },
+
+    //   )
+
     axios
       .put(
         `${url}/user/password`,
         // url 변수로 변경예정
         {
           password: password,
-          newpassword: newPassword,
+          newPassword: newPassword,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.accessToken}`,
-          },
-        }
+        {withCredentials:true}
+        // {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     Authorization: `Bearer ${localStorage.accessToken}`,
+        //   },
+        // }
       )
       // async/await 변경
       .then(() => {
         console.log("password successfully updated");
       })
       .catch((err) => {
+        console.log('error')
         if (err) throw err;
       });
   };
@@ -82,7 +111,7 @@ function EditPW ({
           
           type="password"
           placeholder="현재 비밀번호"
-          onChange={handleInputValue2('newPW')}
+          onChange={handleInputValue2('password')}
         />
         {/* <div>{PWerrorMessage}</div> */}
       </div>
@@ -92,7 +121,7 @@ function EditPW ({
           className="mypage-input"
           type="email"
           placeholder="변경할 비밀번호"
-          onChange={handleInputValue2('PW')}
+          onChange={handleInputValue2('newPassword')}
         />
         <div>{PWerrorMessage}</div>
       </div>
@@ -101,13 +130,14 @@ function EditPW ({
           className="mypage-input"
           type="text"
           placeholder="비밀번호 변경확인"
-          // onChange={handleInputValue}
+          onChange={handleInputValue2('newPassword')}
 
         />
       </div>
       <button className="mypage-button" onClick={handlePW} > 
           변경완료
       </button>
+      {/* <button onClick={onClickToggleModalPW}> 닫기</button> */}
 
     </div>
     

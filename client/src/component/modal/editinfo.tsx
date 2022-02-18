@@ -16,27 +16,20 @@ function EditInfo ({
   children,
 }: PropsWithChildren<ModalDefaultType>)  {
 
-  // (alias) function EditInfo({ 
-  //  onClickToggleModal, 
-  //children, 
-  //}: PropsWithChildren<ModalDefaultType>): JSX.Element
-  // import EditInfo
-
 
 // mypage 이동
   const [users, setUsers] = useState({
-    name: "",
     email: "",
-    id: "",
+    phone: "",
   });
 
   // const history = useHistory();
   const [errorMessage, setErrorMessage] = useState("");
 
 
-  // const handleInputValue = (key) => (e) => {
-  //   setUsers({ ...users, [key]: e.target.value });
-  // }
+  const handleInputValue = (key:string) => (e:React.ChangeEvent<HTMLInputElement>) => {
+    setUsers({ ...users, [key]: e.target.value });
+  }
 
   //에러메세지 (handleInputValue)
   // Parameter 'key' implicitly has an 'any' type.
@@ -45,24 +38,27 @@ function EditInfo ({
 
   // 회원정보 수정
   const handleUserinfo = () => {
+    console.log('회원정보변경')
+    console.log(users)
+
     if (
       users.email === "" ||
-      users.name === "" 
+      users.phone === "" 
       //회원정보 수정 항목에서 입력을 안할 경우
     ) {
       setErrorMessage("모든 항목입력은 필수입니다");
     } 
-    const { email, name } = users;
+    const { email, phone } = users;
     axios
-      .patch(
-        //put
-        `${url}/user/password`
+      .put(
+        
+        `${url}/user/info`
         ,
         {
           email: email,
-          name: name,
+          phone: phone,
         },
-        // axios patch 로 이메일, 이름 정보 업데이트
+        
         {
           withCredentials:true
         }
@@ -70,19 +66,12 @@ function EditInfo ({
       // then >> async/await 통일
       .then(() => {
         console.log("userinfo successfully updated");
-        // history.push("/");
-        // 회원정보 수정후 기본경로로 이동
-        // 모달 사라지고 끝남
+        console.log(users)
       })
       .catch((err) => {
         if (err) throw err;
       });
   };
-
-
-
-
-
 
   return(
     <div>
@@ -103,33 +92,29 @@ function EditInfo ({
       <DialogBox onClick={(e) => e.stopPropagation()}>
 
       <div className="mypage-input-box">  
-    <div> 모달창구성</div>
-    <div>{errorMessage}</div>
-      <div className="mypage-input-box-email">      
-        <input
-          className="mypage-input"
-          type="email"
-          placeholder="변경할 이메일"
-          // onChange={handleInputValue}
-          // value >> state로 
-        />
-      </div>
-      <div className="mypage-input-box-name">      
-        <input
-          className="mypage-input"
-          type="text"
-          placeholder="변경할 이름"
-          // onChange={handleInputValue}
-
-        />
-      </div>
-      <button className="mypage-button" onClick={handleUserinfo}> 
-          변경완료
-      </button>
-
+        <div> 모달창구성</div>
+        <div>{errorMessage}</div>
+          <div className="mypage-input-box-email">      
+            <input
+              className="mypage-input"
+              type="email"
+              placeholder="변경할 이메일"
+              onChange={handleInputValue('email')}
+              // value >> state로 
+            />
+          </div>
+          <div className="mypage-input-box-name">      
+            <input
+              className="mypage-input"
+              type="text"
+              placeholder="변경할 이름"
+              onChange={handleInputValue('name')}
+            />
+          </div>
+          <button className="mypage-button" onClick={handleUserinfo}> 
+              변경완료
+          </button>
     </div>
-    
-
       </DialogBox>
 
         
