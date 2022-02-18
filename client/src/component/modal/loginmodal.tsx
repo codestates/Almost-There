@@ -43,11 +43,12 @@ const clickBack = () => {
 
 const handleLogin = async() => {
   try {
-    const result: AxiosResponse<any, any> = await axios.post(url, {
+    const result: AxiosResponse<any, any> = await axios.post(`${url}/user/login`, {
       userId: info.userId,
       password: info.password
     }, { withCredentials: true });
     setLogin(true);
+    setShow({ login: false, signin: false});
     setUser({...result.data.data});
   } catch {
     setMsg(true);

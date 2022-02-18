@@ -2,6 +2,8 @@ import atlogo from '../data/atlogo.png'
 import { useRef } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import './CSS/header.css';
+import axios from 'axios';
+import url from '../url';
 
 interface ShowList {
   login: boolean,
@@ -27,23 +29,18 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
   }
 
   
-  const clickLogout = () => {
+  const clickLogout = async () => {
+    await axios.post(`${url}/user/logout`, {}, { withCredentials: true});
     setLogin(false);
     navigate('/');
   }
   
   const clickLogin = () => {
-    setShow({
-      login: true,
-      signin: false
-    })
+    setShow({login: true, signin: false});
   }
 
   const clickSignin = () => {
-    setShow({
-      login: false,
-      signin: true
-    })
+    setShow({login: false, signin: true});
   }
 
   const clickMenu = () => {
