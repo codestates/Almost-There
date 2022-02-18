@@ -1,4 +1,5 @@
 # Almost There
+:point_right: [지금 바로 이용하기](https://client.almosthere.tk)
 <img alt="logo" src="https://user-images.githubusercontent.com/91545626/153361050-e065c1b8-69c1-4056-8c4d-4b99bb3d5bd2.png" width="400" height="300" />
 
 ### 친구들이 약속한 대로 잘 오고 있는지, 약속한 장소에 도착했는지 확인해보세요
@@ -16,8 +17,6 @@
 - :iphone: **모바일 환경에서도 이용할 수 있어요.**
 - :eyes: **가입을 하지 않더라도 어떤 서비스인지 체험해볼 수 있어요.**
   - 가입 전에 Almost There의 기능을 체험해볼 수 있습니다.
-
-:point_right: [지금 바로 이용하기](https://client.almosthere.tk)
 
 ## :toolbox: 사용한 기술
 ![Almost There](https://user-images.githubusercontent.com/89420103/153975765-00541300-a5e5-4f6b-afc4-b799b44253e7.png)
