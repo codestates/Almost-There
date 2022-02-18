@@ -7,20 +7,37 @@ import styled from "styled-components";
 import url from "../../url";
 
 interface ModalDefaultType {
-  onClickToggleModal: () => void;
+  setOpenModal: () => void;
 }
 
+interface User {
+  userId: string,
+  email: string,
+  name: string
+}
+
+type editInfoProps = {
+  user:User, setUser:React.Dispatch<React.SetStateAction<User>>,
+  setOpenModal:React.Dispatch<React.SetStateAction<boolean>>
+}
 
 function EditInfo ({
-  onClickToggleModal,
-  children,
-}: PropsWithChildren<ModalDefaultType>)  {
+  setOpenModal,
+  user, setUser
+  // children,
+// }: PropsWithChildren<ModalDefaultType>)  {
+}: editInfoProps)  {
+
+  //setUSEr
 
 
 // mypage 이동
+
+  
+
   const [users, setUsers] = useState({
-    email: "",
-    phone: "",
+    email: `${user.email}`,
+    name: `${user.name}`,
   });
 
   // const history = useHistory();
@@ -29,8 +46,7 @@ function EditInfo ({
 
   const handleInputValue = (key:string) => (e:React.ChangeEvent<HTMLInputElement>) => {
     setUsers({ ...users, [key]: e.target.value });
-  }
-
+  }  
   //에러메세지 (handleInputValue)
   // Parameter 'key' implicitly has an 'any' type.
   // Parameter 'e' implicitly has an 'any' type.
@@ -38,17 +54,17 @@ function EditInfo ({
 
   // 회원정보 수정
   const handleUserinfo = () => {
+
     console.log('회원정보변경')
     console.log(users)
-
     if (
       users.email === "" ||
-      users.phone === "" 
+      users.name === "" 
       //회원정보 수정 항목에서 입력을 안할 경우
     ) {
       setErrorMessage("모든 항목입력은 필수입니다");
     } 
-    const { email, phone } = users;
+    const { email, name } = users;
     axios
       .put(
         
@@ -56,17 +72,20 @@ function EditInfo ({
         ,
         {
           email: email,
-          phone: phone,
+          name: name,
         },
         
         {
           withCredentials:true
         }
       )
+
       // then >> async/await 통일
       .then(() => {
         console.log("userinfo successfully updated");
         console.log(users)
+        setUser({...user,name:users.name,email:users.email})
+        setOpenModal(false)
       })
       .catch((err) => {
         if (err) throw err;
@@ -84,9 +103,11 @@ function EditInfo ({
       <Backdrop onClick={(e: React.MouseEvent) => {
           e.preventDefault();
 
-          if (onClickToggleModal) {
-            onClickToggleModal();
-          }
+          // if (setOpenModal) {
+          //   setOpenModal();
+          // }
+        setOpenModal(false);
+          
         }}
       >
       <DialogBox onClick={(e) => e.stopPropagation()}>
@@ -100,6 +121,7 @@ function EditInfo ({
               type="email"
               placeholder="변경할 이메일"
               onChange={handleInputValue('email')}
+              value={users.email}
               // value >> state로 
             />
           </div>
@@ -109,6 +131,7 @@ function EditInfo ({
               type="text"
               placeholder="변경할 이름"
               onChange={handleInputValue('name')}
+              value={users.name}
             />
           </div>
           <button className="mypage-button" onClick={handleUserinfo}> 

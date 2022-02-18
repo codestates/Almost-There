@@ -54,7 +54,7 @@ function App() {
           <Route path= '/' element={<Home setLogin={setLogin}/>} />
           {
             login 
-              ? <Route path= '/mypage' element={<Mypage />} /> 
+              ? <Route path= '/mypage' element={<Mypage setUser={setUser} user={user} />}  /> 
               : <Route path= '/mypage' element={<Navigate to='/'/>} />
           }
         </Routes>

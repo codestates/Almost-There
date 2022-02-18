@@ -7,13 +7,27 @@ import { Deactivate, EditInfo, EditPW } from '../page/index';
 import { useState, useCallback } from "react";
 import styled from "styled-components";
 
+interface User {
+  userId: string,
+  email: string,
+  name: string
+}
 
-function Mypage () {
+type mypageprops = {
+  user:User, setUser:React.Dispatch<React.SetStateAction<User>>
+}
+
+function Mypage ({user,setUser}:mypageprops) {
 
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-  const onClickToggleModal: () => void = useCallback(() => {
+  // const onClickToggleModal: () => void = useCallback(() => {
+  //   setOpenModal(!isOpenModal);
+  // }, [isOpenModal]);
+  const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
-  }, [isOpenModal]);
+  };
+
+
 
   const [isOpenModalPW, setOpenModalPW] = useState<boolean>(false);
   const onClickToggleModalPW: () => void = useCallback(() => {
@@ -34,16 +48,15 @@ function Mypage () {
       <UserinfoTitle> 회원정보</UserinfoTitle>
       
       <UserinfoDetail>
-        <div> 00000님 환영합니다 </div>  
-        <div> 아이디</div>
-        <div> 이메일 </div>
+        <div> {user.name}님 환영합니다 </div>  
+        <div> {user.userId}</div>
+        <div> {user.email} </div>
       </UserinfoDetail>
       <Buttons>
         <div>
         <div >
           {isOpenModal && (
-          <EditInfo onClickToggleModal={onClickToggleModal}>
-          </EditInfo>
+          <EditInfo setUser={setUser} user={user} setOpenModal={setOpenModal}/>
           )}
       <DialogButton onClick={onClickToggleModal}>회원정보 수정</DialogButton>  
         </div>
