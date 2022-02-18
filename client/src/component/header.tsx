@@ -1,7 +1,9 @@
 import atlogo from '../data/atlogo.png'
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import './CSS/header.css';
+import axios from 'axios';
+import url from '../url';
 
 interface ShowList {
   login: boolean,
@@ -13,6 +15,7 @@ type HeaderProps = {
   setLogin: React.Dispatch<React.SetStateAction<boolean>>
   setShow: React.Dispatch<React.SetStateAction<ShowList>>
 }
+
 
 const Header = ({ login, setLogin, setShow }: HeaderProps) => {
   const navigate: NavigateFunction = useNavigate();
@@ -27,23 +30,18 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
   }
 
   
-  const clickLogout = () => {
+  const clickLogout = async () => {
+    await axios.post(`${url}/user/logout`, {}, { withCredentials: true});
     setLogin(false);
     navigate('/');
   }
   
   const clickLogin = () => {
-    setShow({
-      login: true,
-      signin: false
-    })
+    setShow({login: true, signin: false});
   }
 
   const clickSignin = () => {
-    setShow({
-      login: false,
-      signin: true
-    })
+    setShow({login: false, signin: true});
   }
 
   const clickMenu = () => {

@@ -1,14 +1,14 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import url from '../url';
 import './CSS/home.css'
 
 type HomeProps = {
-  
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function Home () {
+function Home ({setLogin}: HomeProps) {
   let code = new URL(window.location.href).searchParams.get('code');
   let userState = new URL(window.location.href).searchParams.get('state');
   const navigate = useNavigate();
@@ -18,44 +18,30 @@ function Home () {
       case 'naver' :
         console.log(code);
         const sendNaver = async () => {
-          try {
-            const result = await axios.post(`${url}/social/naver`, { 
-              code: code, 
-              state: userState
-            }, { 
-              withCredentials: true 
-            });
-          } catch (err) {
-            console.log(err);
-          }
+          await axios.post(`${url}/social/naver`, { 
+            code: code, state: userState
+          }, { withCredentials: true });
+          setLogin(true);
         }
         sendNaver();
-        // localStorage.removeItem('social');
-        // navigate('/');
         break;
       case 'kakao' :
         const sendKakao = async () => {
-          const result2 = await axios.post(`${url}/social/kakaotalk`, { 
+          await axios.post(`${url}/social/kakaotalk`, { 
             authorizationCode: code,
-          }, { 
-            withCredentials: true 
-          });
+          }, { withCredentials: true });
+          setLogin(true);
         }
         sendKakao();
-        // localStorage.removeItem('social');
-        // navigate('/');
         break;
       case 'google' :
         const sendGoogle = async () => {
-          const result3 = await axios.post(`${url}/social/google`, { 
+          await axios.post(`${url}/social/google`, { 
             authorizationCode: code
-          }, { 
-            withCredentials: true 
-          });
+          }, { withCredentials: true });
+          setLogin(true);
         }
         sendGoogle();
-        // localStorage.removeItem('social');
-        // navigate('/');
         break;
       default:
         break;
