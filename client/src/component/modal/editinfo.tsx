@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
-
+import url from "../../url";
 
 interface ModalDefaultType {
   onClickToggleModal: () => void;
@@ -56,7 +56,8 @@ function EditInfo ({
     axios
       .patch(
         //put
-        `http://localhost:4000`,
+        `${url}/user/password`
+        ,
         {
           email: email,
           name: name,

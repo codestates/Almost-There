@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
-
+import url from "../../url";
 
 interface ModalDefaultType {
   onClickToggleModalPW: () => void;
@@ -16,8 +16,8 @@ function EditPW ({
 
 
   const [changePW, setchangePW] = useState({
-    PW: "",
-    newPW: "",
+    password: "",
+    newPassword: "",
   });
 
   const [PWerrorMessage, setPWErrorMessage] = useState("");
@@ -28,22 +28,22 @@ function EditPW ({
 
   const handlePW = () => {
     if (
-      changePW.PW === "" ||
-      changePW.newPW === ""
+      changePW.password === "" ||
+      changePW.newPassword === ""
     ) {
-      setPWErrorMessage("모든 항목은 필수입니다");
-    } else if (changePW.PW!== changePW.newPW) {
+      setPWErrorMessage("모든 항목입력은 필수입니다");
+    } else if (changePW.password!== changePW.newPassword) {
       setPWErrorMessage("비밀번호가 일치하지 않습니다");
     }
-    const { PW, newPW} = changePW;
+    const { password, newPassword} = changePW;
     //userpassword
     axios
       .put(
-        `http://localhost:4000/user/password`,
+        `${url}/user/password`,
         // url 변수로 변경예정
         {
-          PW: PW,
-          newPW: newPW,
+          password: password,
+          newpassword: newPassword,
         },
         {
           headers: {

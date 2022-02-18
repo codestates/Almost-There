@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
+import url from "../../url";
+
 
 interface ModalDefaultType {
   onClickToggleModalDeact: () => void;
@@ -16,17 +18,15 @@ function Deactivate ({
     // const { PW, newPW} = changePW;
     axios
       .delete(
-        `http://localhost:4000/user`,{data:{
-          // PW: PW,
-          // ID: ID,
-        }}
+        `${url}/user`,
+        {withCredentials:true}
         // url 변수로 변경예정        
         ,
         
       )
       // async/await 변경
       .then(() => {
-        console.log("password successfully updated");
+        console.log("password successfully deleted");
       })
       .catch((err) => {
         if (err) throw err;
