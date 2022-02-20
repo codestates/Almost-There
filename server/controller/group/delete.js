@@ -7,9 +7,9 @@ module.exports = {
     if (!userInfo) {
       return res.status(401).send({ message: 'not authorized' });
     } else {
-      const { userId } = userInfo;
-      const id = req.body.groupId;
-      console.log(userId, id);
+      const { userId, id } = userInfo;
+      const groupId = req.body.groupId;
+      console.log(userId, id, groupId);
       console.log(req.query);
 
       // ! 생성한 그룹 삭제 -> ?group=true
@@ -19,7 +19,7 @@ module.exports = {
           await _groups.destroy({
             where: {
               leaderId: userId,
-              id: id
+              id: groupId
             },
             include: users_groups
           });
@@ -37,8 +37,8 @@ module.exports = {
           await users_groups.update({ overtime: -1 },
           {
             where: {
-              groupId: id,
-              userId: userId
+              groupId: groupId,
+              userId: id
             }
           });
           return res.send({ message: 'success' });
@@ -74,9 +74,9 @@ INSERT INTO users(userId, name, password, email, social, createdAt, updatedAt) V
 INSERT INTO _groups(name, time, leaderId, place, createdAt, updatedAt) VALUES('group1', '2022-02-17', 'test', 'anywhere', '2022-02-17', '2022-02-17');
 
 ? users_groups
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test', 1, '2022-02-17', '2022-02-17');
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test2', 2, '2022-02-17', '2022-02-17');
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test3', 3, '2022-02-17', '2022-02-17');
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test4', 4, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(4, 4, 1, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(4, 5, 2, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(4, 6, 3, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(4, 7, 4, '2022-02-17', '2022-02-17');
 
 */
