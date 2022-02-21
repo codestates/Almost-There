@@ -32,7 +32,7 @@ module.exports = {
           social: 'google'
         },
         defaults: {
-          userId:googleUserInfo.data.email,
+          userId: googleUserInfo.data.email,
           email: googleUserInfo.data.email,
           name: googleUserInfo.data.name,
           password: '',

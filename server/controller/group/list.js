@@ -1,6 +1,6 @@
 const { _groups, users_groups } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
-const { Op } = require('sequelize')
+const { Op } = require('sequelize');
 
 module.exports = {
   get: async (req, res) => {
@@ -11,12 +11,15 @@ module.exports = {
       try {
         const { id } = userInfo;
         console.log(id);
-        const groups = await users_groups.findAll({
+        const result = await users_groups.findAll({
           where: {
             userId: id,
             overtime: { [Op.ne]: -1 }
-          }
+          },
+          include: _groups
         });
+        const groups = result.sort((a, b) => a._group.time - b._group.time);
+
         return res.send({ groups });
       } catch (err) {
         console.log(err);
