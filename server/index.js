@@ -9,7 +9,6 @@ const userRouter = require('./routes/user');
 const groupRouter = require('./routes/group');
 const notificationRouter = require('./routes/notification');
 const socialRouter = require('./routes/social');
-const models = require('./models');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -29,7 +28,10 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
+<<<<<<< HEAD
 models.sequelize.sync({ force: false });
+=======
+>>>>>>> 454d0df4ab36cfc2af05579544386f843d9ad6c2
 app.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
 });

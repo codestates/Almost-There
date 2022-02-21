@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.createTable('users_groups', {
       id: {
         allowNull: false,
@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       overtime: {
-        type: Sequelize.INTEGER
+        type: Sequelize.TIME
       },
       createdAt: {
         allowNull: false,
@@ -27,7 +27,7 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     await queryInterface.dropTable('users_groups');
   }
 };

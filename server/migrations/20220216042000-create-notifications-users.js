@@ -8,11 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      from: {
-        type: Sequelize.STRING
+      sender: {
+        type: Sequelize.INTEGER
       },
-      to: {
-        type: Sequelize.STRING
+      receiver: {
+        type: Sequelize.INTEGER
       },
       notifyId: {
         type: Sequelize.INTEGER

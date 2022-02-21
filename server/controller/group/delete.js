@@ -7,9 +7,9 @@ module.exports = {
     if (!userInfo) {
       return res.status(401).send({ message: 'not authorized' });
     } else {
-      const { userId } = userInfo;
-      const id = req.body.groupId;
-      console.log(userId, id);
+      const { userId, id } = userInfo;
+      const groupId = req.body.groupId;
+      console.log(userId, id, groupId);
       console.log(req.query);
 
       // ! 생성한 그룹 삭제 -> ?group=true
@@ -19,7 +19,7 @@ module.exports = {
           await _groups.destroy({
             where: {
               leaderId: userId,
-              id: id
+              id: groupId
             },
             include: users_groups
           });
@@ -35,12 +35,12 @@ module.exports = {
         try {
           // users_groups에서 탈퇴하는 사람(userId)의 overtime을 불참(-1)으로 변경
           await users_groups.update({ overtime: -1 },
-          {
-            where: {
-              groupId: id,
-              userId: userId
-            }
-          });
+            {
+              where: {
+                groupId: groupId,
+                userId: id
+              }
+            });
           return res.send({ message: 'success' });
         } catch (err) {
           console.log(err);
@@ -71,12 +71,12 @@ INSERT INTO users(userId, name, password, email, social, createdAt, updatedAt) V
 INSERT INTO users(userId, name, password, email, social, createdAt, updatedAt) VALUES('test4', '테스트4', '4', 'abcdef', 'AT', '2022-02-17', '2022-02-17');
 
 ? _groups
-INSERT INTO _groups(name, time, leaderId, place, createdAt, updatedAt) VALUES('group1', '2022-02-17', 'test', 'anywhere', '2022-02-17', '2022-02-17');
+INSERT INTO _groups(name, time, leaderId, place, createdAt, updatedAt) VALUES('group1', '2022-02-19', 'test', 'anywhere', '2022-02-17', '2022-02-17');
 
 ? users_groups
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test', 1, '2022-02-17', '2022-02-17');
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test2', 2, '2022-02-17', '2022-02-17');
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test3', 3, '2022-02-17', '2022-02-17');
-INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 'test4', 4, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 1, 5, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 2, 6, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 3, 7, '2022-02-17', '2022-02-17');
+INSERT INTO users_groups(groupId, userId, overtime, createdAt, updatedAt) VALUES(6, 4, 8, '2022-02-17', '2022-02-17');
 
 */
