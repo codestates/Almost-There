@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
+const { Server } = require('socket.io');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -9,7 +10,6 @@ const userRouter = require('./routes/user');
 const groupRouter = require('./routes/group');
 const notificationRouter = require('./routes/notification');
 const socialRouter = require('./routes/social');
-const models = require('./models');
 
 // const models = require('./models');
 // models.sequelize.sync({ force: false });
@@ -32,9 +32,14 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
-models.sequelize.sync({ force: true });
-app.listen(PORT, () => {
+
+const io = new Server(app.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
+}), {}
+);
+
+io.on('connection', (socket) => {
+  // ...
 });
 
 // const fs = require("fs");

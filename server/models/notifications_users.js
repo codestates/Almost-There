@@ -10,12 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      // define association here
+      notifications_users.belongsTo(models.users, { foreignKey: 'sender', sourceKey: 'id', onDelete: 'cascade' });
+      notifications_users.belongsTo(models.users, { foreignKey: 'receiver', sourceKey: 'id', onDelete: 'cascade' });
+      notifications_users.belongsTo(models.notifications, { foreignKey: 'notifyId', sourceKey: 'id', onDelete: 'cascade' });
     }
   }
   notifications_users.init({
-    from: DataTypes.STRING,
-    to: DataTypes.STRING,
+    sender: DataTypes.INTEGER,
+    receiver: DataTypes.INTEGER,
     notifyId: DataTypes.INTEGER
   }, {
     sequelize,
