@@ -4,40 +4,34 @@ const { generateAccessToken, sendAccessToken, isAuthorized } = require('../token
 module.exports = {
   put: async (req, res) => {
     try {
-      const userInfo = isAuthorized(req);
+      const userInfo = await isAuthorized(req);
       if (!userInfo) {
-        return res.status(400).send({ message: 'bad request' });
+        return res.status(401).send({ message: 'not authorized' });
       } else {
         const { userId } = userInfo;
-        const user = await users.findOne({
-          attributes: ['id', 'userId', 'email', 'name', 'createdAt', 'updatedAt'],
+        const [name, email] = [req.body.name, req.body.email];
+        const updateInfo = {
+          name: name,
+          email: email
+        };
+        await users.update(updateInfo, {
           where: { userId }
         });
 
-        if (!user) { return res.status(401).send({ message: 'not authorized' }); } else {
-          const [name, email] = [req.body.name, req.body.email];
-          const updateInfo = {
-            name: name,
-            email: email
-          };
-          await users.update(updateInfo, {
-            where: { userId }
-          });
-
-          const data = await users.findOne({
-            attributes: ['id', 'userId', 'email', 'name', 'createdAt', 'updatedAt'],
-            where: { userId }
-          });
-          res.clearCookie('jwt');
-          const jwt = generateAccessToken(data.dataValues);
-          sendAccessToken(res, jwt);
-          return res.status(200).send({
-            info: data.dataValues,
-            message: 'user info successfully modified'
-          });
-        }
+        const data = await users.findOne({
+          attributes: ['id', 'userId', 'email', 'name', 'createdAt', 'updatedAt'],
+          where: { userId }
+        });
+        res.clearCookie('jwt');
+        const jwt = generateAccessToken(data.dataValues);
+        sendAccessToken(res, jwt);
+        return res.status(200).send({
+          info: data.dataValues,
+          message: 'user info successfully modified'
+        });
       }
     } catch (err) {
+      console.log(err);
       res.status(500).send({ message: 'server error' });
     }
   }

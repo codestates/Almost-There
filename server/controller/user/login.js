@@ -14,7 +14,7 @@ module.exports = {
           password: hashPassword
         }
       });
-      console.log(result.dataValues);
+
       if (!result) {
         return res.status(401).send({ message: 'Invalid user or password' });
       }

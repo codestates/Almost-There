@@ -8,7 +8,7 @@ module.exports = {
       const { authorizationCode } = req.body;
 
       //   client에서 코드 값 구할 때 필요한 링크, 하단 링크로 화면 렌더해서(window.location.assign??) 로그인 시키고 주소창에 코드값 뽑아내서 서버로 보내기 (서버로 보낼 때 body에 authorizationCode='코드값')
-      //   https://accounts.google.com/o/oauth2/auth?client_id=956548166940-5urgkjv390ubtuent2rp26ah8e2jk1rn.apps.googleusercontent.com&redirect_uri=https://localhost:3000&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
+      //   https://accounts.google.com/o/oauth2/auth?client_id=956548166940-5urgkjv390ubtuent2rp26ah8e2jk1rn.apps.googleusercontent.com&redirect_uri=http://localhost:3000&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
 
       //   client에서 받은 code로 google access_token 요청
       const result = await axios.post(
@@ -28,12 +28,13 @@ module.exports = {
       // 받아온 회원정보 users 테이블에 삽입
       const userInfo = await users.findOrCreate({
         where: {
-          email: googleUserInfo.data.email,
+          userId: googleUserInfo.data.email,
           social: 'google'
         },
         defaults: {
+          userId:googleUserInfo.data.email,
           email: googleUserInfo.data.email,
-          userId: googleUserInfo.data.name,
+          name: googleUserInfo.data.name,
           password: '',
           social: 'google'
         }

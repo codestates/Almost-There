@@ -7,9 +7,9 @@ module.exports = {
     try {
       const [password, newPassword] = [req.body.password, req.body.newPassword];
       const hashPassword = crypto.createHash('sha512').update(password).digest('hex');
-      const userInfo = isAuthorized(req);
+      const userInfo = await isAuthorized(req);
       if (!userInfo) {
-        return res.status(400).send({ message: 'bad request' });
+        return res.status(401).send({ message: 'not authorized' });
       } else {
         const { userId } = userInfo;
         const user = await users.findOne({
