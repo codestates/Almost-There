@@ -34,8 +34,8 @@ app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
 
 const io = new Server(app.listen(PORT, () => {
-    console.log(`HTTP server listen on ${PORT}`);
-  }), {}
+  console.log(`HTTP server listen on ${PORT}`);
+}), {}
 );
 
 io.on('connection', (socket) => {
