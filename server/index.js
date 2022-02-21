@@ -32,9 +32,6 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
-// app.listen(PORT, () => {
-//   console.log(`HTTP server listen on ${PORT}`);
-// });
 
 const io = new Server(app.listen(PORT, () => {
     console.log(`HTTP server listen on ${PORT}`);
