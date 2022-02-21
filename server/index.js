@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
+const { Server } = require('socket.io');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -31,8 +32,17 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
-app.listen(PORT, () => {
-  console.log(`HTTP server listen on ${PORT}`);
+// app.listen(PORT, () => {
+//   console.log(`HTTP server listen on ${PORT}`);
+// });
+
+const io = new Server(app.listen(PORT, () => {
+    console.log(`HTTP server listen on ${PORT}`);
+  }), {}
+);
+
+io.on('connection', (socket) => {
+  // ...
 });
 
 // const fs = require("fs");
