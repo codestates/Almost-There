@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { Home, Mypage } from './page/index';
+import { Home, Mypage, CreateGroup } from './page/index';
 import { Header, LoginModal } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
@@ -51,12 +51,17 @@ function App() {
       <Router>
         <Header login={login} setLogin={setLogin} setShow={setShow} />
         <Routes>
-          <Route path= '/' element={<Home setLogin={setLogin}/>} />
           {
             login 
-              ? <Route path= '/mypage' element={<Mypage setUser={setUser} user={user} />}  /> 
-              : <Route path= '/mypage' element={<Navigate to='/'/>} />
+            ? <Route path= '/mypage' element={<Mypage setUser={setUser} user={user} />}  /> 
+            : <Route path= '/mypage' element={<Navigate to='/'/>} />
           }
+          {
+            login
+            ? <Route path='/creategroup' element={<CreateGroup />} />
+            : <Route path= '/creategroup' element={<Navigate to='/' />} />
+          }
+          <Route path= '/' element={<Home setLogin={setLogin}/>} />
         </Routes>
         {
           show.login
