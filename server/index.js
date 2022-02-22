@@ -32,7 +32,7 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
-models.sequelize.sync({ force: true });
+models.sequelize.sync({ force: false });
 app.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
 });
