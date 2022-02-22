@@ -26,6 +26,7 @@ module.exports = {
           userId: userId,
           groupId: group.dataValues.id
         })
+
       // 반복문 돌려서 초대 인원만큼 users_groups 테이블에 groupId, userId 추가
         for(let i = 0; i < inviteId.length; i ++){
           await users_groups.create({
