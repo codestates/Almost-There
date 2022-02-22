@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
+const { Server } = require('socket.io');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -31,7 +32,7 @@ app.use('/social', socialRouter);
 models.sequelize.sync({ force: true });
 app.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
-});
+}), {};
 
 // const fs = require("fs");
 // const https = require("https");

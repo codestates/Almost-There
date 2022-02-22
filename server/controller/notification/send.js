@@ -10,7 +10,7 @@ module.exports = {
       try {
         const { id } = userInfo;
         const [receiverId, notifyId] = [req.body.receiverId, req.body.notifyId];
-        const notice = await notifications_users.create({
+        await notifications_users.create({
           sender: id,
           receiver: receiverId,
           notifyId: notifyId

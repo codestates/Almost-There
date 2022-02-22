@@ -6,6 +6,6 @@ router.post('/create', groupController.create.post);
 router.delete('/', groupController.delete.delete);
 router.post('/overtime', groupController.overtime.post);
 router.get('/list', groupController.list.get);
-router.post('/memberInfo',groupController.memberInfo.post)
+router.get('/memberInfo', groupController.memberInfo.get);
 
 module.exports = router;

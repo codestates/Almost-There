@@ -10,7 +10,6 @@ module.exports = {
     } else {
       try {
         const { id } = userInfo;
-        console.log(id);
         const result = await users_groups.findAll({
           where: {
             userId: id,
@@ -22,7 +21,6 @@ module.exports = {
 
         return res.send({ groups });
       } catch (err) {
-        console.log(err);
         return res.status(500).send({ message: 'server error' });
       }
     }
