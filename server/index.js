@@ -10,16 +10,13 @@ const userRouter = require('./routes/user');
 const groupRouter = require('./routes/group');
 const notificationRouter = require('./routes/notification');
 const socialRouter = require('./routes/social');
-
-// const models = require('./models');
-// models.sequelize.sync({ force: false });
-
+const models = require('./models');
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: `http://localhost:3000`,
+    origin: 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   })
@@ -32,15 +29,10 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
-
-const io = new Server(app.listen(PORT, () => {
+models.sequelize.sync({ force: true });
+app.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
-}), {}
-);
-
-io.on('connection', (socket) => {
-  // ...
-});
+}), {};
 
 // const fs = require("fs");
 // const https = require("https");
