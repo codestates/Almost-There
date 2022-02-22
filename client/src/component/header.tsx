@@ -4,6 +4,8 @@ import { NavigateFunction, useNavigate } from 'react-router-dom';
 import './CSS/header.css';
 import axios from 'axios';
 import url from '../url';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 interface ShowList {
   login: boolean,
@@ -61,7 +63,9 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
             <div className='menu' onClick={clickMenu}>menu</div>
             <div className='direction' ref={menuRef}>
               <div className='tap'>알림</div>
-              <div className='tap'>그룹 생성</div>
+              <StyledLink to='creategroup'>
+                <div className='tap'>그룹 생성</div>
+              </StyledLink>
               <div className='tap' onClick={clickMypage}>마이페이지</div>
             </div>
             <div className='lastap' onClick={clickLogout}>로그아웃</div>
@@ -76,5 +80,10 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
     </header>
   )
 }
+
+const StyledLink = styled(Link)`
+  color: black;
+  text-decoration: none;
+`
 
 export default Header;

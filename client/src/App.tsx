@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { Home, Mypage } from './page/index';
+import { Home, Mypage, CreateGroup, Group } from './page/index';
 import { Header, LoginModal } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
@@ -17,6 +17,7 @@ interface User {
   name: string
 }
 
+
 function App() {
   const [login, setLogin] = useState<boolean>(false);
   const [show, setShow] = useState<ShowList>({
@@ -29,34 +30,43 @@ function App() {
     name: ''
   })
 
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {
         const res = await axios.get(`${url}/user/info`, { withCredentials: true });
         const {userId, name, email} = res.data.user;
+
         setUser({
           userId,
           name,
           email
         })
       } catch (err) {
-         console.log(err);
+        console.log(err);
       }
     };
     getUserInfo();
   }, [login]);
+
 
   return (
     <div className="App">
       <Router>
         <Header login={login} setLogin={setLogin} setShow={setShow} />
         <Routes>
-          <Route path= '/' element={<Home setLogin={setLogin}/>} />
           {
             login 
-              ? <Route path= '/mypage' element={<Mypage setUser={setUser} user={user} />}  /> 
-              : <Route path= '/mypage' element={<Navigate to='/'/>} />
+            ? <>
+                <Route path= '/mypage' element={<Mypage setUser={setUser} user={user} />}  />
+                <Route path='/creategroup' element={<CreateGroup />} /> 
+                <Route path='/group/:id' element={<Group />} />
+              </>
+            : <>
+                <Route path='/*' element={<Navigate to='/' />} />
+              </>
           }
+          <Route path= '/' element={<Home setLogin={setLogin}/>} />
         </Routes>
         {
           show.login
