@@ -25,7 +25,7 @@ module.exports = {
         }
       );
       console.log(result.data.access_token);
-      console.log('여기까진 되는데요?')
+      console.log('여기까진 되는데요?');
       //   받아온 회원정보 users테이블에 추가
       const userInfo = await users.findOrCreate({
         where: {

@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      contents: {
+      notifyType: {
         type: Sequelize.STRING
       },
       createdAt: {

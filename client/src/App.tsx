@@ -17,6 +17,7 @@ interface User {
   name: string
 }
 
+
 function App() {
   const [login, setLogin] = useState<boolean>(false);
   const [show, setShow] = useState<ShowList>({
@@ -29,22 +30,25 @@ function App() {
     name: ''
   })
 
+
   useEffect(() => {
     const getUserInfo = async () => {
       try {
         const res = await axios.get(`${url}/user/info`, { withCredentials: true });
         const {userId, name, email} = res.data.user;
+
         setUser({
           userId,
           name,
           email
         })
       } catch (err) {
-         console.log(err);
+        console.log(err);
       }
     };
     getUserInfo();
   }, [login]);
+
 
   return (
     <div className="App">

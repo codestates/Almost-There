@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      
+      notifications.hasMany(models.notifications_users, { foreignKey: 'notifyId', sourceKey: 'id', onDelete: 'cascade' });
     }
   }
   notifications.init({
-    contents: DataTypes.STRING
+    notifyType: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'notifications'

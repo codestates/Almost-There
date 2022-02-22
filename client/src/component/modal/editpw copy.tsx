@@ -5,29 +5,18 @@ import styled from "styled-components";
 import url from "../../url";
 
 interface ModalDefaultType {
-  setOpenModalPW: () => void;
-}
-
-interface Password {
-  password: number
-
-}
-
-type editPWProps = {
-  setOpenModalPW:React.Dispatch<React.SetStateAction<boolean>>
+  onClickToggleModalPW: () => void;
 }
 
 function EditPW ({
-  setOpenModalPW,
-  // onClickToggleModalPW,
-  // children,
-}: editPWProps)  {
+  onClickToggleModalPW,
+  children,
+}: PropsWithChildren<ModalDefaultType>)  {
 
 
   const [changePW, setchangePW] = useState({
     password: null,
     newPassword: "",
-    confirmPW : "",
   });
 
   const [PWerrorMessage, setPWErrorMessage] = useState("");
@@ -40,39 +29,41 @@ function EditPW ({
     console.log('비밀번호변경')
     console.log(changePW)
 
-  if (changePW.confirmPW!== changePW.newPassword) {
-      console.log('비밀번호 불일치')
-      setPWErrorMessage("변경할 비밀번호가 일치하지 않습니다");
+    if (
+      changePW.password === "" ||
+      changePW.newPassword !== changePW.password
+    ) {
+      setPWErrorMessage("변경할 비밀번호를 정확하게 입력해주세요")}
+      else if (changePW.password!== changePW.newPassword) {
+        console.log('비밀번호 불일치')
+      setPWErrorMessage("현재 비밀번호가 일치하지 않습니다");
     }
-  else{
     const { password, newPassword} = changePW;
     axios
-    .put(
-      `${url}/user/password`,
-      {
-        password: password,
-        newPassword: newPassword,
-      },
-      {withCredentials:true}
-    )
-    .then(() => {
-      console.log("password successfully updated");
-    })
-    .catch((err) => {
-      setPWErrorMessage("현재 비밀번호가 일치하지 않습니다");
-    });
-} 
+      .put(
+        `${url}/user/password`,
+        {
+          password: password,
+          newPassword: newPassword,
+        },
+        {withCredentials:true}
+      )
+      .then(() => {
+        console.log("password successfully updated");
+      })
+      .catch((err) => {
+        console.log('error')
+        if (err) throw err;
+      });
   };
-
 
   return(
     <div>
       <Backdrop onClick={(e: React.MouseEvent) => {
           e.preventDefault();
-          // if (onClickToggleModalPW) {
-          //   onClickToggleModalPW();
-          // }
-        setOpenModalPW((false))
+          if (onClickToggleModalPW) {
+            onClickToggleModalPW();
+          }
         }}
       >
       <DialogBox onClick={(e) => e.stopPropagation()}>
@@ -84,6 +75,7 @@ function EditPW ({
           placeholder="현재 비밀번호"
           onChange={handleInputValue2('password')}
         />
+        <div>{PWerrorMessage}</div>
       </div>
       <div className="mypage-input-box-email">      
         <input
@@ -92,21 +84,19 @@ function EditPW ({
           placeholder="변경할 비밀번호"
           onChange={handleInputValue2('newPassword')}
         />
+        <div>{PWerrorMessage}</div>
       </div>
       <div className="mypage-input-box-name">      
         <input
           className="mypage-input"
           type="text"
           placeholder="비밀번호 변경확인"
-          onChange={handleInputValue2('confirmPW')}
+          onChange={handleInputValue2('newPassword')}
         />
       </div>
-
       <button className="mypage-button" onClick={handlePW} > 
           변경완료
       </button>
-      <div>{PWerrorMessage}</div>
-
     </div>
       </DialogBox>
       </Backdrop>
