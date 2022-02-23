@@ -1,4 +1,34 @@
 import styled from 'styled-components';
+import { Timer } from '.';
+
+
+// const appointment = '20 jan 2023';
+
+// function countdown() {
+//   const Dday = new Date(appointment);
+//   const currentDate = new Date();
+
+//   const totalSeconds = (Dday - currentDate) / 1000;
+//   const days = Math.floor(totalSeconds / 3600 / 24);
+//   const hours = Math.floor(totalSeconds / 3600) % 24;
+//   const minutes = Math.floor(totalSeconds / 60) % 60;
+//   const seconds = Math.floor(totalSeconds) % 60;
+
+//   document.getElementById('days').innerText = formatTime(days);
+//   document.getElementById('hours').innerText = formatTime(hours);
+//   document.getElementById('minutes').innerText = formatTime(minutes);
+//   document.getElementById('seconds').innerText = formatTime(seconds);
+// }
+
+// function formatTime(time) {
+//   return time < 10 ? '0' + time : time;
+// }
+
+// setInterval(countdown, 1000);
+
+
+
+
 
 function Group () {
   return (
@@ -17,7 +47,8 @@ function Group () {
             <Title3>2월 22일 오후 5:00</Title3>
           </List1>
         </Contents1>
-        <Contents2>
+        <Timer />
+        {/* <Contents2>
           <TimeBox>
             <IntBox>0</IntBox>
             <TextBox>일</TextBox>
@@ -34,7 +65,7 @@ function Group () {
             <IntBox>54</IntBox>
             <TextBox>초</TextBox>
           </TimeBox>
-        </Contents2>
+        </Contents2> */}
         <Contents3>
           <Title2><button>시간 추가</button></Title2>
           <List2>
