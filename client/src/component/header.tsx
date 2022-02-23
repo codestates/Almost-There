@@ -51,7 +51,7 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
         ?
           <Taps>
             <Menu login={login} onClick={clickMenu}>menu</Menu>
-            <Direction login={login} display={display} 
+            <Direction login={login} show={display} 
               onClick={() => setDisplay(false)}>
               <Tap>알림</Tap>
               <StyledLink to='/creategroup'>
@@ -66,7 +66,7 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
         : 
           <Taps>
             <Menu login={login} onClick={clickMenu}>menu</Menu>
-            <Direction login={login} display={display}
+            <Direction login={login} show={display}
               onClick={() => setDisplay(false)}>
               <StyledLink to='/'>
                 <Tap>체험하기</Tap>
@@ -133,7 +133,7 @@ const Menu = styled.div<MenuI>`
   }
 `
 interface DirectionI {
-  display: boolean,
+  show: boolean,
   login: boolean
 }
 const Direction = styled.div<DirectionI>`
@@ -144,9 +144,9 @@ const Direction = styled.div<DirectionI>`
     position: fixed;
     flex-direction: column;
     top: 7vh;
-    left: ${(props) => props.login ? 0 : 'none'}px;
-    right: ${(props) => props.login ? 'none' : 0}px;
-    display: ${(props) => props.display ? 'flex' : 'none'};
+    left: ${(props) => props.login ? 0 : 'none'};
+    right: ${(props) => props.login ? 'none' : 0};
+    display: ${(props) => props.show ? 'flex' : 'none'};
     background-color: black;
   }
 `

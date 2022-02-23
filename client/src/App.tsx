@@ -36,14 +36,14 @@ function App() {
       try {
         const res = await axios.get(`${url}/user/info`, { withCredentials: true });
         const {userId, name, email} = res.data.user;
-
         setUser({
           userId,
           name,
           email
         })
+        setLogin(true);
       } catch (err) {
-        console.log(err);
+        setLogin(false);
       }
     };
     getUserInfo();
