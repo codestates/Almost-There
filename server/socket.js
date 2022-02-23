@@ -1,3 +1,5 @@
+const { authorizeSocket } = require('./controller/tokenFunctions');
+
 module.exports = function (server) {
   const io = require('socket.io')(server, {
     cors: {
@@ -7,38 +9,69 @@ module.exports = function (server) {
     }
   });
 
-io.on('connection', (socket) => {
-  // console.log('connection');
+  // ! connection
+  io.on('connection', async (socket) => {
+    // console.log(`user connected: ${socket.id}`);
+    // console.log(socket.rooms);
 
-  // login
-  socket.on('login', (payload) => {
-    console.log(payload);
-    socket.join('login');
-    io.to('login').emit('login', 'room join');
-    console.log(socket.rooms);
+    // disconnect
+    socket.on('disconnect', (reason) => {
+      console.log(`disconnect ${socket.id} due to ${reason}`);
+    });
+
+    // error
+    socket.on('error', (error) => {
+      console.log(error);
+    });
+
+    // login
+    socket.on('login', (payload) => {
+      console.log(payload);
+      try {
+        // const userAdapter = io.of('/user').adapter;
+        // console.log(userAdapter.nsp.name);
+        
+        socket.join(`user ${payload.userId}`);
+        io.to(`user ${payload.userId}`).emit('login', `join room - user ${payload.userId}`);
+        console.log(socket.rooms);
+        return socket;
+      } catch (err) {
+        console.log(err);
+      }      
+    });
+
+    // logout
+    socket.on('logout', (payload) => {
+      console.log(socket.rooms);
+      console.log(payload);
+      try {
+        io.emit('logout', 'logout');
+      } catch (err) {
+        console.log(err);
+      }
+    })
+
+    // 'success' 이벤트 처리 테스트
+    socket.on('success', async (payload) => {
+      console.log('success');
+      console.log(payload);
+      try {
+        const userInfo = await authorizeSocket(socket.handshake.headers['cookie']);
+        if (!userInfo) {
+          return io.emit('success', 'fail: not authorized');
+        }
+        const { id, userId } = userInfo;
+        console.log(id, userId);
+        console.log(socket.rooms);
+        io.emit('success', 'success again');
+      } catch (err) {
+        console.log(err);
+      }
+    });
   });
-
-  // 'success' 이벤트 처리 테스트
-  socket.on('success', (payload) => {
-    console.log('success');
-    console.log(payload);
-    io.emit('success', 'success again');
-  });
-});
-
-//   disconnection
-//   socket.on('disconnecting', () => {
-//     console.log(socket.rooms);
-
-//     socket.on('disconnect', () => {
-//       console.log(socket.rooms.size);
-//     });
-//   });
-// });
-
 
   return io;
-}
+};
 
 // const count = io.engine.clientsCount;
 // const count2 = io.of('/').sockets.size;
@@ -54,8 +87,6 @@ io.on('connection', (socket) => {
 //   console.log(err.context);
 // });
 
-
-
 /*
 
 ! Socket.io를 이용한 실시간 알림
@@ -64,10 +95,8 @@ Client: 특정 대상이 받은 알림 실시간으로 조회하여 사용자에
 
 1) 로그인(notification room)
 - 비로그인 때 온 알림 조회(notification/list)
-- Socket 접속, 로그인한 userId 이름으로 채널(room) 생성 후 연결(join)
+- Socket 접속, 소속된 모든 그룹 채널에 연결 -> 그룹 정보 주고받기
   - login 상태가 true가 되면 접속 -> login 상태가 있는 최상위 컴포넌트가 어디?
-- 본인 userId 채널에서 실시간 알림 주고받기
-- 소속된 모든 그룹 채널에 연결 -> 그룹 정보 주고받기
 
 2) 로그아웃
 - login 상태가 false
@@ -97,9 +126,15 @@ Client: 특정 대상이 받은 알림 실시간으로 조회하여 사용자에
 - groupId 채널에서 각자 위치 정보 확인 버튼을 클릭할 때?
   - 실시간으로 제공되는 좌표를 가져와서 지도에 표시?
 
-+ 서버: index.js 말고 다른 파일에서도 socket.io 다루는 방법 찾기
-
 */
 
-// TODO: 로그인 때 본인 userId 이름의 room 접속
-// TODO: 그룹 생성 때 groupId 이름의 room 접속 (+ 다른 그룹원도)
+// TODO: 로그인 때 소속된 모든 그룹 채널 접속
+// 로그인할 때 알림 실시간으로 받기
+// 로그인한 사람만 서비스 이용하도록 (인증)
+
+// TODO: 로그아웃 -> 접속한 모든 채널 나가기(leave)
+
+
+
+// 그룹 생성 때 groupId 이름의 room 접속 (+ 다른 그룹원도)
+// 초대 알림 전송
