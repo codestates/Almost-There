@@ -183,7 +183,6 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
                   }
                 <Option select=''></Option>
               </HourContainer>
-              
             </HourBox>
             <MinuteBox ref={refMinute} onScroll={handleMinute}>
               <MinuteContainer>
