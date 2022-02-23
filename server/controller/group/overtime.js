@@ -7,7 +7,6 @@ module.exports = {
     try {
       // 토큰 회원 검증 => userId 뽑아내서 해당 userId에 body로 받은 overtime 추가하기
       const userInfo = await isAuthorized(req);
-
       if (!userInfo) {
         return res.status(400).send({ message: 'bad request' });
       } else {
@@ -25,8 +24,7 @@ module.exports = {
         return res.status(200).send({ message: 'ok' });
       }
     } catch (err) {
-      console.log('error');
-      console.log(err);
+      return res.status(500).send({ message: 'server error' });
     }
   }
 };

@@ -5,9 +5,7 @@ module.exports = {
   get: async (req, res) => {
     try {
       // 토큰 회원 검증
-      console.log(req.query.groupId);
       const userInfo = await isAuthorized(req);
-      console.log(userInfo);
       if (!userInfo) {
         return res.status(400).send({ message: 'bad request' });
       } else {
@@ -19,7 +17,7 @@ module.exports = {
         return res.status(200).send({ result });
       }
     } catch (err) {
-      console.log('err!!!!!!!!!');
+      return res.status(500).send({ message: 'server error' });
     }
   }
 };

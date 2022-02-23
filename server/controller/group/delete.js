@@ -42,7 +42,7 @@ module.exports = {
             });
           return res.send({ message: 'success' });
         } catch (err) {
-          res.status(500).send({ message: 'server error' });
+          return res.status(500).send({ message: 'server error' });
         }
       }
     }

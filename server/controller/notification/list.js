@@ -18,7 +18,6 @@ module.exports = {
         const notice = result.sort((a, b) => a.createdAt - b.createdAt);
         return res.send({ notice });
       } catch (err) {
-        console.log(err);
         return res.status(500).send({ message: 'server error' });
       }
     }
