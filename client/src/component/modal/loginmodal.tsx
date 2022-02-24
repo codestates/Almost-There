@@ -122,9 +122,9 @@ const handleGoogleLogin = async () => {
           <ImgFrame>
             <Img src={logoK} onClick={handleKakaoLogin} />
           </ImgFrame>
-          <GImgFrame>
-            <Img src={logoG} onClick={handleGoogleLogin} />
-          </GImgFrame>
+          <ImgFrame>
+            <GImg src={logoG} onClick={handleGoogleLogin} />
+          </ImgFrame>
         </Logos>
       </Container>
     </Background>
@@ -230,22 +230,27 @@ const ImgFrame = styled.div`
   border-bottom: solid rgba(0, 0, 0, 0.4) 1px;
   border-radius: 5px;
 `
-const GImgFrame = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  width: 180px;
-  height: 40px;
-  margin-top: 5px;
-  border-bottom: solid rgba(0, 0, 0, 0.4) 1px;
-  border-radius: 5px;
-`
+// const GImgFrame = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   overflow: hidden;
+//   width: 200px;
+//   height: 40px;
+//   margin-top: 5px;
+//   border-bottom: solid rgba(0, 0, 0, 0.4) 1px;
+//   border-radius: 5px;
+// `
 
 const Img = styled.img`
   padding: 2px;
+  width: 200px;
+  height: 50px;
   cursor: pointer;
 `
-
+const GImg = styled.img`
+  width: 200px;
+  height: 45px;
+`
 
 export default LoginModal;

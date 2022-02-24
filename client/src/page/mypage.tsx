@@ -69,7 +69,7 @@ function Mypage ({user,setUser}:mypageprops) {
         try {
           const res = await axios.get(`${url}/group/list/`, { withCredentials: true });
           const {name, id} = res.data.group;
-  
+          getGrouplist()
           setGroups({
             name,
             id
@@ -86,18 +86,15 @@ function Mypage ({user,setUser}:mypageprops) {
   const getGrouplist = () => {
     axios
     .get(
-      `${url}/group/list`,
-      // {
-        // id:groupId,
-        // name:name
-        // id:"",
-        //그룹아이디
-        // name:""
-      // },
+      // `${url}/group/list`,
+      `http://localhost:4000/group/list`,
       {withCredentials:true}
     )
-    .then(() => {
+    .then((res) => {
       console.log("grouplist successfully inquired");
+      // setGroups()
+
+
     })
     .catch((err) => {
     });
@@ -105,9 +102,9 @@ function Mypage ({user,setUser}:mypageprops) {
   }
 
   const DeleteGrouplist = () => {
+    // console.log(res.data)
 
     console.log("test");    
-
     axios
     .delete(
       
@@ -198,7 +195,12 @@ function Mypage ({user,setUser}:mypageprops) {
         <GroupName> 
           <div>
           test group3
-          {_groups.name}
+          
+          {/* {_groups.map(list)=>{
+            return (
+              <div>{list.name}</div>
+            )
+          }} */}
           </div>
           <div>
             <button onClick={DeleteGrouplist}> 그룹나가기 </button>

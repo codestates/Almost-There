@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { Home, Mypage, CreateGroup, Group } from './page/index';
+import { Home, Mypage, CreateGroup, Group, Map, Timer} from './page/index';
 import { Header, LoginModal } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
 import axios from 'axios';
 import url from './url';
+
+
 
 interface ShowList {
   login: boolean,
@@ -36,14 +38,14 @@ function App() {
       try {
         const res = await axios.get(`${url}/user/info`, { withCredentials: true });
         const {userId, name, email} = res.data.user;
-
         setUser({
           userId,
           name,
           email
         })
+        setLogin(true);
       } catch (err) {
-        console.log(err);
+        setLogin(false);
       }
     };
     getUserInfo();
@@ -63,6 +65,8 @@ function App() {
                 <Route path='/group/:id' element={<Group />} />
               </>
             : <>
+                <Route path='/timer' element={<Timer />} />        
+                <Route path='/map' element={<Map />} />        
                 <Route path='/*' element={<Navigate to='/' />} />
               </>
           }
