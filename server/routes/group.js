@@ -3,7 +3,7 @@ const router = express.Router();
 const { groupController } = require('../controller');
 
 router.post('/create', groupController.create.post);
-router.delete('/', groupController.delete.delete);
+router.delete('/:groupId', groupController.delete.delete);
 router.post('/overtime', groupController.overtime.post);
 router.get('/list', groupController.list.get);
 router.get('/memberInfo', groupController.memberInfo.get);

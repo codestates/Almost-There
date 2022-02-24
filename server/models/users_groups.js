@@ -21,10 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   },
   {
     sequelize,
-    modelName: 'users_groups',
-    tableName: 'users_groups',
-    charset: 'utf8',
-    collate: 'utf8_general_ci'
+    modelName: 'users_groups'
   });
   return users_groups;
 };

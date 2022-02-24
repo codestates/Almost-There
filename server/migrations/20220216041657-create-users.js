@@ -24,6 +24,12 @@ module.exports = {
       social: {
         type: Sequelize.STRING
       },
+      lat: {
+        type: Sequelize.STRING
+      },
+      lng: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

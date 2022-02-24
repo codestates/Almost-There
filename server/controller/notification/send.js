@@ -8,10 +8,10 @@ module.exports = {
       return res.status(401).send({ message: 'not authorized' });
     } else {
       try {
-        const { id } = userInfo;
+        const { userId } = userInfo;
         const [receiverId, notifyId] = [req.body.receiverId, req.body.notifyId];
         await notifications_users.create({
-          sender: id,
+          sender: userId,
           receiver: receiverId,
           notifyId: notifyId
         });
