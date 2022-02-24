@@ -21,9 +21,6 @@ module.exports = (sequelize, DataTypes) => {
     notifyId: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'notifications_users',
-    charset: 'utf8',
-    collate: 'utf8_general_ci'
   });
   return notifications_users;
 };

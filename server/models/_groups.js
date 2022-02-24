@@ -22,9 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     lng:DataTypes.STRING
   }, {
     sequelize,
-    modelName: '_groups',
-    charset: 'utf8',
-    collate: 'utf8_general_ci',
   });
   return _groups;
 };

@@ -17,9 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     notifyType: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'notifications',
-    charset: 'utf8',
-    collate: 'utf8_general_ci'
   });
   return notifications;
 };
