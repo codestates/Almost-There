@@ -11,7 +11,7 @@ module.exports = {
         const { userId } = userInfo;
         await notifications_users.destroy({
           where: {
-            id: req.query.id,
+            id: req.params.notificationId,
             receiver: userId
           }
         });

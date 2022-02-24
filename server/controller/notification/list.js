@@ -24,28 +24,3 @@ module.exports = {
     }
   }
 };
-
-/*
-* 테스트용 더미데이터
-
-? users
-INSERT INTO users(userId, name, password, email, social, createdAt, updatedAt) VALUES('test2', '테스트2', '2', 'abcd', 'AT', '2022-02-17', '2022-02-17');
-INSERT INTO users(userId, name, password, email, social, createdAt, updatedAt) VALUES('test3', '테스트3', '3', 'abcde', 'AT', '2022-02-17', '2022-02-17');
-INSERT INTO users(userId, name, password, email, social, createdAt, updatedAt) VALUES('test4', '테스트4', '4', 'abcdef', 'AT', '2022-02-17', '2022-02-17');
-
-? notifications
-INSERT INTO notifications(notifyType, createdAt, updatedAt) VALUES('test1', '2022-02-21', '2022-02-21');
-INSERT INTO notifications(notifyType, createdAt, updatedAt) VALUES('test2', '2022-02-21', '2022-02-21');
-INSERT INTO notifications(notifyType, createdAt, updatedAt) VALUES('test3', '2022-02-21', '2022-02-21');
-
-? notifications_users
-INSERT INTO notifications_users(sender, receiver, notifyId, createdAt, updatedAt) VALUES(1, 2, 1, '2022-02-21', '2022-02-21');
-INSERT INTO notifications_users(sender, receiver, notifyId, createdAt, updatedAt) VALUES(1, 3, 2, '2022-02-20', '2022-02-20');
-INSERT INTO notifications_users(sender, receiver, notifyId, createdAt, updatedAt) VALUES(4, 1, 3, '2022-02-19', '2022-02-19');
-INSERT INTO notifications_users(sender, receiver, notifyId, createdAt, updatedAt) VALUES(3, 1, 1, '2022-02-18', '2022-02-18');
-
-*/
-
-// 로그인:
-// notification/list -> 알림 갱신 여부 파악
-// group/list -> 소속된 그룹에 해당하는 room 접속
