@@ -2,33 +2,6 @@ import styled from 'styled-components';
 import { Timer } from '.';
 
 
-// const appointment = '20 jan 2023';
-
-// function countdown() {
-//   const Dday = new Date(appointment);
-//   const currentDate = new Date();
-
-//   const totalSeconds = (Dday - currentDate) / 1000;
-//   const days = Math.floor(totalSeconds / 3600 / 24);
-//   const hours = Math.floor(totalSeconds / 3600) % 24;
-//   const minutes = Math.floor(totalSeconds / 60) % 60;
-//   const seconds = Math.floor(totalSeconds) % 60;
-
-//   document.getElementById('days').innerText = formatTime(days);
-//   document.getElementById('hours').innerText = formatTime(hours);
-//   document.getElementById('minutes').innerText = formatTime(minutes);
-//   document.getElementById('seconds').innerText = formatTime(seconds);
-// }
-
-// function formatTime(time) {
-//   return time < 10 ? '0' + time : time;
-// }
-
-// setInterval(countdown, 1000);
-
-
-
-
 
 function Group () {
   return (
@@ -48,24 +21,6 @@ function Group () {
           </List1>
         </Contents1>
         <Timer />
-        {/* <Contents2>
-          <TimeBox>
-            <IntBox>0</IntBox>
-            <TextBox>일</TextBox>
-          </TimeBox>
-          <TimeBox>
-            <IntBox>0</IntBox>
-            <TextBox>시간</TextBox>
-          </TimeBox>
-          <TimeBox>
-            <IntBox>11</IntBox>
-            <TextBox>분</TextBox>
-          </TimeBox>
-          <TimeBox>
-            <IntBox>54</IntBox>
-            <TextBox>초</TextBox>
-          </TimeBox>
-        </Contents2> */}
         <Contents3>
           <Title2><button>시간 추가</button></Title2>
           <List2>

@@ -1,8 +1,5 @@
-// import "./CSS/mypage.css"
 import React from 'react';
 import '../App.css';
-// import { Mypage } from '../page/index'
-// import {EditInfo} from 'react-modal';
 import { Deactivate, EditInfo, EditPW } from '../page/index';
 import { useState, useCallback,useEffect } from "react";
 import url from '../url';
@@ -16,11 +13,6 @@ interface User {
   name: string
 }
 
-interface Group {
-  name:string
-  id: number
-  //그룹명, 그룹ID
-}
 
 
 type mypageprops = {
@@ -30,26 +22,13 @@ type mypageprops = {
 function Mypage ({user,setUser}:mypageprops) {
 
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-  // const onClickToggleModal: () => void = useCallback(() => {
-  //   setOpenModal(!isOpenModal);
-  // }, [isOpenModal]);
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
   };
-
-
-
   const [isOpenModalPW, setOpenModalPW] = useState<boolean>(false);
-  // const onClickToggleModalPW: () => void = useCallback(() => {
-  //   setOpenModalPW(!isOpenModalPW);
-  // }, [isOpenModalPW]);
   const onClickToggleModalPW = () => {
     setOpenModalPW(!isOpenModalPW);
   };
-
-
-
-
   const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
   const onClickToggleModalDeact: () => void = useCallback(() => {
     setOpenModalDeact(!isOpenModalDeact);
@@ -59,41 +38,37 @@ function Mypage ({user,setUser}:mypageprops) {
   //   groupId:"생성된 그룹없음"
   // });
 
-    const [_groups, setGroups] = useState<Group>({
-    name:"",
-    id: 0
-    })
+    const [_groups, setGroups] = useState<Array<any>>([ ])
 
+
+    
     useEffect(() => {
-      const getGroupName = async () => {
-        try {
-          const res = await axios.get(`${url}/group/list/`, { withCredentials: true });
-          const {name, id} = res.data.group;
-          getGrouplist()
-          setGroups({
-            name,
-            id
-          })
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      getGroupName();
-    }, [_groups]);
+      
+      getGrouplist();
+    },[]);
     // 그룹상태가 바뀔때마다 useeffect사용하여 그룹리스트 불러옴
   
-
   const getGrouplist = () => {
+    // console.log('test')
     axios
     .get(
-      // `${url}/group/list`,
-      `http://localhost:4000/group/list`,
+      `${url}/group/list`,
+      // `http://localhost:4000/group/list`,
       {withCredentials:true}
     )
     .then((res) => {
-      console.log("grouplist successfully inquired");
-      // setGroups()
+      const filter = res.data.groups.map((el:any)=>{
+        return {
+                name : el._group.name,
+                id: el._group.id
+              }
+      })      // console.log("grouplist successfully inquired");
+      console.log(res.data.groups[0]._group.name)
+      console.log(res.data.groups)
+      // setGroups(res.data.groups[0]._group)    
+      setGroups([...filter])    
 
+      //res.data.groups.map (el)=> {el._group.name}
 
     })
     .catch((err) => {
@@ -101,16 +76,22 @@ function Mypage ({user,setUser}:mypageprops) {
 
   }
 
-  const DeleteGrouplist = () => {
+  const DeleteGrouplist = (e:string) => {
     // console.log(res.data)
 
     console.log("test");    
     axios
     .delete(
       
-      `${url}/group/list/`, 
+      `${url}/group/${e}`, 
+      // event.target.id로 불러오기 가능?
+      // {
+
+      // },
       // `${url}/group/list/${_groups.id}`, 
       //grouplist중 groups.id에 해당하는 그룹만 삭제해야함
+      // e.currentTarget.id
+
       {withCredentials:true}
     )
     .then(() => {
@@ -121,16 +102,11 @@ function Mypage ({user,setUser}:mypageprops) {
   }
   // 완성후 그룹탈퇴버튼에 이벤트
 
-
-
-
-
   return (
   
   <MypageStyle>
     <Userinfo>
-      <UserinfoTitle> 회원정보</UserinfoTitle>
-      
+      <UserinfoTitle> 회원정보</UserinfoTitle>     
       <UserinfoDetail>
         <div> {user.name}님 환영합니다 </div>  
         <div> {user.userId}</div>
@@ -146,116 +122,46 @@ function Mypage ({user,setUser}:mypageprops) {
         </div>
         </div>
       </Buttons>
-
-
-
       <Buttons>
       <div>
         <div >
           {isOpenModalPW && (
-          // <EditPW onClickToggleModalPW={onClickToggleModalPW}>
-          // </EditPW>
           <EditPW setOpenModalPW={setOpenModalPW}/>
-          
-
           )}
       <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
+        </div>        
         </div>
-        
-        </div>
-
       </Buttons>
-
-
-
     </Userinfo>
-  
     <Groupinfo>
       <GroupTitle>그룹정보</GroupTitle>
       <GroupBox>
-        <GroupName> 
-          <div>
-          test group1
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-        </GroupName>
-      
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-      
-        <GroupName> 
-          <div>
-          test group3
           
-          {/* {_groups.map(list)=>{
+          {_groups.map((el)=>{
             return (
-              <div>{list.name}</div>
-            )
-          }} */}
+          <Box>
+          <GroupName key={el.id}>
+              {el.name}
+            </GroupName>
+            <div>
+              <button id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}> 그룹나가기 </button>
+            </div>
+
+          </Box>
+              )
+          })}
+          
+          {/* <div>
+            <button onClick={DeleteGrouplist}> 그룹나가기 </button>
+          </div> */}
+        {/* <GroupName> 
+          <div>
+            aaaaa
           </div>
           <div>
             <button onClick={DeleteGrouplist}> 그룹나가기 </button>
           </div>
-
-        </GroupName>
-
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-
-
+        </GroupName> */}
 
       </GroupBox>  
     </Groupinfo>
@@ -362,6 +268,11 @@ const GroupBox = styled.div`
   border-bottom: solid black 1px;
 `
 
+const Box = styled.div`
+display:flex;
+justify-content:space-between
+//margin
+`;
 
 const GroupTitle = styled.div`
     padding: 15px 0px 15px 0px;

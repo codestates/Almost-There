@@ -35,11 +35,7 @@ function Timer () {
 
   const [isIncrease,setIsIncrease] = useState(false);
 
-  useEffect(() => {
-    init()
-    // if(!isIncrease) return undefined;
-    
-  }, [seconds]);
+
 
 
   const Day = Math.floor(distance/(1000*60*60*24));
@@ -87,6 +83,12 @@ const init = () => {
   // setInterval(getDDay, 1000);
   setTimeout(minusOne, 1000);
 }
+
+useEffect(() => {
+  init()
+  // if(!isIncrease) return undefined;
+  
+}, [seconds]);
 
 // init();
 
