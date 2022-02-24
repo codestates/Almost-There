@@ -1,5 +1,6 @@
 const { isAuthorized } = require('../tokenFunctions');
 const { users_groups } = require('../../models');
+const { _groups } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
@@ -12,7 +13,10 @@ module.exports = {
         const { groupId } = req.query;
         // groupId, userId, overtime
         const result = await users_groups.findAll({
-          where: { groupId }
+          where: {
+            groupId 
+          },
+          include: _groups
         });
         return res.status(200).send({ result });
       }
@@ -21,3 +25,5 @@ module.exports = {
     }
   }
 };
+
+// 클라이언트에서 groupId 받아서 해당 그룹에 속한 유저와 해당 그룹의 정보 반환.

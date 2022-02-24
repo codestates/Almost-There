@@ -17,10 +17,14 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     time: DataTypes.DATE,
     leaderId: DataTypes.STRING,
-    place: DataTypes.STRING
+    place: DataTypes.STRING,
+    lat:DataTypes.STRING,
+    lng:DataTypes.STRING
   }, {
     sequelize,
-    modelName: '_groups'
+    modelName: '_groups',
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
   });
   return _groups;
 };

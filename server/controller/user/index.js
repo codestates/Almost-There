@@ -6,5 +6,6 @@ module.exports = {
   delete: require('./delete'),
   updateInfo: require('./updateInfo'),
   updatePassword: require('./updatePassword'),
-  info: require('./info')
+  info: require('./info'),
+  latlng: require('./latlng')
 };
