@@ -45,3 +45,7 @@ INSERT INTO notifications_users(sender, receiver, notifyId, createdAt, updatedAt
 INSERT INTO notifications_users(sender, receiver, notifyId, createdAt, updatedAt) VALUES(3, 1, 1, '2022-02-18', '2022-02-18');
 
 */
+
+// 로그인: 
+// notification/list -> 알림 갱신 여부 파악
+// group/list -> 소속된 그룹에 해당하는 room 접속

@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       sender: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       receiver: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       notifyId: {
         type: Sequelize.INTEGER

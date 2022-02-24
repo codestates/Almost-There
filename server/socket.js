@@ -11,8 +11,10 @@ module.exports = function (server) {
 
   // ! connection
   io.on('connection', async (socket) => {
-    // console.log(`user connected: ${socket.id}`);
+    console.log(`user connected: ${socket.id}`);
     // console.log(socket.rooms);
+    // console.log(socket.adapter);
+    // console.log(socket.namespace);
 
     // disconnect
     socket.on('disconnect', (reason) => {
@@ -136,5 +138,15 @@ Client: 특정 대상이 받은 알림 실시간으로 조회하여 사용자에
 
 
 
+// TODO: 그룹 생성 -> groupId 이름의 room 생성, 초대된 그룹원들 접속
+// * groupId room에서 받을 정보: 초대 알림, 도착 알림, 탈퇴 알림, (+ 실시간 위치 정보)
+// 로그인할 때 그 groupId room에 접속
+
+// 생성된 groupId 이름의 room에 접속(로그인 시)
+
 // 그룹 생성 때 groupId 이름의 room 접속 (+ 다른 그룹원도)
 // 초대 알림 전송
+
+
+// 접속 시 room 연결
+// 그 room에 있는 사람에게 메시지 보내기

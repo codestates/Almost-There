@@ -10,21 +10,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      users_groups.belongsTo(models._groups, { foreignKey: 'groupId', sourceKey: 'id', onDelete: 'cascade' });
-      users_groups.belongsTo(models.users, { foreignKey: 'userId', sourceKey: 'id', onDelete: 'cascade' });
+      users_groups.belongsTo(models._groups, { foreignKey: 'groupId', targetKey: 'id', onDelete: 'cascade' });
+      users_groups.belongsTo(models.users, { foreignKey: 'userId', targetKey: 'userId', onDelete: 'cascade' });
     }
   }
   users_groups.init({
     groupId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER,
+    userId: DataTypes.STRING,
     overtime: DataTypes.TIME
   },
   {
     sequelize,
-    modelName: 'users_groups',
-    tableName: 'users_groups',
-    charset: 'utf8',
-    collate: 'utf8_general_ci'
+    modelName: 'users_groups'
   });
   return users_groups;
 };

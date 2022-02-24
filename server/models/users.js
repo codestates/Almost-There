@@ -10,17 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      users.hasMany(models.users_groups, { foreignKey: 'userId', sourceKey: 'id', onDelete: 'cascade' });
-      users.hasMany(models.notifications_users, { foreignKey: 'sender', sourceKey: 'id', onDelete: 'cascade' });
-      users.hasMany(models.notifications_users, { foreignKey: 'receiver', sourceKey: 'id', onDelete: 'cascade' });
+      users.hasMany(models.users_groups, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'cascade' });
+      users.hasMany(models.notifications_users, { foreignKey: 'sender', sourceKey: 'userId', onDelete: 'cascade' });
+      users.hasMany(models.notifications_users, { foreignKey: 'receiver', sourceKey: 'userId', onDelete: 'cascade' });
     }
   }
   users.init({
-    userId: DataTypes.STRING,
+    userId: {
+      type: DataTypes.STRING,
+      unique:true
+    },
     name: DataTypes.STRING,
     password: DataTypes.STRING,
     email: DataTypes.STRING,
-    social: DataTypes.STRING
+    social: DataTypes.STRING,
+    lat: DataTypes.STRING,
+    lng: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'users'
