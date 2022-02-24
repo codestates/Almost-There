@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Calendar, Invite } from '../component/index'
+import { Calendar, Invite, Location } from '../component/index'
 import url from '../url';
 
 interface Show {
@@ -50,6 +50,13 @@ function CreateGroup () {
     })
   }
   
+  const handleLocation = () => {
+    setModal({
+      ...modal,
+      location: true
+    })
+  }
+  
   const handleInvite = () => {
     setModal({
       ...modal,
@@ -85,6 +92,11 @@ function CreateGroup () {
       { 
         modal.calendar
           ? <Calendar setModal={setModal} time={time} setTime={setTime}/>
+          : <></>
+      }
+      {
+        modal.location
+          ? <Location />
           : <></>
       }
       {
@@ -141,7 +153,7 @@ function CreateGroup () {
             </Box2>
             <Box3>
               <div>
-                <button>약속 장소 선택</button>
+                <button onClick={handleLocation}>약속 장소 선택</button>
               </div>
             </Box3>
           </Box1>
