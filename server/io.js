@@ -1,3 +1,5 @@
+const { users } = require("./models");
+
 var app = require("express")();
 var http = require("http").createServer(app);
 var io = require('socket.io')(http, {
@@ -15,13 +17,18 @@ app.get('/', (req, res) => {
     res.send('<h1> Hello World </h1>');
   });
 
-io.on('connection', function (socket) {
+  
+io.on ('connection', (socket) => {
   console.log(socket.id, 'Connected');
 
-socket.on('그룹 생성', function (data){
+socket.on('join room', (data) => {
   console.log(data)
-  socket.emit('그룹 생성 확인', 'Server 그룹 생성 확인했습니다.')
+  socket.join(data.room)
+  const result = io.to(data.room).emit('msg', data.msg)
+  console.log(result)
 })
+
+
 
 // socket.emit('msg', `${socket.id} 연결 되었습니다.`);
   
@@ -30,11 +37,6 @@ socket.on('그룹 생성', function (data){
 //   });
 // 그룹 생성이 클릭됐을 떄 클라이언트에서 해당 내용을 받고 서버에서 room으로 넣고 해당 room에 초대 알림 발송
 // 클라이언트에서 알림받고 알림창에 띄우기, 수락? or 거절? or 렌더링?
-socket.join('test room'); // 초대 받은 클라이언트 개인마다 접속되게끔
-
-io.to('test room').emit('test room',`${socket.rooms} 테스트 메시지입니다.`)
-
-console.log(socket.rooms)
 // const rooms = io.of("/").adapter.rooms;
 // console.log(rooms)
 
