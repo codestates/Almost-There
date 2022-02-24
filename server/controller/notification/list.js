@@ -8,10 +8,10 @@ module.exports = {
       return res.status(401).send({ message: 'not authorized' });
     } else {
       try {
-        const { id } = userInfo;
+        const { userId } = userInfo;
         const result = await notifications_users.findAll({
           where: {
-            receiver: id
+            receiver: userId
           },
           include: notifications
         });
@@ -46,6 +46,6 @@ INSERT INTO notifications_users(sender, receiver, notifyId, createdAt, updatedAt
 
 */
 
-// 로그인: 
+// 로그인:
 // notification/list -> 알림 갱신 여부 파악
 // group/list -> 소속된 그룹에 해당하는 room 접속

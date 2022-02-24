@@ -32,14 +32,14 @@ module.exports = function (server) {
       try {
         // const userAdapter = io.of('/user').adapter;
         // console.log(userAdapter.nsp.name);
-        
+
         socket.join(`user ${payload.userId}`);
         io.to(`user ${payload.userId}`).emit('login', `join room - user ${payload.userId}`);
         console.log(socket.rooms);
         return socket;
       } catch (err) {
         console.log(err);
-      }      
+      }
     });
 
     // logout
@@ -51,14 +51,14 @@ module.exports = function (server) {
       } catch (err) {
         console.log(err);
       }
-    })
+    });
 
     // 'success' 이벤트 처리 테스트
     socket.on('success', async (payload) => {
       console.log('success');
       console.log(payload);
       try {
-        const userInfo = await authorizeSocket(socket.handshake.headers['cookie']);
+        const userInfo = await authorizeSocket(socket.handshake.headers.cookie);
         if (!userInfo) {
           return io.emit('success', 'fail: not authorized');
         }
@@ -136,8 +136,6 @@ Client: 특정 대상이 받은 알림 실시간으로 조회하여 사용자에
 
 // TODO: 로그아웃 -> 접속한 모든 채널 나가기(leave)
 
-
-
 // TODO: 그룹 생성 -> groupId 이름의 room 생성, 초대된 그룹원들 접속
 // * groupId room에서 받을 정보: 초대 알림, 도착 알림, 탈퇴 알림, (+ 실시간 위치 정보)
 // 로그인할 때 그 groupId room에 접속
@@ -146,7 +144,6 @@ Client: 특정 대상이 받은 알림 실시간으로 조회하여 사용자에
 
 // 그룹 생성 때 groupId 이름의 room 접속 (+ 다른 그룹원도)
 // 초대 알림 전송
-
 
 // 접속 시 room 연결
 // 그 room에 있는 사람에게 메시지 보내기

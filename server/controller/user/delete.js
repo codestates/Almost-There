@@ -1,4 +1,4 @@
-const { users, _groups, users_groups } = require('../../models');
+const { users, _groups, users_groups, notifications_users } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = {
@@ -15,6 +15,12 @@ module.exports = {
             leaderId: userId
           },
           include: users_groups
+        });
+        await notifications_users.destroy({
+          where: { receiver: userId }
+        });
+        await notifications_users.destroy({
+          where: { sender: userId }
         });
         return res.status(200).send({ message: 'successfully deleted' });
       }
