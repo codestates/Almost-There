@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     notifyType: DataTypes.STRING
   }, {
     sequelize,
+    modelName: 'notifications'
   });
   return notifications;
 };

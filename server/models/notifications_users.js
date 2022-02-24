@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     notifyId: DataTypes.INTEGER
   }, {
     sequelize,
+    modelName: 'notifications_users'
   });
   return notifications_users;
 };
