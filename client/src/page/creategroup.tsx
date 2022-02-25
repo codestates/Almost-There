@@ -5,10 +5,12 @@ import styled from 'styled-components';
 import { Calendar, Invite, Location } from '../component/index'
 import url from '../url';
 
-interface Show {
-  calendar: boolean,
-  location: boolean,
-  invite: boolean
+declare global {
+  interface Show {
+    calendar: boolean,
+    location: boolean,
+    invite: boolean
+  }
 }
 interface Time {
   year: number,
@@ -18,6 +20,11 @@ interface Time {
   hour: number,
   minute: number
 }
+interface Place {
+  name: string,
+  x: string,
+  y: string
+}
 
 function CreateGroup () {
   const [modal, setModal] = useState<Show>({
@@ -25,7 +32,7 @@ function CreateGroup () {
     location: false,
     invite: false
   })
-  const [groupName, setGroupName] = useState<string>('');
+  const [groupName, setGroupName] = useState<string>('동아리 모임');
   const [edit, setEdit] = useState<boolean>(false);
   const refGroupName = useRef<HTMLInputElement>(null);
   const [time, setTime] = useState<Time>({
@@ -36,6 +43,11 @@ function CreateGroup () {
     hour: 12,
     minute: 0
   })
+  const [place, setPlace] = useState<Place>({
+    name: '서울역 1번 출구',
+    x: '',
+    y: ''
+  });
   const [inviteList, setInviteList] = useState<Array<string>>([]);
   const navigate = useNavigate();
 
@@ -96,7 +108,7 @@ function CreateGroup () {
       }
       {
         modal.location
-          ? <Location />
+          ? <Location setModal={setModal} setPlace={setPlace}/>
           : <></>
       }
       {
@@ -149,7 +161,7 @@ function CreateGroup () {
           <Box1>
             <Box2>
               <Title2>약속 장소</Title2>
-              <Box4>xx역 1번 출구</Box4>
+              <Box4>{place.name}</Box4>
             </Box2>
             <Box3>
               <div>
