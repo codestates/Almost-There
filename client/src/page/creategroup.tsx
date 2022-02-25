@@ -2,13 +2,15 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Calendar, Invite } from '../component/index'
+import { Calendar, Invite, Location } from '../component/index'
 import url from '../url';
 
-interface Show {
-  calendar: boolean,
-  location: boolean,
-  invite: boolean
+declare global {
+  interface Show {
+    calendar: boolean,
+    location: boolean,
+    invite: boolean
+  }
 }
 interface Time {
   year: number,
@@ -18,14 +20,23 @@ interface Time {
   hour: number,
   minute: number
 }
+interface Place {
+  name: string,
+  x: string,
+  y: string
+}
 
-function CreateGroup () {
+type CreateGroupProps = {
+  user: User
+}
+
+function CreateGroup ({ user }: CreateGroupProps) {
   const [modal, setModal] = useState<Show>({
     calendar: false,
     location: false,
     invite: false
   })
-  const [groupName, setGroupName] = useState<string>('');
+  const [groupName, setGroupName] = useState<string>('동아리 모임');
   const [edit, setEdit] = useState<boolean>(false);
   const refGroupName = useRef<HTMLInputElement>(null);
   const [time, setTime] = useState<Time>({
@@ -36,6 +47,11 @@ function CreateGroup () {
     hour: 12,
     minute: 0
   })
+  const [place, setPlace] = useState<Place>({
+    name: '',
+    x: '',
+    y: ''
+  });
   const [inviteList, setInviteList] = useState<Array<string>>([]);
   const navigate = useNavigate();
 
@@ -47,6 +63,13 @@ function CreateGroup () {
     setModal({
       ...modal,
       calendar: true
+    })
+  }
+  
+  const handleLocation = () => {
+    setModal({
+      ...modal,
+      location: true
     })
   }
   
@@ -62,13 +85,22 @@ function CreateGroup () {
   }
 
   const handleCreateButton = async () => {
-    // const res = await axios.post(`${url}/group/create`, {
-    //   name: groupName,
-    //   time: `${time.day}`,
-    //   place: '서울역 1번출구',
-    //   inviteId: inviteList
-    // });
-    // const id = res.data.data.id;
+    let hour;
+    if (time.meridium === '오후') {
+      hour = time.hour + 12;
+    } else {
+      hour = time.hour;
+    }
+    const { year, month, day, minute } = time;
+    const res = await axios.post(`${url}/group/create`, {
+      name: groupName,
+      time: `${year}.${month}.${day} ${hour}:${minute}:00`,
+      place: place.name,
+      inviteId: inviteList,
+      lat: place.x,
+      lng: place.y
+    }, {withCredentials: true});
+    // const res2 = await axios.get(`${url}/group/list`, {withCredentials: true});
     const id = 3;
     navigate(`/group/${id}`);
   }
@@ -88,8 +120,13 @@ function CreateGroup () {
           : <></>
       }
       {
+        modal.location
+          ? <Location setModal={setModal} setPlace={setPlace}/>
+          : <></>
+      }
+      {
         modal.invite
-          ? <Invite setModal={setModal} inviteList={inviteList} setInviteList={setInviteList}/>
+          ? <Invite setModal={setModal} inviteList={inviteList} setInviteList={setInviteList} user={user}/>
           : <></>
       }
       <Container>
@@ -137,11 +174,11 @@ function CreateGroup () {
           <Box1>
             <Box2>
               <Title2>약속 장소</Title2>
-              <Box4>xx역 1번 출구</Box4>
+              <Box4>{place.name}</Box4>
             </Box2>
             <Box3>
               <div>
-                <button>약속 장소 선택</button>
+                <button onClick={handleLocation}>약속 장소 선택</button>
               </div>
             </Box3>
           </Box1>

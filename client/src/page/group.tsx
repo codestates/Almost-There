@@ -1,71 +1,92 @@
 import styled from 'styled-components';
-import { Timer } from '.';
-
-
-// const appointment = '20 jan 2023';
-
-// function countdown() {
-//   const Dday = new Date(appointment);
-//   const currentDate = new Date();
-
-//   const totalSeconds = (Dday - currentDate) / 1000;
-//   const days = Math.floor(totalSeconds / 3600 / 24);
-//   const hours = Math.floor(totalSeconds / 3600) % 24;
-//   const minutes = Math.floor(totalSeconds / 60) % 60;
-//   const seconds = Math.floor(totalSeconds) % 60;
-
-//   document.getElementById('days').innerText = formatTime(days);
-//   document.getElementById('hours').innerText = formatTime(hours);
-//   document.getElementById('minutes').innerText = formatTime(minutes);
-//   document.getElementById('seconds').innerText = formatTime(seconds);
-// }
-
-// function formatTime(time) {
-//   return time < 10 ? '0' + time : time;
-// }
-
-// setInterval(countdown, 1000);
-
-
-
+import { Timer } from '../component';
+import React from 'react';
+import '../App.css';
+import { useState, useCallback,useEffect } from "react";
+import url from '../url';
+import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 
 function Group () {
+  const [groupInfo, setGroupInfo] = useState<Array<any>>([ ])
+  // const [groupInfo, setGroupInfo] = useState<Object>([ ])
+  const [newInfo, setnewInfo] = useState<Object>([ ])
+  const params= useParams();
+
+useEffect(() => {      
+getGroupInfo();
+console.log(groupInfo[0])
+},[]);  
+
+const getGroupInfo = () => {
+  // console.log('test')
+  axios
+  .get(
+  `${url}/group/list`,
+  {withCredentials:true}
+  )
+  .then((res) => {
+  const filtered = res.data.groups.filter((el:any)=>{
+  // filter 사용하여 id가 00인 그룹정보 불러오기
+  // return el.groupId === 3
+  console.log(params.id)
+  // return el.id === 5;    
+  return el.id === Number(params.id);    
+
+})
+  // console.log(res.data.groups[0]._group.name)
+  console.log(filtered)  
+  // console.log(res.data.groups)
+  // setGroupInfo([...filtered])    
+  setGroupInfo([...filtered])    
+  setnewInfo(groupInfo)
+
+  // console.log(filtered)  
+  console.log(groupInfo)
+  console.log(newInfo)  
+
+})
+  .catch((err) => {
+  });
+}
+
+//groups의 name, place, time 필요
+
+
   return (
     <Background>
       <Container>
         <Contents1>
           <List1>
-            <Title1>그룹 이름</Title1>
-            <Icon>그룹원</Icon>
+          {/* <GroupBox>
+          {groupInfo.map((el)=>{
+          return (
+          <Box>
+          <GroupName 
+          // key={el.id}
+          >
+          {el.name}
+          </GroupName>
+          </Box>
+          )
+          })}
+          </GroupBox>  
+ */}
+            <Title1 onClick={getGroupInfo} >{groupInfo[0]?._group.name}</Title1>
+            <Icon>
+              그룹원
+            </Icon>
           </List1>
           <List1>
-            <Title1>xxx구 xxx로 123</Title1>
+            <Title1>{groupInfo[0]?._group.place}</Title1>
             <Icon>지도</Icon>
           </List1>
           <List1>
-            <Title3>2월 22일 오후 5:00</Title3>
+            <Title3>{groupInfo[0]?._group.time}</Title3>
           </List1>
         </Contents1>
         <Timer />
-        {/* <Contents2>
-          <TimeBox>
-            <IntBox>0</IntBox>
-            <TextBox>일</TextBox>
-          </TimeBox>
-          <TimeBox>
-            <IntBox>0</IntBox>
-            <TextBox>시간</TextBox>
-          </TimeBox>
-          <TimeBox>
-            <IntBox>11</IntBox>
-            <TextBox>분</TextBox>
-          </TimeBox>
-          <TimeBox>
-            <IntBox>54</IntBox>
-            <TextBox>초</TextBox>
-          </TimeBox>
-        </Contents2> */}
         <Contents3>
           <Title2><button>시간 추가</button></Title2>
           <List2>
@@ -234,5 +255,15 @@ const ATBox = styled.div`
   margin: 0 5px;
   background-color: white;
 `
+
+const GroupBox = styled.div`
+`
+const Box = styled.div`
+`
+const GroupName = styled.div`
+`
+
+
+
 
 export default Group;

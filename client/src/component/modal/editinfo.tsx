@@ -1,5 +1,3 @@
-// import { useHistory } from "react-router-dom";
-// import "./CSS/mypage.css"
 import axios from "axios";
 import React, { useState } from "react";
 import { PropsWithChildren } from "react";
