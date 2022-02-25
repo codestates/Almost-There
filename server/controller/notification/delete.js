@@ -1,23 +1,23 @@
-const { notifications_users, notifications } = require('../../models');
+const { notifications_users } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = {
-  get: async (req, res) => {
+  delete: async (req, res) => {
     const userInfo = await isAuthorized(req);
     if (!userInfo) {
       return res.status(401).send({ message: 'not authorized' });
     } else {
       try {
         const { userId } = userInfo;
-        const result = await notifications_users.findAll({
+        await notifications_users.destroy({
           where: {
+            id: req.params.notificationId,
             receiver: userId
-          },
-          include: notifications
+          }
         });
-        const notice = result.sort((a, b) => a.createdAt - b.createdAt);
-        return res.send({ notice });
+        return res.send({ message: 'deleted' });
       } catch (err) {
+        console.log(err);
         return res.status(500).send({ message: 'server error' });
       }
     }

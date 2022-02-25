@@ -38,14 +38,16 @@ function Timer () {
       ${seconds < 10 ? `0${seconds}` : seconds}초 남았습니다.`;
     }
   }
-  const init = () => {
+const init = () => {
   // console.log('hello')
+  // init 함수 생성해서 getDDay함수 호출하고,
   getDDay();
   setTimeout(minusOne, 1000);
   }
   useEffect(() => {
   init()
   }, [seconds]);
+
 
   return(
     <>
@@ -69,7 +71,9 @@ function Timer () {
   </Contents2>
     </>
   )
+  
 }
+
 const Title = styled.div`
   background-color: #ffcdd2;
 `

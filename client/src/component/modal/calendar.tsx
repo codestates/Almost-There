@@ -37,7 +37,7 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
   const refMeridium = useRef<HTMLDivElement>(null);
   const refHour = useRef<HTMLDivElement>(null);
   const refMinute = useRef<HTMLDivElement>(null);
-  const [day, setDay] = useState<string>('');
+  const [day, setDay] = useState<string>('1');
   const [meridium, setMeridium] = useState<string>('오전');
   const [hour, setHour] = useState<string>('1');
   const [minute, setMinute] = useState<string>('0');
@@ -183,7 +183,6 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
                   }
                 <Option select=''></Option>
               </HourContainer>
-              
             </HourBox>
             <MinuteBox ref={refMinute} onScroll={handleMinute}>
               <MinuteContainer>
@@ -349,7 +348,7 @@ const Option = styled.div<OptionI>`
   align-items: center;
   font-size: 15px;
   font-weight: bold;
-  background-color: ${(props) => props.id===props.select ? 'rgba(52, 106, 255, 0.4)' : 'none'}
+  background-color: ${(props) => props.id===props.select ? 'rgba(52, 106, 255, 0.4)' : 'none'};
 `
 const Select = styled.div`
   width: 250px;

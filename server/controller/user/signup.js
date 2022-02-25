@@ -15,9 +15,6 @@ module.exports = {
         defaults: { userId, password: hashPassword, name, email, social: 'AT' },
         raw: true
       });
-      // if (!created) {
-      //   return res.status(409).send({ message: 'Id already exists' });
-      // }
       delete userInfo.dataValues.password;
       const jwt = generateAccessToken(userInfo.dataValues);
       sendAccessToken(res, jwt);

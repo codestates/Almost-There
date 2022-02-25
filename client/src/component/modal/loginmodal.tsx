@@ -4,11 +4,6 @@ import styled from 'styled-components';
 import { logoN, logoK, logoG } from '../../data';
 import url from '../../url';
 
-interface ShowList {
-  login: boolean,
-  signin: boolean
-}
-
 interface Info {
   userId: string,
   password: string
@@ -37,7 +32,8 @@ const [msg, setMsg] = useState<boolean>(false);
 const clickBack = () => {
   setShow({
     login: false,
-    signin: false
+    signin: false,
+    notify: false
   });
 }
 
@@ -47,9 +43,14 @@ const handleLogin = async() => {
       userId: info.userId,
       password: info.password
     }, { withCredentials: true });
+    const {userId, name, email} = result.data.data;
+    setUser({
+      userId,
+      name,
+      email
+    });
     setLogin(true);
-    setShow({ login: false, signin: false});
-    setUser({...result.data.data});
+    setShow({ login: false, signin: false, notify: false});
   } catch {
     setMsg(true);
   }
@@ -58,7 +59,8 @@ const handleLogin = async() => {
 const clickSign = () => {
   setShow({
     login: false,
-    signin: true
+    signin: true,
+    notify: false
   })
 }
 

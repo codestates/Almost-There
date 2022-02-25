@@ -62,8 +62,8 @@ function Map () {
     // console.log(res.data.groups[0]._group)
     console.log(filtered[0]._group)
     // setingdes(res.data.groups[0]._group.name)
-    // setx()
-    // sety()
+    // setx(res.data.groups[0]._group.x)
+    // sety(res.data.groups[0]._group.y)
   })
     .catch((err) => {
     });
