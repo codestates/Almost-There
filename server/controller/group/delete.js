@@ -9,7 +9,7 @@ module.exports = {
       try {
         const { userId } = userInfo;
         const groupId = req.params.groupId;
-        
+
         // 소속 그룹 탈퇴
         await users_groups.update({ overtime: null },
           { where: { groupId, userId } });
