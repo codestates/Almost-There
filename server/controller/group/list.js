@@ -9,11 +9,11 @@ module.exports = {
       return res.status(401).send({ message: 'not authorized' });
     } else {
       try {
-        const { id } = userInfo;
+        const { userId } = userInfo;
         const result = await users_groups.findAll({
           where: {
-            userId: id,
-            overtime: { [Op.ne]: -1 }
+            userId: userId,
+            overtime: { [Op.ne]: null }
           },
           include: _groups
         });

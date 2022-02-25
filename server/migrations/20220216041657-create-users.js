@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       name: {
         type: Sequelize.STRING
@@ -21,6 +22,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       social: {
+        type: Sequelize.STRING
+      },
+      lat: {
+        type: Sequelize.STRING
+      },
+      lng: {
         type: Sequelize.STRING
       },
       createdAt: {
