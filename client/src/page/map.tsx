@@ -3,6 +3,7 @@ import { useState, useCallback,useEffect } from "react";
 import url from '../url';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
+import { contains } from "cheerio/lib/static";
 
 
 
@@ -15,15 +16,15 @@ declare global {
 
 function Map () {
 
-  const [x, setx] = useState(37.48276303605517);
-  const [y, sety] = useState(127.03557641134296);
+  const [x, setx] = useState('37.48276303605517');
+  const [y, sety] = useState('127.03557641134296');
   const params= useParams();
 
   useEffect(() => {
     const latdes2 = 37.48276303605517;
     const ingdes2 = 127.03557641134296;
     // const markerPosition  = new window.kakao.maps.LatLng(37.48276303605517,127.03557641134296); 
-    const markerPosition  = new window.kakao.maps.LatLng(y,x);  
+    const markerPosition  = new window.kakao.maps.LatLng(Number(x),Number(y));  
     // 목적지 좌표표시
     const container = document.getElementById("map");
     // const container =getElementById(map: string): HTMLElement | null;
@@ -38,7 +39,7 @@ function Map () {
         console.log(getlatdes())
         // 마커가 지도 위에 표시되도록 설정합니다
         marker.setMap(map);
-  }, []);
+  }, [x,y]);
 
 
   const getlatdes = () => {
@@ -55,15 +56,15 @@ function Map () {
     // filter 사용하여 id가 00인 그룹정보 불러오기
     // return el.groupId === 3
     // console.log(params.id)
-    return el.groupId === 60;    
+    return el.groupId === 1;    
     // return el.id === Number(params.id);        
   })
     // console.log(res.data.groups[0]._group.name)
     // console.log(res.data.groups[0]._group)
     console.log(filtered[0]._group)
     // setingdes(res.data.groups[0]._group.name)
-    // setx(res.data.groups[0]._group.x)
-    // sety(res.data.groups[0]._group.y)
+    setx(filtered[0]._group.lng)
+    sety(filtered[0]._group.lat)
   })
     .catch((err) => {
     });

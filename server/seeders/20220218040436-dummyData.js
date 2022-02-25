@@ -22,7 +22,7 @@ module.exports = {
       updatedAt: new Date(Date.now()),
       place: '강남역',
       lat:'37.49753208360963',
-      ing:'127.0267786409362'
+      lng:'127.0267786409362'
     }])
 
     let group2 = await queryInterface.bulkInsert('_groups',[{
@@ -33,7 +33,7 @@ module.exports = {
       updatedAt: new Date(Date.now()),
       place:'양재역 9번출구',
       lat: '37.48276303605517', 
-      ing: '127.03557641134296'
+      lng: '127.03557641134296'
 
     }])
 
@@ -45,7 +45,7 @@ module.exports = {
       updatedAt: new Date(Date.now()),
       place: '코엑스',
       lat: '37.51183045067563',
-      ing: '127.05914383375931'      
+      lng: '127.05914383375931'      
     }])
 
 

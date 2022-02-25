@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { Home, Mypage, CreateGroup, Group, Map, Timer} from './page/index';
+import { Home, Mypage, CreateGroup, Group, Map} from './page/index';
 import { Header, LoginModal, Notify } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
@@ -69,7 +69,6 @@ function App() {
                 <Route path='/group/:id' element={<Group />} />
               </>
             : <>
-                <Route path='/timer' element={<Timer />} />        
                 <Route path='/map' element={<Map />} />        
                 <Route path='/*' element={<Navigate to='/' />} />
               </>

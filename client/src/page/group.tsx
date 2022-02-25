@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Timer } from '.';
+import { Timer } from '../component';
 import React from 'react';
 import '../App.css';
 import { useState, useCallback,useEffect } from "react";
