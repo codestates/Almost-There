@@ -81,13 +81,20 @@ function CreateGroup () {
   }
 
   const handleCreateButton = async () => {
-    // const res = await axios.post(`${url}/group/create`, {
-    //   name: groupName,
-    //   time: `${time.day}`,
-    //   place: '서울역 1번출구',
-    //   inviteId: inviteList
-    // });
-    // const id = res.data.data.id;
+    let hour;
+    if (time.meridium === '오후') {
+      hour = time.hour + 12;
+    } else {
+      hour = time.hour;
+    }
+    const { year, month, day, minute } = time;
+    const res = await axios.post(`${url}/group/create`, {
+      name: groupName,
+      time: `${year}.${month}.${day} ${hour}:${minute}:00`,
+      place: place,
+      inviteId: inviteList
+    });
+    console.log(res.data);
     const id = 3;
     navigate(`/group/${id}`);
   }
