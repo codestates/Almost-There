@@ -70,7 +70,7 @@ function App() {
                 <Route path='/*' element={<Navigate to='/' />} />
               </>
           }
-          <Route path= '/' element={<Home setLogin={setLogin}/>} />
+          <Route path= '/' element={<Home setLogin={setLogin} setUser={setUser}/> } />
         </Routes>
         {
           show.login

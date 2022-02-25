@@ -47,9 +47,14 @@ const handleLogin = async() => {
       userId: info.userId,
       password: info.password
     }, { withCredentials: true });
+    const {userId, name, email} = result.data.data;
+    setUser({
+      userId,
+      name,
+      email
+    });
     setLogin(true);
     setShow({ login: false, signin: false});
-    setUser({...result.data.data});
   } catch {
     setMsg(true);
   }
