@@ -19,7 +19,10 @@ module.exports = {
       time:new Date(Date.now()),
       leaderId:"kimcoding@codestates.com",
       createdAt: new Date(Date.now()),
-      updatedAt: new Date(Date.now())
+      updatedAt: new Date(Date.now()),
+      place: '강남역',
+      lat:'37.49753208360963',
+      ing:'127.0267786409362'
     }])
 
     let group2 = await queryInterface.bulkInsert('_groups',[{
@@ -27,7 +30,11 @@ module.exports = {
       time:new Date(Date.now()),
       leaderId:"parkhacker@codestates.com",
       createdAt: new Date(Date.now()),
-      updatedAt: new Date(Date.now())
+      updatedAt: new Date(Date.now()),
+      place:'양재역 9번출구',
+      lat: '37.48276303605517', 
+      ing: '127.03557641134296'
+
     }])
 
     let group3 = await queryInterface.bulkInsert('_groups',[{
@@ -35,7 +42,10 @@ module.exports = {
       time:new Date(Date.now()),
       leaderId:"tkdls1611@naver.com",
       createdAt: new Date(Date.now()),
-      updatedAt: new Date(Date.now())
+      updatedAt: new Date(Date.now()),
+      place: '코엑스',
+      lat: '37.51183045067563',
+      ing: '127.05914383375931'      
     }])
 
 
