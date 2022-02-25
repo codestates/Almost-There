@@ -68,9 +68,10 @@ module.exports = function (server) {
 
     // ! 실시간 위치 정보: user/latlng (POST)
     // ? 로그인한 사용자의 위치를 실시간으로 관리
-    // 로그인하면 본인 위치를 실시간으로 서버에 전달 
+    // 로그인하면 본인 위치를 실시간으로 서버에 전달
     // - 클라이언트에서 일정 시간마다 user/latlng (POST) 요청?
     // - 클라이언트에서 일정 시간마다 socket.io 이벤트로 서버에 전달?
+    // setTimeout?
 
     // ? getPosition: 다른 사람의 위치 정보 요청 시 요청한 클라이언트에 위치 정보 전달
     // * 요청 데이터: { userId: 본인, target: 대상 }
@@ -87,22 +88,20 @@ module.exports = function (server) {
         lng: result.dataValues.lng
       });
     });
-    
+
     // ? arrive: 목적지에 도착했을 때 그 목적지와 연관된 그룹에 도착했음을 전달
     // * 요청 데이터: { groupId: 그룹 번호 }
-    // 본인 위치 ~ 목적지까지의 거리를 계산하다가 조건 달성하면 
+    // 본인 위치 ~ 목적지까지의 거리를 계산하다가 조건 달성하면
     // 실시간으로 그 그룹원들에게 도착 소식 전달
     // ? 서버에서 본인 위치 & 목적지 위치 거리 계산 -> 조건 달성하면 클라이언트에 이벤트 전달
     // ? + 도착 알림 다른 그룹원들에게 알리기
     socket.on('arrive', async (payload) => {
       console.log('arrived');
-      
+
       // 약속시간 30분 전 안인지 확인하고 알림 보내야함
       io.to(`group ${payload.groupId}`).emit('notice', '도착 알림');
+    });
 
-    })
-
-    
     // ! 그룹 생성: group/create (POST)
     // groupId 1번 -> group 1 room 만들어서 -> 초대한 사람들도 실시간으로 group 1에 연결
     // 로그인할 때 본인 room에도 입장시켜서, 초대할 때 동일한 userId room에다가 보내면
@@ -111,7 +110,6 @@ module.exports = function (server) {
     // b, c
     // b -> [ 로그인X ] // c -> [ c ] -> socket.on('초대' -> '채널 접속') -> socket.on('채널 접속' -> group 1)
 
-    
     // ! 그룹 탈퇴: group/:groupId (DELETE)
     // * 요청 데이터: { userId: 본인, groupId: 그룹 번호, groupMember: [1, 2, 3, ...] }
     socket.on('leave', async (payload) => {
@@ -125,7 +123,7 @@ module.exports = function (server) {
       }
       socket.leave(`group ${payload.groupId}`);
       io.to(`group ${payload.groupId}`).emit('notice', '탈퇴 알림');
-    })
+    });
   });
 
   return io;
@@ -145,7 +143,6 @@ room은 새로고침 전까지(socket.id가 바뀌기 전까지) 계속 유지�
 ---------------------
 1인 1소켓을 어떻게? -> Props로 소켓을 다룰 수 있는지
 로그인 -> AT는 잘 되지만, 소셜 로그인은 user 값을 제대로 못 가져옴.
-
 
 TODO: (Client) 로그인할 때 notification/list 요청하여 알림왔는지 파악하기
 
