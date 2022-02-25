@@ -26,7 +26,11 @@ interface Place {
   y: string
 }
 
-function CreateGroup () {
+type CreateGroupProps = {
+  user: User
+}
+
+function CreateGroup ({ user }: CreateGroupProps) {
   const [modal, setModal] = useState<Show>({
     calendar: false,
     location: false,
@@ -44,7 +48,7 @@ function CreateGroup () {
     minute: 0
   })
   const [place, setPlace] = useState<Place>({
-    name: '서울역 1번 출구',
+    name: '',
     x: '',
     y: ''
   });
@@ -91,10 +95,12 @@ function CreateGroup () {
     const res = await axios.post(`${url}/group/create`, {
       name: groupName,
       time: `${year}.${month}.${day} ${hour}:${minute}:00`,
-      place: place,
-      inviteId: inviteList
-    });
-    console.log(res.data);
+      place: place.name,
+      inviteId: inviteList,
+      lat: place.x,
+      lng: place.y
+    }, {withCredentials: true});
+    // const res2 = await axios.get(`${url}/group/list`, {withCredentials: true});
     const id = 3;
     navigate(`/group/${id}`);
   }
@@ -120,7 +126,7 @@ function CreateGroup () {
       }
       {
         modal.invite
-          ? <Invite setModal={setModal} inviteList={inviteList} setInviteList={setInviteList}/>
+          ? <Invite setModal={setModal} inviteList={inviteList} setInviteList={setInviteList} user={user}/>
           : <></>
       }
       <Container>

@@ -53,7 +53,7 @@ function Timer () {
       setSeconds(59)
       setMinutes(minutes-1)
     }
-    console.log('test')
+    // console.log('test')
   }
 
 
@@ -80,7 +80,7 @@ function Timer () {
       
     }
 const init = () => {
-  console.log('hello')
+  // console.log('hello')
   // init 함수 생성해서 getDDay함수 호출하고,
   getDDay();
   // setInterval 메서드에서 getDDay함수를 1초(1000밀리초)마다 호출한다.
