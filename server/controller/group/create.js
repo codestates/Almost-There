@@ -38,7 +38,7 @@ module.exports = {
             });
           }
         }
-        return res.status(201).send({ message: 'ok' });
+        return res.status(201).send({ data: group.dataValues.id });
       }
     } catch (err) {
       return res.status(500).send({ message: 'server error2' });
