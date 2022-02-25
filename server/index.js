@@ -10,8 +10,14 @@ const groupRouter = require('./routes/group');
 const notificationRouter = require('./routes/notification');
 const socialRouter = require('./routes/social');
 const httpServer = require('http').createServer(app);
+<<<<<<< Updated upstream
 const io = require('./socket')(httpServer);
 // const models = require('./models');
+=======
+const io = require('./io')(httpServer);
+const models = require('./models');
+
+>>>>>>> Stashed changes
 
 app.use(express.json());
 app.use(cookieParser());
@@ -31,7 +37,11 @@ app.use('/user', userRouter);
 app.use('/group', groupRouter);
 app.use('/notification', notificationRouter);
 app.use('/social', socialRouter);
+<<<<<<< Updated upstream
 // models.sequelize.sync({ force: false });
+=======
+models.sequelize.sync({ force: false });
+>>>>>>> Stashed changes
 httpServer.listen(PORT, () => {
   console.log(`HTTP server listen on ${PORT}`);
 });
