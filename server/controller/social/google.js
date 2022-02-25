@@ -41,7 +41,6 @@ module.exports = {
       });
       // 받아온 회원정보로 almost there 사이트 토큰 발급
       const jwt = generateAccessToken(userInfo[0].dataValues);
-      console.log(jwt);
       sendAccessToken(res, jwt);
       return res.status(200).send({ data: userInfo[0].dataValues });
     } catch (err) {

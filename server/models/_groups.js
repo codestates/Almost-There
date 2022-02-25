@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     time: DataTypes.DATE,
     leaderId: DataTypes.STRING,
     place: DataTypes.STRING,
-    lat:DataTypes.STRING,
-    lng:DataTypes.STRING
+    lat: DataTypes.STRING,
+    lng: DataTypes.STRING
   }, {
     sequelize,
     modelName: '_groups'

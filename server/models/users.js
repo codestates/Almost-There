@@ -17,17 +17,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   users.init({
     userId: {
-      type:DataTypes.STRING,
-      unique:true
-  },
+      type: DataTypes.STRING,
+      unique: true
+    },
     name: DataTypes.STRING,
     password: DataTypes.STRING,
     email: DataTypes.STRING,
     social: DataTypes.STRING,
-    lat:DataTypes.STRING,
-    lng:DataTypes.STRING
+    lat: DataTypes.STRING,
+    lng: DataTypes.STRING
   }, {
     sequelize,
+    modelName: 'users'
   });
 
   return users;
