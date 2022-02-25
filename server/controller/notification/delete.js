@@ -17,7 +17,6 @@ module.exports = {
         });
         return res.send({ message: 'deleted' });
       } catch (err) {
-        console.log(err);
         return res.status(500).send({ message: 'server error' });
       }
     }

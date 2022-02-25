@@ -14,7 +14,7 @@ module.exports = {
         // groupId, userId, overtime
         const result = await users_groups.findAll({
           where: {
-            groupId 
+            groupId
           },
           include: _groups
         });
