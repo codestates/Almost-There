@@ -8,14 +8,13 @@ module.exports = {
       if (!userInfo) {
         return res.status(401).send({ message: 'not authorized' });
       } else {
-        console.log(req.query.id);
         if (req.query.id) {
-          const id = req.query.id;
-          const user = await users.findOne({
-            attributes: ['id', 'userId', 'name', 'email'],
-            where: { id }
-          });
-          return res.status(200).send({ user });
+          // const id = req.query.id;
+          // const user = await users.findOne({
+          //   attributes: ['id', 'userId', 'name', 'email'],
+          //   where: { id }
+          // });
+          // return res.status(200).send({ user });
         } else {
           const { userId } = userInfo;
           const user = await users.findOne({

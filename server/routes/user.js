@@ -12,5 +12,4 @@ router.put('/info', userController.updateInfo.put);
 router.put('/password', userController.updatePassword.put);
 router.get('/info', userController.info.get);
 
-
 module.exports = router;
