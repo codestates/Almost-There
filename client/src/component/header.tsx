@@ -5,19 +5,16 @@ import url from '../url';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-interface ShowList {
-  login: boolean,
-  signin: boolean
-}
 
 type HeaderProps = {
-  login: boolean;
-  setLogin: React.Dispatch<React.SetStateAction<boolean>>
+  login: boolean,
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>,
+  show: ShowList,
   setShow: React.Dispatch<React.SetStateAction<ShowList>>
 }
 
 
-const Header = ({ login, setLogin, setShow }: HeaderProps) => {
+const Header = ({ login, setLogin, show, setShow }: HeaderProps) => {
   const [display, setDisplay] = useState<boolean>(false);
   
   const clickLogout = async () => {
@@ -26,15 +23,19 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
   }
   
   const clickLogin = () => {
-    setShow({login: true, signin: false});
+    setShow({login: true, signin: false, notify: false});
   }
 
   const clickSignin = () => {
-    setShow({login: false, signin: true});
+    setShow({login: false, signin: true, notify: false});
   }
 
   const clickMenu = () => {
     setDisplay(!display);
+  }
+
+  const clickNotify = () => {
+    setShow({login: false, signin: false, notify: !show.notify});
   }
 
   return (
@@ -53,7 +54,7 @@ const Header = ({ login, setLogin, setShow }: HeaderProps) => {
             <Menu login={login} onClick={clickMenu}>menu</Menu>
             <Direction login={login} show={display} 
               onClick={() => setDisplay(false)}>
-              <Tap>알림</Tap>
+              <Tap onClick={clickNotify}>알림</Tap>
               <StyledLink to='/creategroup'>
                 <Tap>그룹 생성</Tap>
               </StyledLink>

@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { useState } from 'react';
 import styled from 'styled-components';
+import url from '../../url';
 
 interface Show {
   calendar: boolean,
@@ -10,11 +12,13 @@ interface Show {
 type InviteProps = {
   setModal: React.Dispatch<React.SetStateAction<Show>>,
   inviteList: Array<string>,
-  setInviteList: React.Dispatch<React.SetStateAction<Array<string>>>
+  setInviteList: React.Dispatch<React.SetStateAction<Array<string>>>,
+  user: User
 }
 
-const Invite = ({ setModal, inviteList, setInviteList }: InviteProps) => {
+const Invite = ({ setModal, inviteList, setInviteList, user }: InviteProps) => {
   const [name, setName] = useState<string>('');
+  const [msg, setMsg] = useState<string>('초대하고 싶은 친구의 아이디를 입력하세요');
   const clickBack = () => {
     setModal({
       calendar: false,
@@ -22,15 +26,28 @@ const Invite = ({ setModal, inviteList, setInviteList }: InviteProps) => {
       location: false
     });
   }
-  const handleComplete = () => {
+  const handleComplete = async () => {
     if (name) {
-      setInviteList([...inviteList, name])
+      if (inviteList.includes(name) || name === user.userId) {
+        setMsg('이미 초대된 아이디 입니다.')
+      } else {
+        try {
+          const res = await axios.post(`${url}/user/check-id`, {
+            userId: name
+          }, {withCredentials: true});
+          setMsg('아이디가 존재하지 않습니다.')
+        } catch {
+          setInviteList([...inviteList, name])
+          setModal({
+            calendar: false,
+            invite: false,
+            location: false
+          });
+        }
+      }
+    } else {
+      setMsg('초대하고 싶은 친구의 아이디를 입력하세요')
     }
-    setModal({
-      calendar: false,
-      invite: false,
-      location: false
-    });
   }
   return (
     <Background onClick={clickBack}>
@@ -38,7 +55,7 @@ const Invite = ({ setModal, inviteList, setInviteList }: InviteProps) => {
         <Title>Almost There</Title>
         <div>
           <Input value={name} onChange={e => setName(e.target.value)}></Input>
-          <Desc>초대하고 싶은 친구의 아이디를 입력하세요</Desc>
+          <Desc>{msg}</Desc>
         </div>
         <Button onClick={handleComplete}>초대 하기</Button>
       </View>
