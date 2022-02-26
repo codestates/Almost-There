@@ -5,16 +5,17 @@ module.exports = {
   post: async (req, res) => {
     try {
       const userInfo = await isAuthorized(req);
+      console.log(userInfo)
       if (!userInfo) {
         return res.status(401).send({ message: 'not authorized' });
       } else {
         const { userId } = userInfo;
-        const { lat, lng } = req.body;
+        const { x, y } = req.body;
+        console.log(x,y)
         const updateInfo = {
-          lat: lat,
-          lng: lng
+          x: x,
+          y: y
         };
-        console.log(lat, lng);
         await users.update(updateInfo, {
           where: { userId: userId }
         });

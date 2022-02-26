@@ -9,7 +9,7 @@ module.exports = {
       if (!userInfo) {
         return res.status(400).send({ message: 'bad request' });
       } else {
-        const { name, time, place, inviteId, lat, lng } = req.body;
+        const { name, time, place, inviteId, x, y } = req.body;
         const { id, userId } = userInfo;
         // 클라이언트에서 받은 body정보로 그룹 생성
         const group = await _groups.create({
@@ -17,8 +17,8 @@ module.exports = {
           time: time,
           place: place,
           leaderId: userId,
-          lat: lat,
-          lng: lng
+          x: x,
+          y: y
         });
         if (!group) {
           return res.status(500).send({ message: 'server error' });
