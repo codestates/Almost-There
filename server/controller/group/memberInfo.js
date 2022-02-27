@@ -19,7 +19,10 @@ module.exports = {
         });
         const arr = []
         for(let i = 0; i < result.length; i++){
-          arr.push(result[i].dataValues.userId)
+          arr.push({
+            userId: result[i].dataValues.userId,
+            overtime: result[i].dataValues.overtime
+          })
         }
         const result1 = await _groups.findOne({
           where: {

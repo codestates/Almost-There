@@ -17,7 +17,7 @@ interface MyPosition {
 // io.to(userId).emit("invite", userId: string); // for 문 돌려서 보내기
 // arrive leave => to(groupId)
 interface ServerToClientEvents {
-  getPosition: (data:MyPosition) => void
+  getPosition: (data:Pos) => void
   notify: (contents: string, userId: string) => void
 }
 
