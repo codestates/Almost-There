@@ -31,7 +31,9 @@ module.exports = function (server) {
         if (!userId) { return io.emit('error', 'not authorized'); }
 
         // 채널 들어가기(본인 아이디)
-        socket.join(`user ${userId}`);
+        socket.join(`notice ${userId}`);
+        // socket.join(`send position ${userId}`)
+        // socket.join(`accept notice ${userId}`)
 
         // 채널 들어가기(소속된 그룹)
         const result = await users_groups.findAll({ where: { userId } });
@@ -57,7 +59,7 @@ module.exports = function (server) {
     socket.on('notify', (payload) => {
       console.log(payload.inviteId);
       for (let i = 0; i < payload.inviteId.length; i++) {
-        io.to(`user ${payload.inviteId[i]}`).emit('notify', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
+        io.to(`notice ${payload.inviteId[i]}`).emit('notify', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
       }
     });
     // a = 초대 알림을 받음
@@ -77,7 +79,7 @@ module.exports = function (server) {
       await users.update(updateData, {
         where: { userId: payload.user.userId }
       });
-      io.to(`user ${payload.user.userId}`).emit('getPosition', {x:payload.position.x, y:payload.position.y} )
+      io.to(`pos ${payload.user.userId}`).emit('getPosition', {x:payload.position.x, y:payload.position.y} )
     });
 
     // ? getPosition: 다른 사람의 위치 정보 요청 시 요청한 클라이언트에 위치 정보 전달
@@ -90,7 +92,7 @@ module.exports = function (server) {
         attributes: ['x', 'y'],
         where: { userId: payload.target }
       });
-      io.to(`user ${payload.userId}`).emit('getPosition', {
+      io.to(`pos ${payload.userId}`).emit('getPosition', {
         x: result.dataValues.x,
         y: result.dataValues.y
       });
@@ -138,7 +140,7 @@ module.exports = function (server) {
         const rooms = socket.rooms;
         rooms.forEach((room) => {
           room.includes('group') ? socket.leave(room) : null;
-          room.includes('user') ? socket.leave(room) : null;
+          room.includes('notice') ? socket.leave(room) : null;
         });
         console.log(rooms);
       } catch (err) {
@@ -148,12 +150,12 @@ module.exports = function (server) {
     // ! join
     socket.on("join", (payload) => {
       console.log('join', payload.userId);
-      socket.join(`user ${payload.userId}`)
+      socket.join(`pos ${payload.userId}`)
     })
 
     socket.on("leave", (payload) => {
       console.log('leave', payload.userId);
-      socket.leave(`user ${payload.userId}`)
+      socket.leave(`pos ${payload.userId}`)
     })
   });
 
