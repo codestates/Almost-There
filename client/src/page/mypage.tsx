@@ -5,6 +5,7 @@ import { useState, useCallback,useEffect } from "react";
 import url from '../url';
 import axios from "axios";
 import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
 
   interface User {
     userId: string,
@@ -16,7 +17,7 @@ import styled from "styled-components";
     user:User, setUser:React.Dispatch<React.SetStateAction<User>>
   }
 
-  function Mypage ({user,setUser}:mypageprops) {
+function Mypage ({user,setUser}:mypageprops) {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
@@ -30,6 +31,12 @@ import styled from "styled-components";
     setOpenModalDeact(!isOpenModalDeact);
     }, [isOpenModalDeact]);
   const [_groups, setGroups] = useState<Array<any>>([ ])
+  const navigate = useNavigate();
+
+  const clickGroup = () => {
+    navigate(`/group/1`)
+  }
+
   useEffect(() => {      
   getGrouplist();
   },[]);  
@@ -104,7 +111,7 @@ import styled from "styled-components";
         {_groups.map((el)=>{
         return (
         <Box key={el.id}>
-        <GroupName>
+        <GroupName onClick={clickGroup}>
           {el.name}
         </GroupName>
           <div>

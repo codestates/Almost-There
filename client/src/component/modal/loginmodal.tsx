@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { SocketContext } from '../../context';
 import { logoN, logoK, logoG } from '../../data';
 import url from '../../url';
 
@@ -22,6 +23,7 @@ type LoginModalProps = {
 }
 
 function LoginModal ({ setLogin, setShow, setUser }: LoginModalProps) {
+const socket = useContext(SocketContext);
 
 const [info, setInfo] = useState<Info>({
   userId: '',
@@ -49,6 +51,7 @@ const handleLogin = async() => {
       name,
       email
     });
+    socket.emit("login", { userId, name, email });
     setLogin(true);
     setShow({ login: false, signin: false, notify: false});
   } catch {

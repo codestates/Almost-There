@@ -5,7 +5,6 @@ module.exports = {
   post: async (req, res) => {
     try {
       const userInfo = await isAuthorized(req);
-      console.log(userInfo)
       if (!userInfo) {
         return res.status(401).send({ message: 'not authorized' });
       } else {

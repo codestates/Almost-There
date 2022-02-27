@@ -53,6 +53,7 @@ function Map ({ user }: MapProps) {
       socket.emit("join", `${params.userId}`);
       socket.on("getPosition", (data) => {
         console.log('getPosition');
+        console.log(data);
         setMember({
           x: data.x,
           y: data.y
