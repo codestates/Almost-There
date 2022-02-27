@@ -17,7 +17,7 @@ interface MyPosition {
 // io.to(userId).emit("invite", userId: string); // for 문 돌려서 보내기
 // arrive leave => to(groupId)
 interface ServerToClientEvents {
-  getPosition: (data:MyPosition) => void
+  getPosition: (data:Pos) => void
   notify: (contents: string, userId: string) => void
 }
 
@@ -31,7 +31,7 @@ interface ClientToServerEvents {
   join: (userId: string) => void
   leave: (userId: string) => void
   sendPosition: (data: MyPosition) => void
-  notify: (contents: string, sender: string, groupId:string) => void// 도착, 초대, 탈퇴
+  notify: (type: string, sender: string, groupId:string) => void// 도착, 초대, 탈퇴
 }
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(`${url}`, {

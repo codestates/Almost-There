@@ -67,6 +67,13 @@ function App() {
           latlng.current.x = x;
           latlng.current.y = y;
         }
+        socket.emit("sendPosition", {
+          user: user,
+          position: {
+            x: x,
+            y: y
+          }
+        })
       }, () => console.log('denied'), {
         enableHighAccuracy: false,
         timeout: 50000,
@@ -91,9 +98,9 @@ function App() {
               ? <>
                     <Route path='/mypage' element={<Mypage setUser={setUser} user={user} />}  />     
                     <Route path='/creategroup' element={<CreateGroup user={user}/>} /> 
-                    <Route path='/group/:id' element={<Group />} />
-                    <Route path='/map/:groupId/:userId' element={<Map />} />
-                    <Route path='/map/:groupId' element={<Map />} />
+                    <Route path='/group/:id' element={<Group user={user}/>} />
+                    <Route path='/map/:groupId/:userId' element={<Map user={user}/>} />
+                    <Route path='/map/:groupId' element={<Map user={user}/>} />
                 </>
               : <>
                   <Route path='/*' element={<Navigate to='/' />} />

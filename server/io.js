@@ -1,10 +1,9 @@
-// const { authorizeSocket } = require('./controller/tokenFunctions');
-const { users_groups } = require('./models');
+const { users, users_groups, notifications_users } = require('./models');
 
 module.exports = function (server) {
   const io = require('socket.io')(server, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: process.env.REDIRECT_URI,
       credentials: true,
       methods: ['GET', 'POST', 'OPTIONS']
     }
@@ -13,9 +12,6 @@ module.exports = function (server) {
   // ! connection
   io.on('connection', async (socket) => {
     console.log(`user connected: ${socket.id}`);
-    // console.log(socket.rooms);
-    // console.log(socket.adapter);
-    // console.log(socket.namespace);
 
     // ! disconnect
     socket.on('disconnect', (reason) => {
@@ -27,118 +23,139 @@ module.exports = function (server) {
       console.log(error);
     });
 
-    // login
+    // ! login
     socket.on('login', async (payload) => {
-      // console.log('login', payload);
+      console.log(`user ${payload.userId} login`);
       try {
-        // const userAdapter = io.of('/user').adapter;
-        // console.log(userAdapter.nsp.name);
-
-        // console.log(socket.handshake.headers);
-        // console.log(payload);
         const userId = payload.userId;
-        // console.log(userId)
+        if (!userId) { return io.emit('error', 'not authorized'); }
 
-        if (!userId) { return io.emit('login', 'fail: not authorized'); }
-        socket.join(`user ${userId}`)
+        // 채널 들어가기(본인 아이디)
+        socket.join(`user ${userId}`);
 
-        const result = await users_groups.findAll({
-          where: { userId }
-        });
-
-        // 채널 들어가기
+        // 채널 들어가기(소속된 그룹)
+        const result = await users_groups.findAll({ where: { userId } });
         for (let i = 0; i < result.length; i++) {
-          // console.log(result[i].dataValues);
           socket.join(`group ${result[i].dataValues.groupId}`);
-          io.to(`group ${result[i].dataValues.groupId}`).emit('login', `join group ${result[i].dataValues.groupId}`);
-        } //1,2,3
+        }
         console.log(socket.rooms);
-        // 
+        socket.on('thisUser', (payload) => {
+          socket.join(payload)
+        })
       } catch (err) {
-        console.log(err);
+        io.emit('error', err);
       }
     });
 
-    // create group
-    // a가 그룹:1을 생성 -> 그룹1 룸에 a를 조인 -> b,c초대받은 유저의 개인 룸에 emit으로 메시지 전송 
-    // 근데 어쨌든 그룹멤버의 도착알림 등을 알람으로 주려면 같은 룸에 모아야 할 것 같은데
+    // ! create group / 그룹 생성: group/create (POST)
     socket.on('createRoom', (payload) => {
-      console.log(payload)
-      socket.join(`group ${payload.room}`)
-      io.to(`group ${payload.room}`).emit('createRoom',`join group ${payload.room}`)
-      console.log(socket.rooms)
-    })
-    socket.on('inviteId',(payload) => {
-      console.log(payload.inviteId)
-      for(let i = 0; i < payload.inviteId.length; i++){
-        io.to(`user ${payload.inviteId[i]}`).emit('inviteId', `group ${payload.room}번 모임에서 초대가 왔습니다.`)
+      console.log(payload);
+      socket.join(`group ${payload.room}`);
+      io.to(`group ${payload.room}`).emit('createRoom', `join group ${payload.room}`);
+      console.log(socket.rooms);
+    });
+    socket.on('notify', (payload) => {
+      console.log(payload.inviteId);
+      for (let i = 0; i < payload.inviteId.length; i++) {
+        io.to(`user ${payload.inviteId[i]}`).emit('notify', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
       }
-    })
+    });
     // a = 초대 알림을 받음
     // b = 초대 알림을 받음
     // a,b => 알림을 받은 그룹의 룸에 조인해줘야함
 
-    // logout
+    // ! 실시간 위치 정보
+    // 내 위치 정보 -> 도착 여부 알려주기
+    // { user: { userId, email, name }, position: { x, y } }
+    socket.on('sendPosition', async (payload) => {
+      // 업데이트 -> 업데이트 될 때 마다 본인 userId room 에다가 x,y를 보내주기
+      console.log(payload.position.x);
+      const updateData = {
+        x: payload.position.x,
+        y: payload.position.y
+      }
+      await users.update(updateData, {
+        where: { userId: payload.user.userId }
+      });
+      io.to(`user ${payload.user.userId}`).emit('getPosition', {x:payload.position.x, y:payload.position.y} )
+    });
+
+    // ? getPosition: 다른 사람의 위치 정보 요청 시 요청한 클라이언트에 위치 정보 전달
+    // * 요청 데이터: { userId: 본인, target: 대상 }
+    // - 사용자의 위도&경도를 조회하는 API가 없음
+    // - socket.io 이벤트로 전달
+    socket.on('getPosition', async (payload) => {
+      console.log(`user ${payload.userId} requests GET POSITION: user ${payload.target}`);
+      const result = await users.findOne({
+        attributes: ['x', 'y'],
+        where: { userId: payload.target }
+      });
+      io.to(`user ${payload.userId}`).emit('getPosition', {
+        x: result.dataValues.x,
+        y: result.dataValues.y
+      });
+    });
+
+    // ! 알림 핸들링
+    // * 요청 데이터: { contents: 알림 종류, sender: 본인, groupId: 그룹 번호 }
+    socket.on('notify', async (payload) => {
+      if (payload.contents === 1) {
+          // console.log(payload.inviteId);
+          // for (let i = 0; i < payload.inviteId.length; i++) {
+          //   io.to(`user ${payload.inviteId[i]}`).emit('inviteId', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
+          // }
+
+        // 초대 알림
+      }
+
+      if (payload.contents === 2) {
+        // 도착 알림
+      }
+
+      if (payload.contents === 3) {
+        // 탈퇴 알림
+        console.log(`user ${payload.userId} leave group ${payload.groupId}`);
+        for (let i = 0; i < payload.groupMember.length; i++) {
+          await notifications_users.create({
+            sender: payload.userId,
+            receiver: payload.groupMember[i],
+            notifyId: 3
+          });
+        }
+        socket.leave(`group ${payload.groupId}`);
+        const data = {
+          contents: 3,
+          userId: ''
+        };
+        io.to(`group ${payload.groupId}`).emit('notify', '탈퇴 알림');
+      }
+    });
+    // ! logout
     socket.on('logout', (payload) => {
-      // console.log(payload);
+      console.log(`user ${payload.userId} logout`);
       try {
-        io.emit('logout', 'logout');
         // 채널 나가기
         const rooms = socket.rooms;
         rooms.forEach((room) => {
-          console.log(room);
           room.includes('group') ? socket.leave(room) : null;
           room.includes('user') ? socket.leave(room) : null;
         });
-        console.log(socket.rooms);
+        console.log(rooms);
       } catch (err) {
-        console.log(err);
+        io.emit('error', err);
       }
     });
+    // ! join
+    socket.on("join", (payload) => {
+      console.log('join', payload.userId);
+      socket.join(`user ${payload.userId}`)
+    })
 
-    // 'success' 이벤트 처리 테스트
-    // socket.on('success', async (payload) => {
-    //   console.log('success');
-    //   console.log(payload);
-    //   try {
-    //     const userInfo = await authorizeSocket(socket.handshake.headers.cookie);
-    //     if (!userInfo) {
-    //       return io.emit('success', 'fail: not authorized');
-    //     }
-    //     const { id, userId } = userInfo;
-    //     console.log(id, userId);
-    //     console.log(socket.rooms);
-    //     io.emit('success', 'success again');
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // });
+    socket.on("leave", (payload) => {
+      console.log('leave', payload.userId);
+      socket.leave(`user ${payload.userId}`)
+    })
   });
 
   return io;
 };
-
-// TODO: 그룹 생성 -> groupId 이름의 room 생성, 초대된 그룹원들 접속
-// * groupId room에서 받을 정보: 초대 알림, 도착 알림, 탈퇴 알림, (+ 실시간 위치 정보)
-// 로그인할 때 그 groupId room에 접속
-// !group/create
-
-
-/* 2022-02-24
-! 로그인 때 소속된 모든 그룹 채널 접속
-로그인할 때 알림 실시간으로 받기
-로그인한 사람만 서비스 이용하도록 (인증) 
-
-! 로그아웃 -> 접속한 모든 채널 나가기(leave)
-
-room은 새로고침 전까지(socket.id가 바뀌기 전까지) 계속 유지됨.
-- 서버 재시작, 클라이언트 새로고침 -> ???
-
-login -> 로그인을 할 때 user state의 값이 서버에 제대로 전달되지 않음
-(첫 로그인, 소셜 로그인)
-
-1인 1소켓을 어떻게? -> Props로 소켓을 다룰 수 있는지
-
-header -> logout을 해도 user state 값이 변하지 않음(setUser)
-
-*/
