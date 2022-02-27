@@ -41,15 +41,15 @@ function Map () {
       return String(el.groupId) === params.groupId;    
     });
     setTarget({
-      x: Number(filtered[0]._group.lat),
-      y: Number(filtered[0]._group.lng)
+      x: Number(filtered[0]._group.x),
+      y: Number(filtered[0]._group.y)
     })
     // const res2 = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`,
     // {withCredentials: true});
     if (params.userId) {
       setUser({
-        x: Number(filtered[0]._group.lat) + 0.0005,
-        y: Number(filtered[0]._group.lng) + 0.0005
+        x: Number(filtered[0]._group.x) + 0.0005,
+        y: Number(filtered[0]._group.y) + 0.0005
       })
     }
   }

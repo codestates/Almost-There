@@ -32,7 +32,7 @@ function Group () {
 
   useEffect(() => {      
     getGroupInfo();
-    console.log(groupInfo[0])
+    // console.log(groupInfo[0])
   },[]);  
     
   return (
