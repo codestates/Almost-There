@@ -54,7 +54,6 @@ const Input = styled.input`
   left: 20px;
   z-index: 20;
 `
-
 const Button = styled.button`
   position: fixed;
   top: 5px;
@@ -66,7 +65,6 @@ const Button = styled.button`
     color: white;
   }
 `
-
 const GoBack = styled.div`
   width: 150px;
   height: 75px;
@@ -82,7 +80,6 @@ const GoBack = styled.div`
   border-radius: 10px;
   cursor: pointer;
 `
-
 const LeftIcon = styled.div`
   font-size: 80px;
   margin-bottom: 20px;

@@ -1,84 +1,87 @@
 import styled from "styled-components";
-import { useState, useCallback,useEffect } from "react";
+import { useState, useEffect } from "react";
 import url from '../url';
 import axios from "axios";
-import { useParams } from 'react-router-dom';
-import { contains } from "cheerio/lib/static";
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 
 declare global {
   interface Window {
-    kakao: any;
+    kakao: any
   }
 }
+
+interface Pos {
+  x: number,
+  y: number
+}
 //전역객체
+const { kakao } = window;
 
 function Map () {
-
-  const [x, setx] = useState('37.48276303605517');
-  const [y, sety] = useState('127.03557641134296');
+  const [target, setTarget] = useState<Pos>({
+    x: 127.03557641134296,
+    y: 37.48276303605517
+  })
+  const [user, setUser] = useState<Pos>({
+    x: 127.0350,
+    y: 37.4830
+  })
   const params= useParams();
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(`/group/${params.groupId}`);
+  }
+
+  const getlatdes = async () => {
+    const res = await axios.get(`${url}/group/list`, {withCredentials:true});
+    const filtered = res.data.groups.filter((el:any)=>{
+      return String(el.groupId) === params.groupId;    
+    });
+    setTarget({
+      x: Number(filtered[0]._group.lat),
+      y: Number(filtered[0]._group.lng)
+    })
+    // const res2 = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`,
+    // {withCredentials: true});
+    if (params.userId) {
+      setUser({
+        x: Number(filtered[0]._group.lat) + 0.0005,
+        y: Number(filtered[0]._group.lng) + 0.0005
+      })
+    }
+  }
 
   useEffect(() => {
-    const latdes2 = 37.48276303605517;
-    const ingdes2 = 127.03557641134296;
-    // const markerPosition  = new window.kakao.maps.LatLng(37.48276303605517,127.03557641134296); 
-    const markerPosition  = new window.kakao.maps.LatLng(Number(x),Number(y));  
-    // 목적지 좌표표시
+    getlatdes();
+  }, []);
+
+  useEffect(() => {
+    const markerPosition  = new kakao.maps.LatLng(target.y, target.x);  
     const container = document.getElementById("map");
-    // const container =getElementById(map: string): HTMLElement | null;
-    const options = {
-      center: new window.kakao.maps.LatLng(37.48276303605517,127.03557641134296),
-    };
-    const map = new window.kakao.maps.Map(container, options);
-        // 마커를 생성합니다
-        var marker = new window.kakao.maps.Marker({
-          position: markerPosition
-        });
-        console.log(getlatdes())
-        // 마커가 지도 위에 표시되도록 설정합니다
-        marker.setMap(map);
-  }, [x,y]);
-
-
-  const getlatdes = () => {
-    console.log('test')
-    axios
-    .get(
-    `${url}/group/list`,
-    {withCredentials:true}
-    )
-    .then((res) => {
-      // console.log('test2')
-      // console.log(res)
-      const filtered = res.data.groups.filter((el:any)=>{
-    // filter 사용하여 id가 00인 그룹정보 불러오기
-    // return el.groupId === 3
-    // console.log(params.id)
-    return el.groupId === 1;    
-    // return el.id === Number(params.id);        
-  })
-    // console.log(res.data.groups[0]._group.name)
-    // console.log(res.data.groups[0]._group)
-    console.log(filtered[0]._group)
-    // setingdes(res.data.groups[0]._group.name)
-    setx(filtered[0]._group.lng)
-    sety(filtered[0]._group.lat)
-  })
-    .catch((err) => {
+    const options = params.userId 
+      ? { center: new kakao.maps.LatLng(user.y, user.x) }
+      : { center: new kakao.maps.LatLng(target.y,target.x) }
+    console.log(options);
+    const map = new kakao.maps.Map(container, options);
+    const marker = new kakao.maps.Marker({
+      position: markerPosition
     });
-  }
-  // constructor(props: MapProps) {
-  //   super(props)
-  //   this.onComponentMount = this.onComponentMount.bind(this)
-  //   this._onBoundChanged = this._onBoundChanged.bind(this)
-  //   this._onCenterChanged = this._onCenterChanged.bind(this)
-  //   this._onClick = this._onClick.bind(this)
-  //   this._onLoad = this._onLoad.bind(this)
-  //   this._onZoomChanged = this._onZoomChanged.bind(this)
-  // }
+    if (params.userId) {
+      const content = '<span class="user">!</span>';
+      const position = new kakao.maps.LatLng(user.y, user.x);  
+      const customOverlay = new kakao.maps.CustomOverlay({
+          position: position,
+          content: content   
+      });
+      customOverlay.setMap(map);
+    }
+    
+    marker.setMap(map);
 
+  }, [target, user]);
 
   return(
     <div>
@@ -88,33 +91,74 @@ function Map () {
         {/* <div id="map" /> */}
         </Mapbox>
       </div>
+      <GoBack onClick={handleBack}>
+        {/* <LeftIcon></LeftIcon> */}
+        <Text>돌아가기</Text>
+      </GoBack>
       </Outer>
-      </div>
-
+    </div>
   )
+}
 
+const Mapbox = styled.div`
+  
+  width:100vw;
+  height:93vh;
+  /* @media screen and (max-width:760px){
+  width:360px;
+  height:360px;
+  } */
 
-
+  span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background-color: red;
+    z-index: 1;
+    animation: spread;
+    animation-iteration-count: infinite;//name duration timing-function delay iteration-count direction fill-mode;
+    animation-duration: 1s;
+    @keyframes spread {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
-
-    const Mapbox = styled.div`
-    
-    width:100vw;
-    height:93vh;
-    /* @media screen and (max-width:760px){
-    width:360px;
-    height:360px;
-    } */
-    ;
-  `
-    const Outer = styled.div`
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    width:100vw;
-    height:93vh;
-  `
-
+  }
+`
+const Outer = styled.div`
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100vw;
+  height:93vh;
+`
+const GoBack = styled.div`
+  width: 150px;
+  height: 75px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 20;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: white;
+  background-color: #448aff;
+  border-radius: 10px;
+  cursor: pointer;
+`
+const LeftIcon = styled.div`
+  font-size: 80px;
+  margin-bottom: 20px;
+`
+const Text = styled.div`
+  font-size: 25px;
+  font-weight: bold;
+`
 
 
 export default Map;
