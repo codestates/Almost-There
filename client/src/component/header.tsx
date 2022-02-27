@@ -1,24 +1,31 @@
 import atlogo from '../data/atlogo.png'
-import { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import url from '../url';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { SocketContext } from '../context';
 
 
 type HeaderProps = {
   login: boolean,
   setLogin: React.Dispatch<React.SetStateAction<boolean>>,
   show: ShowList,
-  setShow: React.Dispatch<React.SetStateAction<ShowList>>
+  setShow: React.Dispatch<React.SetStateAction<ShowList>>,
+  user: User,
+  setUser: React.Dispatch<React.SetStateAction<User>>,
+  watch: React.MutableRefObject<any>
 }
 
 
-const Header = ({ login, setLogin, show, setShow }: HeaderProps) => {
+const Header = ({ login, setLogin, show, setShow, user, setUser, watch }: HeaderProps) => {
   const [display, setDisplay] = useState<boolean>(false);
-  
+  const socket = useContext(SocketContext);
   const clickLogout = async () => {
     await axios.post(`${url}/user/logout`, {}, { withCredentials: true});
+    navigator.geolocation.clearWatch(watch.current.id);
+    socket.emit("logout", user);
+    setUser({ userId: '', name: '', email: '' });
     setLogin(false);
   }
   
@@ -37,6 +44,10 @@ const Header = ({ login, setLogin, show, setShow }: HeaderProps) => {
   const clickNotify = () => {
     setShow({login: false, signin: false, notify: !show.notify});
   }
+
+  useEffect(() => {
+    
+  }, [login])
 
   return (
     <Background>

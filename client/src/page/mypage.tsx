@@ -103,8 +103,8 @@ import styled from "styled-components";
       <GroupBox>
         {_groups.map((el)=>{
         return (
-        <Box>
-        <GroupName key={el.id}>
+        <Box key={el.id}>
+        <GroupName>
           {el.name}
         </GroupName>
           <div>

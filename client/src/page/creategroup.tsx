@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Calendar, Invite, Location } from '../component/index'
+import { SocketContext } from '../context';
 import url from '../url';
 
 declare global {
@@ -36,7 +37,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
     location: false,
     invite: false
   })
-  const [groupName, setGroupName] = useState<string>('동아리 모임');
+  const [groupName, setGroupName] = useState<string>('');
   const [edit, setEdit] = useState<boolean>(false);
   const refGroupName = useRef<HTMLInputElement>(null);
   const [time, setTime] = useState<Time>({
@@ -57,6 +58,11 @@ function CreateGroup ({ user }: CreateGroupProps) {
 
   const handleGroupName = (boo:boolean) => {
     setEdit(boo);
+    if (boo===true) {
+      setTimeout(() => {
+        refGroupName.current?.focus()
+      }, 0)
+    }
   }
 
   const handleTime = () => {
@@ -97,19 +103,21 @@ function CreateGroup ({ user }: CreateGroupProps) {
       time: `${year}.${month}.${day} ${hour}:${minute}:00`,
       place: place.name,
       inviteId: inviteList,
-      lat: place.x,
-      lng: place.y
+      x: place.x,
+      y: place.y
     }, {withCredentials: true});
-    // const res2 = await axios.get(`${url}/group/list`, {withCredentials: true});
-    const id = 3;
+    const id = res.data.data;
     navigate(`/group/${id}`);
   }
 
+  // useEffect(() => {
+  //   if (refGroupName) {
+  //     refGroupName.current?.focus();
+  //   }
+  // }, [edit]);
+
   useEffect(() => {
-    if (refGroupName) {
-      refGroupName.current?.focus();
-    }
-  }, [edit])
+  }, []);
 
   return (
     <>
