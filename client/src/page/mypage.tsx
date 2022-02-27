@@ -1,136 +1,77 @@
-// import "./CSS/mypage.css"
 import React from 'react';
 import '../App.css';
-// import { Mypage } from '../page/index'
-// import {EditInfo} from 'react-modal';
 import { Deactivate, EditInfo, EditPW } from '../page/index';
 import { useState, useCallback,useEffect } from "react";
 import url from '../url';
 import axios from "axios";
-
 import styled from "styled-components";
 
-interface User {
-  userId: string,
-  email: string,
-  name: string
-}
+  interface User {
+    userId: string,
+    email: string,
+    name: string
+  }
 
-interface Group {
-  name:string
-  id: number
-  //그룹명, 그룹ID
-}
+  type mypageprops = {
+    user:User, setUser:React.Dispatch<React.SetStateAction<User>>
+  }
 
-
-type mypageprops = {
-  user:User, setUser:React.Dispatch<React.SetStateAction<User>>
-}
-
-function Mypage ({user,setUser}:mypageprops) {
-
+  function Mypage ({user,setUser}:mypageprops) {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
-  // const onClickToggleModal: () => void = useCallback(() => {
-  //   setOpenModal(!isOpenModal);
-  // }, [isOpenModal]);
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
   };
-
-
-
   const [isOpenModalPW, setOpenModalPW] = useState<boolean>(false);
-  // const onClickToggleModalPW: () => void = useCallback(() => {
-  //   setOpenModalPW(!isOpenModalPW);
-  // }, [isOpenModalPW]);
   const onClickToggleModalPW = () => {
     setOpenModalPW(!isOpenModalPW);
   };
-
-
-
-
   const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
   const onClickToggleModalDeact: () => void = useCallback(() => {
     setOpenModalDeact(!isOpenModalDeact);
-  }, [isOpenModalDeact]);
-
-  //   const [groupList, setgroupList] = useState({
-  //   groupId:"생성된 그룹없음"
-  // });
-
-    const [_groups, setGroups] = useState<Group>({
-    name:"",
-    id: 0
-    })
-
-    useEffect(() => {
-      const getGroupName = async () => {
-        try {
-          const res = await axios.get(`${url}/group/list/`, { withCredentials: true });
-          const {name, id} = res.data.group;
-          getGrouplist()
-          setGroups({
-            name,
-            id
-          })
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      getGroupName();
-    }, [_groups]);
-    // 그룹상태가 바뀔때마다 useeffect사용하여 그룹리스트 불러옴
+    }, [isOpenModalDeact]);
+  const [_groups, setGroups] = useState<Array<any>>([ ])
+  useEffect(() => {      
+  getGrouplist();
+  },[]);  
   
-
   const getGrouplist = () => {
-    axios
-    .get(
-      // `${url}/group/list`,
-      `http://localhost:4000/group/list`,
-      {withCredentials:true}
-    )
-    .then((res) => {
-      console.log("grouplist successfully inquired");
-      // setGroups()
+  axios
+  .get(
+    
+  `${url}/group/list`,
+  {withCredentials:true}
+  )
+  .then((res) => {
+    const filter = res.data.groups.map((el:any)=>{
+  return {
+    name : el._group.name,
+    id: el._group.id
+    }
+  })
+  console.log(res.data.groups[0]._group.name)
+  console.log(res.data.groups)
+  setGroups([...filter])    
+  })
+  .catch((err) => {
+  });
+}
 
-
-    })
-    .catch((err) => {
-    });
-
+  const DeleteGrouplist = (e:string) => {
+  console.log("test");    
+  axios
+  .delete(`${url}/group/${e}`, 
+  {withCredentials:true}
+  )
+  .then(() => {
+  console.log("group successfully deleted");
+  })
+  .catch((err) => {
+  });
   }
-
-  const DeleteGrouplist = () => {
-    // console.log(res.data)
-
-    console.log("test");    
-    axios
-    .delete(
-      
-      `${url}/group/list/`, 
-      // `${url}/group/list/${_groups.id}`, 
-      //grouplist중 groups.id에 해당하는 그룹만 삭제해야함
-      {withCredentials:true}
-    )
-    .then(() => {
-      console.log("group successfully deleted");
-    })
-    .catch((err) => {
-    });
-  }
-  // 완성후 그룹탈퇴버튼에 이벤트
-
-
-
-
-
-  return (
-  
+  return (  
   <MypageStyle>
     <Userinfo>
-      <UserinfoTitle> 회원정보</UserinfoTitle>
-      
+      <UserinfoTitle> 회원정보</UserinfoTitle>     
       <UserinfoDetail>
         <div> {user.name}님 환영합니다 </div>  
         <div> {user.userId}</div>
@@ -146,140 +87,48 @@ function Mypage ({user,setUser}:mypageprops) {
         </div>
         </div>
       </Buttons>
-
-
-
       <Buttons>
       <div>
         <div >
           {isOpenModalPW && (
-          // <EditPW onClickToggleModalPW={onClickToggleModalPW}>
-          // </EditPW>
           <EditPW setOpenModalPW={setOpenModalPW}/>
-          
-
           )}
       <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
+        </div>        
         </div>
-        
-        </div>
-
       </Buttons>
-
-
-
     </Userinfo>
-  
     <Groupinfo>
       <GroupTitle>그룹정보</GroupTitle>
       <GroupBox>
-        <GroupName> 
-          <div>
-          test group1
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
+        {_groups.map((el)=>{
+        return (
+        <Box>
+        <GroupName key={el.id}>
+          {el.name}
         </GroupName>
-      
-        <GroupName> 
           <div>
-          test group2
+            <button id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}> 그룹나가기 </button>
           </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-      
-        <GroupName> 
-          <div>
-          test group3
-          
-          {/* {_groups.map(list)=>{
-            return (
-              <div>{list.name}</div>
-            )
-          }} */}
-          </div>
-          <div>
-            <button onClick={DeleteGrouplist}> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-        <GroupName> 
-          <div>
-          test group2
-          </div>
-          <div>
-            <button> 그룹나가기 </button>
-          </div>
-
-        </GroupName>
-
-
-
+        </Box>
+        )
+        })}
       </GroupBox>  
     </Groupinfo>
     <Delete>
-      <div >
-      {isOpenModalDeact && (
-        <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
-        </Deactivate>
-      )}
-      <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
+    <div >
+    {isOpenModalDeact && (
+    <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
+    </Deactivate>
+    )}
+    <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
     </div>
-
-      </Delete>
-
+    </Delete>
   </MypageStyle>
-  
   )
   }
   
   export default Mypage;
-
-
-
-
 
 const DialogButton = styled.button`
   width: 160px;
@@ -313,16 +162,9 @@ const MypageStyle = styled.div`
   height: 100vh;
   font-size: 30px;
 `
-
-
-
-
 const UserinfoTitle = styled.div`
   padding: 15px 0px 15px 0px;
 `
-
-
-
 const Userinfo = styled.div`
   background-color: #ffcdd2;
   display: flex;
@@ -331,28 +173,18 @@ const Userinfo = styled.div`
   height: 50vh;
   flex-direction: column;
 `
-
-
-
-
 const Buttons = styled.div`
   display: flex;
   justify-content: right;
   width: 60vw;
   padding: 15px 0px 15px 0px;
 `
-
-
-
 const Groupinfo = styled.div`
   height: 50vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 `
-
-
-
 const GroupBox = styled.div`
   padding: 15px;
   height: 140px;
@@ -361,8 +193,6 @@ const GroupBox = styled.div`
   border-top: solid black 1px;
   border-bottom: solid black 1px;
 `
-
-
 const GroupTitle = styled.div`
     padding: 15px 0px 15px 0px;
 `
@@ -376,14 +206,13 @@ const Delete = styled.div`
   right: 20px;
   font-size: 20px;
 `
-// const  = styled.div`
-// `
-// const  = styled.div`
-// `
-// const  = styled.div`
-// `
-// const  = styled.div`
-// `
+
+
+const Box = styled.div`
+display:flex;
+justify-content:space-between
+`
+;
 
 
 

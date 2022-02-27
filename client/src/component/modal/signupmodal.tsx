@@ -5,11 +5,6 @@ import { convertTypeAcquisitionFromJson } from 'typescript';
 import { MsgModal } from '..';
 import url from '../../url';
 
-interface ShowList {
-  login: boolean,
-  signin: boolean
-}
-
 interface Info {
   userId: string,
   password: string,
@@ -56,20 +51,20 @@ function SignUpModal ({setShow}: SigninModalProps) {
   const [text, setText] = useState<string>('');
 
   const clickBack = () => {
-    setShow({login: false, signin: false});
+    setShow({login: false, signin: false, notify: false});
   }
 
   const validId = async () => {
     const regExp = /^[a-z]{1,1}[a-z0-9]{3,19}$/i;
     if (regExp.test(info.userId)) {
       try {
-        // const res = await axios.post(`${url}/user/check-id`, {
-        //   userId: info.userId
-        // },{withCredentials: true});
-        // if (res) {
+        const res = await axios.post(`${url}/user/check-id`, {
+          userId: info.userId
+        },{withCredentials: true});
+        if (res) {
           setCheck({...check, userId: true});
           setMsg({...msg, userId: '사용 가능한 아이디입니다.'});
-        // }
+        }
       } catch {
         setCheck({...check, userId: false});
         setMsg({...msg, userId: '이미 사용중인 아이디입니다.'});
@@ -129,7 +124,7 @@ function SignUpModal ({setShow}: SigninModalProps) {
           userId, password, name, email
         });
         if (res.status === 201) {
-          setShow({login: false, signin: false});
+          setShow({login: false, signin: false, notify: false});
         }
       } else {
         setText('모든 정보를 입력해야 합니다.');
@@ -142,7 +137,7 @@ function SignUpModal ({setShow}: SigninModalProps) {
   }
 
   const moveToLogin = () => {
-    setShow({login: true, signin: false});
+    setShow({login: true, signin: false, notify: false});
   }
 
   return (

@@ -53,6 +53,10 @@ module.exports = function (server) {
           io.to(`group ${result[i].dataValues.groupId}`).emit('login', `join group ${result[i].dataValues.groupId}`);
         } //1,2,3
         console.log(socket.rooms);
+        socket.on('thisUser', (payload) => {
+          socket.join(payload)
+          // socket.emit('join ok', 'join ok')
+        })
         // 
       } catch (err) {
         console.log(err);
@@ -61,7 +65,6 @@ module.exports = function (server) {
 
     // create group
     // a가 그룹:1을 생성 -> 그룹1 룸에 a를 조인 -> b,c초대받은 유저의 개인 룸에 emit으로 메시지 전송 
-    // 근데 어쨌든 그룹멤버의 도착알림 등을 알람으로 주려면 같은 룸에 모아야 할 것 같은데
     socket.on('createRoom', (payload) => {
       console.log(payload)
       socket.join(`group ${payload.room}`)
