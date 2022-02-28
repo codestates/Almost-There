@@ -25,17 +25,40 @@ function Timer () {
     });
     console.log(filtered[0]?._group.time);
     let setDate = new Date(filtered[0]?._group.time);
+
     const now = new Date();
     setBoo(true)
     setDay(Math.floor((setDate.getTime() - now.getTime())/(1000*60*60*24)))
-    setHours(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60*24))/(1000*60*60)))
+    setHours(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60*24))/(1000*60*60))) ;
     setMinutes(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60))/(1000*60)))
     setSeconds(Math.floor((setDate.getTime() - now.getTime())%(1000*60)/(1000)))
+    console.log(setDate.getTime()-now.getTime())
+    // console.log()
+    
   }
 
   function minusOne (){
     if(seconds ===0){
       setSeconds(59)
+      if( minutes===0){
+        setMinutes(59)
+        if(hours===0){
+          setHours(23)
+          setDay(day-1)
+          if(day===0){
+            setDay(0)
+            setHours(0)
+            setMinutes(0)
+            setSeconds(0)
+          }
+        }
+        else{
+          setHours(hours-1)
+        }
+      }
+      else {
+        setMinutes(minutes-1)
+      }
       // setMinutes(minutes-1)
     }
     else {
@@ -45,11 +68,19 @@ function Timer () {
   }
 
   useEffect(() => {
-    let id: any;
-    if (boo) {
-      id = setTimeout(minusOne, 1000);
+    if(boo){
+
+      let ID = setTimeout(minusOne, 1000);
+      if(day<=0 && hours <= 0 && minutes <=0 && seconds<=0 ){
+        setDay(0)
+        setHours(0)
+        setMinutes(0)
+        setSeconds(0)
+        setBoo(false)
+        clearTimeout(ID)
+    }        
+      return () => clearTimeout(ID)      
     }
-    return () => {clearTimeout(id)}
   }, [seconds]);
 
   useEffect(() => {
