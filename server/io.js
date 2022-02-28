@@ -87,12 +87,12 @@ module.exports = function (server) {
     // - 사용자의 위도&경도를 조회하는 API가 없음
     // - socket.io 이벤트로 전달
     socket.on('getPosition', async (payload) => {
-      console.log(`user ${payload.userId} requests GET POSITION: user ${payload.target}`);
+      console.log(`user requests GET POSITION: user ${payload.target}`);
       const result = await users.findOne({
         attributes: ['x', 'y'],
-        where: { userId: payload.target }
+        where: { userId: payload }
       });
-      io.to(`pos ${payload.userId}`).emit('getPosition', {
+      io.to(`pos ${payload}`).emit('getPosition', {
         x: result.dataValues.x,
         y: result.dataValues.y
       });
@@ -149,13 +149,13 @@ module.exports = function (server) {
     });
     // ! join
     socket.on("join", (payload) => {
-      console.log('join', payload.userId);
-      socket.join(`pos ${payload.userId}`)
+      console.log('join', payload);
+      socket.join(`pos ${payload}`)
     })
 
     socket.on("leave", (payload) => {
-      console.log('leave', payload.userId);
-      socket.leave(`pos ${payload.userId}`)
+      console.log('leave', payload);
+      socket.leave(`pos ${payload}`)
     })
   });
 

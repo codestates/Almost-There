@@ -37,8 +37,31 @@ function App() {
     email: '',
     name: ''
   });
-  const latlng = useRef<LatLng>({ x: 0, y: 0 });
+  const latlng = useRef<LatLng>({ y: 0, x: 0 });
   const watch = useRef({ id: 0 });
+  const [alarm, setAlarm] = useState<boolean>(true);
+  const [list, setList] = useState<Array<any>>([
+    {
+      id: 1,
+      sender: 'kimcoding',
+      notifyType: 'invite',
+    },
+    {
+      id: 2,
+      sender: 'parkhacker',
+      notifyType: 'arrive'
+    },
+    {
+      id: 3,
+      sender: 'leehacker',
+      notifyType: 'arrive'
+    },
+    {
+      id: 4,
+      sender: 'user1',
+      notifyType: 'invite'
+    }
+  ]);
 
   useEffect(() => {
     console.log(user);
@@ -49,11 +72,22 @@ function App() {
         setUser({ userId, name, email });
         setLogin(true);
       } catch (err) {
-        navigator.geolocation.clearWatch(watch.current.id);
+        if (watch.current.id !== 0)
+          navigator.geolocation.clearWatch(watch.current.id);
         setLogin(false);
       }
     };
     if (login) {
+      socket.on("notify", (type, sender) => {
+        setAlarm(true);
+        setList(
+          [{
+            id: list.length+1, 
+            sender: sender,
+            notifyType: type
+          }, 
+          ...list]);
+      })
       watch.current.id = 
       navigator.geolocation.watchPosition(async(coor) => {
         const x = Math.round(coor.coords.longitude*10000)/10000;
@@ -90,7 +124,7 @@ function App() {
       <SocketContext.Provider value={socket}>
         <Router>
           <Header login={login} setLogin={setLogin} 
-          show={show} setShow={setShow} 
+          show={show} setShow={setShow} setAlarm={setAlarm} alarm={alarm}
           user={user} setUser={setUser} watch={watch}/>
           <Routes>
             {
@@ -120,7 +154,7 @@ function App() {
           }
           {
             show.notify
-            ? <Notify />
+            ? <Notify list={list} setList={setList} />
             : <></>
           }
         </Router>

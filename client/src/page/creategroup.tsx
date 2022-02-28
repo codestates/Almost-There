@@ -208,6 +208,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
           </List>
         </Contents2>
         <Contents3>
+          <Button2 onClick={() => navigate('/')}>취소</Button2>
           <Button2 onClick={handleCreateButton}>그룹 생성 완료</Button2>
         </Contents3>
       </Container>
@@ -269,7 +270,7 @@ const Contents3 = styled.div`
   width: 550px;
   height: 50px;
   display: flex;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
   border: solid black 1px;
 `

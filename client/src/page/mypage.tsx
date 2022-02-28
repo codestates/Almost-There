@@ -30,51 +30,36 @@ function Mypage ({user,setUser}:mypageprops) {
   const onClickToggleModalDeact: () => void = useCallback(() => {
     setOpenModalDeact(!isOpenModalDeact);
     }, [isOpenModalDeact]);
-  const [_groups, setGroups] = useState<Array<any>>([ ])
+  const [_groups, setGroups] = useState<Array<any>>([])
   const navigate = useNavigate();
 
-  const clickGroup = () => {
-    navigate(`/group/1`)
+  const clickGroup = (groupId:string) => {
+    navigate(`/group/${groupId}`);
   }
 
   useEffect(() => {      
-  getGrouplist();
+    getGrouplist();
   },[]);  
   
-  const getGrouplist = () => {
-  axios
-  .get(
-    
-  `${url}/group/list`,
-  {withCredentials:true}
-  )
-  .then((res) => {
-    const filter = res.data.groups.map((el:any)=>{
-  return {
-    name : el._group.name,
-    id: el._group.id
+  const getGrouplist = async () => {
+  const res = await axios.get(`${url}/group/list`, {withCredentials:true})
+  const filter = res.data.groups.map((el:any)=>{
+    return {
+      name : el._group.name,
+      id: el._group.id
     }
   })
   console.log(res.data.groups[0]._group.name)
   console.log(res.data.groups)
   setGroups([...filter])    
-  })
-  .catch((err) => {
-  });
 }
 
-  const DeleteGrouplist = (e:string) => {
+  const DeleteGrouplist = async (e:string) => {
   console.log("test");    
-  axios
-  .delete(`${url}/group/${e}`, 
-  {withCredentials:true}
-  )
-  .then(() => {
-  console.log("group successfully deleted");
-  })
-  .catch((err) => {
-  });
+  await axios.delete(`${url}/group/${e}`, {withCredentials:true})
+
   }
+
   return (  
   <MypageStyle>
     <Userinfo>
@@ -109,16 +94,16 @@ function Mypage ({user,setUser}:mypageprops) {
       <GroupTitle>그룹정보</GroupTitle>
       <GroupBox>
         {_groups.map((el)=>{
-        return (
-        <Box key={el.id}>
-        <GroupName onClick={clickGroup}>
-          {el.name}
-        </GroupName>
-          <div>
-            <button id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}> 그룹나가기 </button>
-          </div>
-        </Box>
-        )
+          return (
+            <Box key={el.id}>
+            <GroupName onClick={() => clickGroup(el.id)}>
+              {el.name}
+            </GroupName>
+            <div>
+              <button id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}> 그룹나가기 </button>
+            </div>
+          </Box>
+          )
         })}
       </GroupBox>  
     </Groupinfo>
@@ -137,22 +122,28 @@ function Mypage ({user,setUser}:mypageprops) {
   
   export default Mypage;
 
-const DialogButton = styled.button`
-  width: 160px;
-  height: 48px;
-  background-color: blueviolet;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 400;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-1px);
-  }
-`;
-
+  const MypageStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+    background-color: #e1bee7;
+    height: 93vh;
+    font-size: 30px;
+  `
+  const DialogButton = styled.button`
+    width: 160px;
+    height: 48px;
+    background-color: blueviolet;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 400;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+  
+    &:hover {
+      transform: translateY(-1px);
+    }
+  `
 const UserinfoDetail = styled.div`
   border-top: solid black 1px;
   border-bottom: solid black 1px;
@@ -161,13 +152,6 @@ const UserinfoDetail = styled.div`
   font-size: 30px;
   text-align: left;
   width: 60vw;
-
-`
-
-const MypageStyle = styled.div`
-  background-color: #e1bee7;
-  height: 100vh;
-  font-size: 30px;
 `
 const UserinfoTitle = styled.div`
   padding: 15px 0px 15px 0px;

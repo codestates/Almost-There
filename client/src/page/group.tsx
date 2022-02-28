@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { Timer } from '../component';
-import React from 'react';
+import React, { useRef } from 'react';
 import '../App.css';
 import { useState, useCallback,useEffect } from "react";
 import url from '../url';
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
+import '@fortawesome/fontawesome-free/js/all.js'
+import { socket } from '../context';
 
 interface GroupInfo {
   name: string,
@@ -28,10 +30,15 @@ function Group ({ user }: GroupProps) {
   const [groupInfo, setGroupInfo] = useState<GroupInfo>();
   const [member, setMember] = useState<Array<Member>>([]);
   const [arriveTime, setArriveTime] = useState<Array<string>>([]);
+  const timeleft = useRef({
+    left: 30
+  })
+  const [checkloc, setCheckloc] = useState<boolean>(false);
   const navigate = useNavigate();
   const params= useParams();
   let date: Array<any>;
-
+  const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const monthLength2 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 //   groupInfo:
 //     createdAt: "2022-02-27T02:17:14.000Z"
 //     id: 1
@@ -50,21 +57,44 @@ function Group ({ user }: GroupProps) {
     const res = await axios.get(`${url}/group/memberInfo?groupId=${params.id}`,{withCredentials:true});
     const { name, place, leaderId, x, y } = res.data.groupInfo;
     date = res.data.groupInfo.time.split(/[TZ\:\.-]/);
-    console.log(date); 
-    date[3] = Number(date[3]) + 9 > 24 ? `${Number(date[3]) + 9 - 24}` : `${Number(date[3]) + 9}`;
-    date[3] = Number(date[3]) > 11 
-      ? Number(date[3]) !== 12 ? `오후 ${Number(date[3])}` : `오후 ${date[3]}`
-      : `오전 ${date[3]}`;
-    const time = `${date[1]}월 ${date[2]}일 ${date[3]}시 ${date[4]}분`;
+    const lastDay = Number(date[0])%4 === 0 ? monthLength2[Number(date[1]) - 1] : monthLength[Number(date[1]) - 1];
+    timeleft.current.left = Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime())/(1000*60));
+    if (Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime())/(1000*60)) < 10) {
+      setCheckloc(true);
+    }
+    if (Number(date[3]) + 9 > 24) {
+      if (Number(date[2]) === lastDay) {
+        date[2] = 1;
+        date[1] = Number(date[1]) + 1;
+      } else {
+        date[2] = Number(date[2]) + 1;
+      }
+    } 
+    let ampm = '';
+    date[3] = Number(date[3]);
+    date[3] = date[3] + 9 > 24 ? date[3] + 9 - 24 : date[3] + 9
+    if (date[3] > 12) {
+      date[3] = date[3] - 12;
+      ampm = '오후'
+      if (date[3] < 10) {
+        date[3] = '0' + date[3];
+      }
+      if (date[3] === 12) ampm = '오전'
+    } else {
+      if (date[3] === 12) {
+        ampm = '오후'
+      } else {
+        if (date[3] < 10) {
+          date[3] = '0' + date[3];
+        }
+        ampm = '오전'
+      }
+    }
+    const time = `${Number(date[1])}월 ${Number(date[2])}일 - ${ampm} ${date[3]}시 ${date[4]}분`;
     setGroupInfo({name, place, time, leaderId, x, y});
     const mapping = res.data.member.map((el:any) => {
       let arr = el.overtime.split(':');
       arr[0] = Number(arr[0]) + Number(date[3].slice(3));
-      // if (Number(arr[0]) > 24);
-      // arr[1] = `${Number(arr[1]) + Number(date[4])}`;
-      // if (Number(arr[1]) > 59) {
-      //   arr[0] = `${Number(arr[0]) + 1}`;
-      // }
       let overtime = arr.join(':');
       return { userId: el.userId, overtime: overtime}
     })
@@ -80,6 +110,16 @@ function Group ({ user }: GroupProps) {
 
   useEffect(() => {     
     getGroupInfo();
+    // socket.on("groupinfo", () => {
+
+    // })
+    let id = setInterval(() => {
+      if (timeleft.current.left < 10 ) {
+        setCheckloc(true);
+      }
+      timeleft.current.left = timeleft.current.left - 1;
+    }, 60000);
+    return () => clearInterval(id)
   },[]);  
     
   return (
@@ -106,12 +146,19 @@ function Group ({ user }: GroupProps) {
                 return (
                   <Li key={el.userId}>
                     <NameBox>{el.userId}</NameBox>
-                    <PosBox onClick={() => checkPosition(el.userId)}>위치 확인</PosBox>
+                    {checkloc
+                      ? <PosBox className='on' onClick={() => checkPosition(el.userId)}>
+                          위치확인
+                            <i className="fa-solid fa-earth-asia" ></i>
+                        </PosBox>
+                      : <PosBox className='off'>&times;</PosBox>
+                    }
                     <ATBox>{el.overtime}</ATBox>
                   </Li>
                 )
               })
             }
+            
           </List2>
         </Contents3>
       </Container>
@@ -251,10 +298,15 @@ const PosBox = styled.div`
   width: 100px;
   margin: 0 5px;
   background-color: white;
-  cursor: pointer;
-  :hover {
-    color: white;
-    background-color: black;
+  &.on {
+    :hover {
+      cursor: pointer;
+      color: white;
+      background-color: black;
+    }
+  } 
+  &.off {
+    background-color: blue;
   }
 `
 const ATBox = styled.div`
