@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import './App.css';
 import { Home, Mypage, CreateGroup, Group, Map} from './page/index';
 import { Header, LoginModal, Notify } from './component/index';
@@ -24,28 +24,10 @@ declare global {
     notify: boolean
   }
 }
-/* IO */
-interface ServerToClientEvents {
-connection: () => void;
-login: (a: string) => void;
-logout: (b: string) => void;
-thisUser: (c: string) => void;
-error: (error: string) => void;
+interface LatLng {
+  x: number,
+  y: number
 }
-
-interface ClientToServerEvents {
-login: (user: object) => void;
-logout: (user: object) => void;
-thisUser: (user: object) => void;
-
-}
-
-// const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(url, {
-//     withCredentials: true
-//   });
-/* IO */
-
-
 
 function App() {
   const [login, setLogin] = useState<boolean>(true);
@@ -58,29 +40,47 @@ function App() {
     userId: '',
     email: '',
     name: ''
-  })
-
-  /* IO */
+  });
+  const latlng = useRef<LatLng>({ x: 0, y: 0 });
+  const watch = useRef({ id: 0 });
 
   socket.on('error', (error) => {
     console.log(error);
   });
   /* IO */
   useEffect(() => {
+    console.log(user);
     const getUserInfo = async () => {
       try {
         const res = await axios.get(`${url}/user/info`, { withCredentials: true });
-        const {userId, name, email} = res.data.user;
-        setUser({
-          userId,
-          name,
-          email
-        })
+        const { userId, name, email } = res.data.user;
+        setUser({ userId, name, email });
         setLogin(true);
       } catch (err) {
+        navigator.geolocation.clearWatch(watch.current.id);
         setLogin(false);
       }
     };
+    if (login) {
+      watch.current.id = 
+      navigator.geolocation.watchPosition(async(coor) => {
+        const x = Math.round(coor.coords.longitude*10000)/10000;
+        const y = Math.round(coor.coords.latitude*10000)/10000;
+        if (x !== latlng.current.x || y !== latlng.current.y) {
+          console.log('send position to server');
+          await axios.post(`${url}/user/latlng`,{
+            y: y,
+            x: x
+          }, {withCredentials: true});
+          latlng.current.x = x;
+          latlng.current.y = y;
+        }
+      }, () => console.log('denied'), {
+        enableHighAccuracy: false,
+        timeout: 50000,
+        maximumAge: 0
+      });
+    }
     getUserInfo();
     /* IO */
     if (login) {
@@ -89,6 +89,13 @@ function App() {
       socket.emit('login', user);
       socket.on('login', (payload) => {
         console.log(payload);
+      });
+      socket.on('notify', (payload) => {
+        console.log(payload) //콘솔 ? 위치 ? App.tsx
+        const regex = /[^0-9]/g;
+        const groupId = payload.replace(regex, "")
+        const thisUser = 'group' + " " + groupId
+        socket.emit('thisUser', thisUser) // 아직 어떤 식인지는 모름 ex) group 1번 모임에서 초대가 왔습니다.
       });
     } 
     if (!login) {
@@ -103,42 +110,44 @@ function App() {
 
   return (
     <div className="App">
-      {/* IO */}<SocketContext.Provider value={socket}>
-      <Router>
-        <Header login={login} setLogin={setLogin} show={show} setShow={setShow} />
-        <Routes>
+      <SocketContext.Provider value={socket}>
+        <Router>
+          <Header login={login} setLogin={setLogin} 
+          show={show} setShow={setShow} 
+          user={user} setUser={setUser} watch={watch}/>
+          <Routes>
+            {
+              login 
+              ? <>
+                    <Route path='/mypage' element={<Mypage setUser={setUser} user={user} />}  />     
+                    <Route path='/creategroup' element={<CreateGroup user={user}/>} /> 
+                    <Route path='/group/:id' element={<Group />} />
+                    <Route path='/map/:groupId/:userId' element={<Map />} />
+                    <Route path='/map/:groupId' element={<Map />} />
+                </>
+              : <>
+                  <Route path='/*' element={<Navigate to='/' />} />
+                </>
+            }
+            <Route path= '/' element={<Home setLogin={setLogin} setUser={setUser}/> } />
+          </Routes>
           {
-            login 
-            ? <>
-                <Route path= '/mypage' element={<Mypage setUser={setUser} user={user} />}  />
-                <Route path='/map' element={<Map />} />        
-                <Route path='/creategroup' element={<CreateGroup user={user}/>} /> 
-                <Route path='/group/:id' element={<Group />} />
-              </>
-            : <>
-                <Route path='/map' element={<Map />} />        
-                <Route path='/*' element={<Navigate to='/' />} />
-              </>
-          }
-          <Route path= '/' element={<Home setLogin={setLogin} setUser={setUser}/> } />
-        </Routes>
-        {
-          show.login
+            show.login
             ? <LoginModal setShow={setShow} setLogin={setLogin} setUser={setUser} />
             : <></>
-        }
-        {
-          show.signin
+          }
+          {
+            show.signin
             ? <SignUpModal setShow={setShow}/>
             : <></>
-        }
-        {
-          show.notify
+          }
+          {
+            show.notify
             ? <Notify />
             : <></>
-        }
-      </Router>
-      {/* IO */}</SocketContext.Provider>
+          }
+        </Router>
+      </SocketContext.Provider>
     </div>
   );
 }

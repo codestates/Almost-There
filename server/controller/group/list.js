@@ -19,7 +19,6 @@ module.exports = {
         });
         const groups = result.sort((a, b) => a._group.time - b._group.time);
 
-
         return res.send({ groups });
       } catch (err) {
         return res.status(500).send({ message: 'server error' });

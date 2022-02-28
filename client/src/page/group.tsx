@@ -5,55 +5,39 @@ import '../App.css';
 import { useState, useCallback,useEffect } from "react";
 import url from '../url';
 import axios from "axios";
-import { useParams } from 'react-router-dom';
-
-
-function Group () {
-  const [groupInfo, setGroupInfo] = useState<Array<any>>([ ])
-  // const [groupInfo, setGroupInfo] = useState<Object>([ ])
-  const [newInfo, setnewInfo] = useState<Object>([ ])
-  const params= useParams();
-
-useEffect(() => {      
-getGroupInfo();
-// console.log(groupInfo[0])
-},[]);  
-
-const getGroupInfo = () => {
-  // console.log('test')
-  axios
-  .get(
-  `${url}/group/list`,
-  {withCredentials:true}
-  )
-  .then((res) => {
-  const filtered = res.data.groups.filter((el:any)=>{
-  // filter 사용하여 id가 00인 그룹정보 불러오기
-  // return el.groupId === 3
-  // console.log(params.id)
-  // return el.id === 5;    
-  return el.id === Number(params.id);    
-
-})
-  // console.log(res.data.groups[0]._group.name)
-  // console.log(filtered)  
-  // console.log(res.data.groups)
-  // setGroupInfo([...filtered])    
-  setGroupInfo([...filtered])    
-  setnewInfo(groupInfo)
+import { useNavigate, useParams } from 'react-router-dom';
 
   // console.log(filtered)  
   // console.log(groupInfo)
   // console.log(newInfo)  
 
-})
-  .catch((err) => {
-  });
-}
+function Group () {
+  const [groupInfo, setGroupInfo] = useState<Array<any>>([]);
+  const [newInfo, setnewInfo] = useState<Object>([]);
+  const navigate = useNavigate();
+  const params= useParams();
 
-//groups의 name, place, time 필요
+  const getGroupInfo = async () => {
+    const res = await axios.get(`${url}/group/list`,{withCredentials:true});
+    const filtered = res.data.groups.filter((el:any)=>{
+      return el.id === Number(params.id);    
+    });    
+    setGroupInfo([...filtered]);
+    setnewInfo(groupInfo);
+  }
+  const clickMap = () => {
+    navigate(`/map/${params.id}`);
+  }
 
+  const checkPosition = (n: number) => {
+    navigate(`/map/${params.id}/${n}`);
+  }
 
+  useEffect(() => {      
+    getGroupInfo();
+    // console.log(groupInfo[0])
+  },[]);  
+    
   return (
     <Background>
       <Container>
@@ -80,7 +64,7 @@ const getGroupInfo = () => {
           </List1>
           <List1>
             <Title1>{groupInfo[0]?._group.place}</Title1>
-            <Icon>지도</Icon>
+            <Icon onClick={clickMap}>지도</Icon>
           </List1>
           <List1>
             <Title3>{groupInfo[0]?._group.time}</Title3>
@@ -92,7 +76,7 @@ const getGroupInfo = () => {
           <List2>
             <Li>
               <NameBox>멤버1</NameBox>
-              <PosBox>위치 확인</PosBox>
+              <PosBox onClick={() => checkPosition(1)}>위치 확인</PosBox>
               <ATBox>17:10</ATBox>
             </Li>
             <Li>

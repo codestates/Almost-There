@@ -1,6 +1,7 @@
 const { isAuthorized } = require('../tokenFunctions');
 const { users_groups } = require('../../models');
 const { _groups } = require('../../models');
+const overtime = require('./overtime');
 
 module.exports = {
   get: async (req, res) => {
@@ -15,23 +16,26 @@ module.exports = {
         const result = await users_groups.findAll({
           where: {
             groupId
-          },
-        });
-        const arr = []
-        for(let i = 0; i < result.length; i++){
-          arr.push(result[i].dataValues.userId)
+          }
+        }); // result = [{groupId,userId,overtime},{groupId,userId,overtime},{groupId,userId,overtime}]
+        console.log(result);
+        const arr = [];
+        for (let i = 0; i < result.length; i++) {
+          a = result[i].dataValues.userId;
+          b = result[i].dataValues.overtime;
+          arr.push({ userId: a, overtime: b });
         }
         const result1 = await _groups.findOne({
           where: {
             id: groupId
           }
-        })
-        return res.status(200).send({ member:arr, groupInfo:result1.dataValues });
+        });
+        return res.status(200).send({ member: arr, groupInfo: result1.dataValues });
       }
     } catch (err) {
       return res.status(500).send({ message: 'server error' });
     }
   }
 };
-// 그룹 정보랑 배열로 그룹인원 나오게 
+// 그룹 정보랑 배열로 그룹인원 나오게
 // 클라이언트에서 groupId 받아서 해당 그룹에 속한 유저와 해당 그룹의 정보 반환.

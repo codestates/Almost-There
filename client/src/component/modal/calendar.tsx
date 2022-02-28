@@ -24,6 +24,7 @@ type CalendarProps = {
 const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const today = new Date().getDate();
   const week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const monthLength2 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -37,7 +38,7 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
   const refMeridium = useRef<HTMLDivElement>(null);
   const refHour = useRef<HTMLDivElement>(null);
   const refMinute = useRef<HTMLDivElement>(null);
-  const [day, setDay] = useState<string>('1');
+  const [day, setDay] = useState<string>(`${today}`);
   const [meridium, setMeridium] = useState<string>('오전');
   const [hour, setHour] = useState<string>('1');
   const [minute, setMinute] = useState<string>('0');
@@ -157,7 +158,7 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
               })}
             </DayBox>
           </MonthBox>
-          <Time>
+          <TimeBox>
             <MeridiumBox ref={refMeridium} onScroll={handleMeridium}>
               <MeridiumContainer>
                 <Option select=''></Option>
@@ -200,7 +201,7 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
               </MinuteContainer>
             </MinuteBox>
             <Select />
-          </Time>
+          </TimeBox>
         </Contents>
         <div>
           <button onClick={selectComplete}>선택 완료</button>
@@ -292,7 +293,7 @@ const Day = styled.div<DayI>`
     cursor: pointer;
   }
 `
-const Time = styled.div`
+const TimeBox = styled.div`
   width: 250px;
   height: 250px;
   position: relative;

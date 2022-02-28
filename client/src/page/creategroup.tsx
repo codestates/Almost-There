@@ -1,13 +1,12 @@
 import axios from 'axios';
-import { useEffect, useRef, useState, useContext} from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Calendar, Invite, Location } from '../component/index'
+import { SocketContext } from '../context';
 import url from '../url';
 /* IO */ import { io, Socket } from 'socket.io-client';
 /* IO */ import { socket } from '../context';
-
-
 
 declare global {
   interface Show {
@@ -33,14 +32,8 @@ interface Place {
 type CreateGroupProps = {
   user: User
 }
-/* IO */
-  // const socket = useContext(SocketContext);  
-  // const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(url, {
-  //     withCredentials: true
-  //   });
-  /* IO */
+
 function CreateGroup ({ user }: CreateGroupProps) {
-  // const socket = useContext(SocketContext);
   const [modal, setModal] = useState<Show>({
     calendar: false,
     location: false,
@@ -67,6 +60,11 @@ function CreateGroup ({ user }: CreateGroupProps) {
 
   const handleGroupName = (boo:boolean) => {
     setEdit(boo);
+    if (boo===true) {
+      setTimeout(() => {
+        refGroupName.current?.focus()
+      }, 0)
+    }
   }
 
   const handleTime = () => {
@@ -106,24 +104,23 @@ function CreateGroup ({ user }: CreateGroupProps) {
       time: `${year}.${month}.${day} ${hour}:${minute}:00`,
       place: place.name,
       inviteId: inviteList,
-      lat: place.x,
-      lng: place.y
+      x: place.x,
+      y: place.y
     }, {withCredentials: true});
-    // const res2 = await axios.get(`${url}/group/list`, {withCredentials: true});
     const id = res.data.data;
     navigate(`/group/${id}`);
-    socket.emit('createRoom', {room:id});
+    socket.emit('createRoom', {room:id},);
     socket.on('createRoom',(payload) => {
       console.log(payload)
     })
-    socket.emit('inviteId', {inviteId:inviteList});
-    socket.on('inviteId', (payload) => {
-      console.log(payload) //콘솔 ? 위치 ? App.tsx
-      const regex = /[^0-9]/g;
-      const groupId = payload.replace(regex, "")
-      const thisUser = 'group' + " " + groupId
-      socket.emit('thisUser', thisUser) // 아직 어떤 식인지는 모름 ex) group 1번 모임에서 초대가 왔습니다.
-    });
+    socket.emit('notify', {} );
+    // socket.on('inviteId', (payload) => {
+    //   console.log(payload) //콘솔 ? 위치 ? App.tsx
+    //   const regex = /[^0-9]/g;
+    //   const groupId = payload.replace(regex, "")
+    //   const thisUser = 'group' + " " + groupId
+    //   socket.emit('thisUser', thisUser) // 아직 어떤 식인지는 모름 ex) group 1번 모임에서 초대가 왔습니다.
+    // });
     
   }
 
@@ -134,10 +131,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
     });
     /* IO */
   useEffect(() => {
-    if (refGroupName) {
-      refGroupName.current?.focus();
-    }
-  }, [edit])
+  }, []);
 
   return (
     <>

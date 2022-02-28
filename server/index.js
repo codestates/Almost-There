@@ -13,7 +13,6 @@ const httpServer = require('http').createServer(app);
 const io = require('./io')(httpServer);
 const models = require('./models');
 
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));

@@ -73,6 +73,7 @@ const KeyMap = ({ location, setPlace, setModal }: KeyMapProps) => {
       const menuEl = menuRef.current,
       bounds = new kakao.maps.LatLngBounds();
       removeMarker();
+      console.log(places);
       setPlaces([...places]);
       for ( let i=0; i<places.length; i++ ) {
         const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
@@ -212,7 +213,6 @@ const Ul = styled.ul`
       font-size: 15px;
     }
   }
-
 `
 
 export default KeyMap;
