@@ -8,90 +8,76 @@ import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/js/all.js';
 
-  interface User {
-    userId: string,
-    email: string,
-    name: string
-  }
+interface User {
+  userId: string,
+  email: string,
+  name: string
+}
 
-  type mypageprops = {
-    user:User, setUser:React.Dispatch<React.SetStateAction<User>>
-  }
+type mypageprops = {
+  user:User, setUser:React.Dispatch<React.SetStateAction<User>>
+}
 
 function Mypage ({user,setUser}:mypageprops) {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
+  const [isOpenModalPW, setOpenModalPW] = useState<boolean>(false);
+  const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
+  const [_groups, setGroups] = useState<Array<any>>([])
+  const navigate = useNavigate();
+  
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
   };
-  const [isOpenModalPW, setOpenModalPW] = useState<boolean>(false);
+
   const onClickToggleModalPW = () => {
     setOpenModalPW(!isOpenModalPW);
   };
-  const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
+
   const onClickToggleModalDeact: () => void = useCallback(() => {
     setOpenModalDeact(!isOpenModalDeact);
-    }, [isOpenModalDeact]);
-  const [_groups, setGroups] = useState<Array<any>>([])
-  const navigate = useNavigate();
+  }, [isOpenModalDeact]);
 
   const clickGroup = (groupId:string) => {
     navigate(`/group/${groupId}`);
   }
-  // const groupStatus = axios.get(
-  //   `${url}/group/list`,
-  // {withCredentials:true}
-  // )
 
-  useEffect(() => {      
-  getGrouplist();
-  },[]);
   
-  // useEffect(() => {        
-  // },[_groups]);
-    
 
-  const getGrouplist = () => {
-  axios
-  .get(
-  `${url}/group/list`,
-  {withCredentials:true}
-  )
-  .then((res) => {
-  // console.log(res.data.groups)
-
+  const getGrouplist = async () => {
+    const res = await axios.get(`${url}/group/list`,{withCredentials:true})
     const filter = res.data.groups.map((el:any)=>{
-    const date = new Date(el._group.time)
-    const arr = date.toString().split(' ')
-    const time = `${arr[1]} ${arr[2]} ${arr[4]}`
-    console.log(date)
-    //Sun Jan 02 2022 00:00:00 GMT+0900 (한국 표준시)
+      const date = new Date(el._group.time);
+      const arr = date.toString().split(' ');
+      const time = `${arr[1]} ${arr[2]} ${arr[4]}`;
+      console.log(date)
+      //Sun Jan 02 2022 00:00:00 GMT+0900 (한국 표준시)
       return {
-    name : el._group.name,
-    id: el._group.id,
-    place:el._group.place,
-    time
-    }
-  })
-  console.log(filter)
-  // console.log(res.data.groups[0]._group.name)
-  // console.log(res.data.groups)
-  setGroups([...filter])    
+        name : el._group.name,
+        id: el._group.id,
+        place:el._group.place,
+        time
+      }
     })
+    console.log(filter)
+    // console.log(res.data.groups[0]._group.name)
+    // console.log(res.data.groups)
+    setGroups([...filter])    
   }
 
   const DeleteGrouplist = async (e:string) => {
-  console.log(e);    
-  await axios
-  .delete(`${url}/group/${e}`, 
-  {withCredentials:true}
-  )
-  const filter = _groups.filter((el)=>{
-    return String(el.id)!== e
-  })
-  console.log("group successfully deleted");
-  console.log(filter);
-  setGroups([...filter])
+    console.log(e);    
+    await axios.delete(`${url}/group/${e}`, { withCredentials:true })
+    const filter = _groups.filter((el)=>{
+      return String(el.id)!== e
+    })
+    console.log("group successfully deleted");
+    console.log(filter);
+    setGroups([...filter])
   }
+
+  useEffect(() => {      
+    getGrouplist();
+  },[]);
 
   return (  
   <MypageStyle>

@@ -78,11 +78,11 @@ function App() {
       }
     };
     if (login) {
-      socket.on("notify", (type, sender) => {
+      socket.on("notify", (type, sender, id) => {
         setAlarm(true);
         setList(
           [{
-            id: list.length+1, 
+            id: id, 
             sender: sender,
             notifyType: type
           }, 

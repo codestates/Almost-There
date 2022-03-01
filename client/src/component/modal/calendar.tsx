@@ -20,6 +20,9 @@ type CalendarProps = {
   time: Time,
   setTime: React.Dispatch<React.SetStateAction<Time>>
 }
+let meId: NodeJS.Timeout;
+let hourId: NodeJS.Timeout;
+let minId: NodeJS.Timeout;
 
 const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
   const [year, setYear] = useState(new Date().getFullYear());
@@ -82,16 +85,34 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
       default:
         break;
     }
+    clearTimeout(meId);
+    meId= setTimeout(() => {
+      if (refMeridium.current && refMeridium.current.scrollTop !== (x-1) * 50) {
+        refMeridium.current.scrollTop = (x-1) * 50;
+      }
+    }, 100)
   }
 
   const handleHour = () => {
     const x = Math.round((refHour.current?.scrollTop||0) / 50) + 1;
     setHour(x.toString());
+    clearTimeout(hourId);
+    hourId= setTimeout(() => {
+      if (refHour.current && refHour.current.scrollTop !== (x-1) * 50) {
+        refHour.current.scrollTop = (x-1) * 50;
+      }
+    }, 100)
   }
   
   const handleMinute = () => {
     const x = Math.round((refMinute.current?.scrollTop||0)/ 50);
     setMinute(x.toString());
+    clearTimeout(minId);
+    minId = setTimeout(() => {
+      if (refMinute.current && refMinute.current.scrollTop !== x * 50) {
+        refMinute.current.scrollTop = x * 50;
+      }
+    }, 100)
   }
 
   const clickBack = () => {

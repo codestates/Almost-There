@@ -57,10 +57,17 @@ function Map ({ user }: MapProps) {
       socket.on("getPosition", (data) => {
         console.log('getPosition');
         console.log(data);
-        setMember({
-          x: Number(data.x) + Math.random()/10,
-          y: Number(data.y) + Math.random()/10
-        });
+        if (!data.x || !data.y) {
+          setMember({
+            x: res.data.groupInfo.x,
+            y: res.data.groupInfo.y
+          })
+        } else {
+          setMember({
+            x: Number(data.x) + Math.random()/10,
+            y: Number(data.y) + Math.random()/10
+          });
+        }
       });
       // setMember({
       //   x: Number(res.data.groupInfo.x) + 0.0005,

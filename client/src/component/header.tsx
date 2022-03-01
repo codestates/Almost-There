@@ -221,7 +221,7 @@ const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
   @media screen and (max-width: 760px) {
-    color: white;
+    color: black;
   }
 `
 
