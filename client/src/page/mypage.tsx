@@ -117,7 +117,7 @@ function Mypage ({user,setUser}:mypageprops) {
           return (
           <Box key={el.id}>
           <GroupName >
-            <GroupNameText onClick={() => clickGroup(el.id)}>
+            <GroupNameText>
             <GroupI>
             <div>{el.name}</div>
             <div>{el.place}</div>
@@ -126,7 +126,7 @@ function Mypage ({user,setUser}:mypageprops) {
             </GroupNameText>
           </GroupName>
             <Group2>
-            <GroupNameButton>
+            <GroupNameButton  onClick={() => clickGroup(el.id)}>
             <button>그룹정보로 이동 </button>
             </GroupNameButton>
               {/* <div> */}
