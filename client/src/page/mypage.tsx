@@ -82,18 +82,18 @@ function Mypage ({user,setUser}:mypageprops) {
 }
 
   const DeleteGrouplist = async (e:string) => {
-  console.log(e);    
-  await axios
-  .delete(`${url}/group/${e}`, 
-  {withCredentials:true}
-  )
-  const filter = _groups.filter((el)=>{
-    return String(el.id)!== e
-  })
-  console.log("group successfully deleted");
-  console.log(filter);
-  setGroups([...filter])
-  }
+    console.log(e);    
+    await axios
+    .delete(`${url}/group/${e}`, 
+    {withCredentials:true}
+    )
+    const filter = _groups.filter((el)=>{
+      return String(el.id)!== e
+    })
+      console.log("group successfully deleted");
+      console.log(filter);
+      setGroups([...filter])
+      }
   return (  
   <MypageStyle>
     <UserGroup>
