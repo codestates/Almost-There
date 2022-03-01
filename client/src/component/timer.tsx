@@ -21,19 +21,44 @@ function Timer () {
   const getGroupTime = async () => {
     const res = await axios.get(`${url}/group/list`,{withCredentials:true});
     const filtered = res.data.groups.filter((el:any)=>{
-      return el.id === Number(params.id);    
+      return el.groupId === Number(params.id);    
     });
+    console.log(filtered[0]?._group.time);
     let setDate = new Date(filtered[0]?._group.time);
+
     const now = new Date();
     setBoo(true)
     setDay(Math.floor((setDate.getTime() - now.getTime())/(1000*60*60*24)))
+    setHours(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60*24))/(1000*60*60))) ;
     setMinutes(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60))/(1000*60)))
     setSeconds(Math.floor((setDate.getTime() - now.getTime())%(1000*60)/(1000)))
+    console.log(setDate.getTime()-now.getTime())
+    // console.log()
+    
   }
 
   function minusOne (){
     if(seconds ===0){
       setSeconds(59)
+      if( minutes===0){
+        setMinutes(59)
+        if(hours===0){
+          setHours(23)
+          setDay(day-1)
+          if(day===0){
+            setDay(0)
+            setHours(0)
+            setMinutes(0)
+            setSeconds(0)
+          }
+        }
+        else{
+          setHours(hours-1)
+        }
+      }
+      else {
+        setMinutes(minutes-1)
+      }
       // setMinutes(minutes-1)
     }
     else {
@@ -44,7 +69,17 @@ function Timer () {
 
   useEffect(() => {
     if(boo){
-      setTimeout(minusOne, 1000);
+
+      let ID = setTimeout(minusOne, 1000);
+      if(day<=0 && hours <= 0 && minutes <=0 && seconds<=0 ){
+        setDay(0)
+        setHours(0)
+        setMinutes(0)
+        setSeconds(0)
+        setBoo(false)
+        clearTimeout(ID)
+    }        
+      return () => clearTimeout(ID)      
     }
   }, [seconds]);
 
