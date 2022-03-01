@@ -97,6 +97,8 @@ module.exports = function (server) {
         return Number(Math.floor(a-b/1000 * 60)) < 10;
       });
       console.log(filter);
+      // el._group.time -> dataValues도 추가?
+      // 아래도 마찬가지 -> dataValues도 추가?
 
       // 목적지와 현재위치 비교
       filter.forEach((el) => {
@@ -109,10 +111,16 @@ module.exports = function (server) {
             }
           });
           const data = {
+            groupId: el.groupId,
+            userId: el.userId,
+            arrive: 'true'
+          }
+          const notice = {
             contents: 2,
             userId: el.userId
           }
-          io.to(`group ${el.groupId}`).emit('notify', data);
+          io.to(`group ${el.groupId}`).emit('arrive', data);
+          io.to(`group ${el.groupId}`).emit('notify', notice);
         }
       });
 
@@ -136,19 +144,19 @@ module.exports = function (server) {
     });
 
     // ! overtime
-    socket.on('overtime', async (payload) => {
+    socket.on('overtime', async (groupId, userId, time) => {
       // groupId: string, userId: string, time: string
-      await users_groups.update({ overtime: payload.time },
+      await users_groups.update({ overtime: time },
         { where: {
-          groupId: payload.groupId,
-          userId: payload.userId
+          groupId: groupId,
+          userId: userId
         }
       });
       const data = {
-        overtime: payload.time,
-        userId: payload.userId
+        overtime: time,
+        userId: userId
       }
-      io.to(`group ${payload.groupId}`).emit('overtime', data);
+      io.to(`group ${groupId}`).emit('overtime', data);
     });    
 
     // ! 알림 핸들링
@@ -238,3 +246,10 @@ module.exports = function (server) {
 
   return io;
 };
+
+// ! leaveGroup 이벤트 추가하기
+// 그 사용자를 그룹에서 불참으로 변경
+// 그룹아이디 방으로 탈퇴 알림 전송
+// client -> groupId, userId
+
+// context.tsx 보고 이벤트 매개변수들 수정
