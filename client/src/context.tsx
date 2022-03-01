@@ -29,8 +29,8 @@ interface ServerToClientEvents {
 interface ClientToServerEvents {
   login: (user: User) => void
   logout: (user: User) => void
-  join: (userId: string) => void
-  leave: (userId: string) => void
+  join: (userId: string) => void // 특정 유저 위치 조회할 때 pos 유저 룸 들어가기
+  leave: (userId: string) => void // 특정 유저 위치 조회할 때 pos 유저 룸 나가기
   sendPosition: (data: MyPosition) => void
   getPosition: (userId: string) => void
   overtime: (groupId: string, userId: string, time: string) => void

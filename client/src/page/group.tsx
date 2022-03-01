@@ -113,6 +113,10 @@ function Group ({ user }: GroupProps) {
     setTimeModal(true);
   }
 
+  const leaveGroup = () => {
+    socket.emit("leaveGroup", `${params.groupId}`, user.userId);
+  }
+
   useEffect(() => {     
     getGroupInfo();
     socket.on("arrive", (groupId, userId, arrive) => {
@@ -140,8 +144,11 @@ function Group ({ user }: GroupProps) {
               userId: el.userId,
               arrive: el.arrive
             }
+          } else {
+            return el;
           }
         })
+        setMember([...update]);
       }
     })
     // group1, group2, group3
@@ -242,14 +249,12 @@ function Group ({ user }: GroupProps) {
           </List2>
         </Contents3>
       </Container>
-      <Leave>
-        <div>out</div>
-        {/* <i className="fa-solid fa-right-from-bracket"></i> */}
+      <Leave onClick={leaveGroup}>
+        <div>그룹 나가기</div>
       </Leave>
-      <Goback>
-        <div>mypage</div>
-        {/* <i className="fa-solid fa-right-from-bracket"></i> */}
-      </Goback>
+      <MyPage onClick={() => navigate('/mypage')}>
+        <div>마이페이지</div>
+      </MyPage>
     </Background>
   )
 }
@@ -471,7 +476,7 @@ const Leave = styled.div`
   position: fixed;
   bottom: 10px;
   right: 10px;
-  font-size: 20px;  
+  font-size: 15px;  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -481,13 +486,13 @@ const Leave = styled.div`
     cursor: pointer;
   }
 `
-const Goback = styled.div`
+const MyPage = styled.div`
   width : 80px;
   height: 40px;
   position: fixed;
   bottom: 10px;
-  left: 10px;
-  font-size: 20px;  
+  right: 100px;
+  font-size: 15px;  
   display: flex;
   justify-content: center;
   align-items: center;

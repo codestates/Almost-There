@@ -7,6 +7,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/js/all.js';
+import { socket } from '../context';
 
 interface User {
   userId: string,
@@ -70,6 +71,7 @@ function Mypage ({user,setUser}:mypageprops) {
     const filter = _groups.filter((el)=>{
       return String(el.id)!== e
     })
+    socket.emit("leaveGroup", e, user.userId);
     console.log("group successfully deleted");
     console.log(filter);
     setGroups([...filter])
