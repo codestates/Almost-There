@@ -11,12 +11,15 @@ module.exports = {
         const groupId = req.params.groupId;
 
         // 소속 그룹 탈퇴
-        await users_groups.update({ overtime: null },
+        await users_groups.update({ 
+          overtime: '00:00:00',
+          arrive: 'leave'
+        },
           { where: { groupId, userId } });
 
         // 다른 그룹원들도 모두 나간 상태면 그 그룹 정보 삭제
         const result = await users_groups.findAll({ where: { groupId } });
-        const isAllMemberLeave = result.every(member => member.overtime === null);
+        const isAllMemberLeave = result.every(member => member.arrive === 'leave');
         if (isAllMemberLeave) {
           await _groups.destroy({
             where: { id: groupId }

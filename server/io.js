@@ -1,4 +1,5 @@
-const { users, users_groups, notifications_users } = require('./models');
+const { users, users_groups, notifications_users, _groups } = require('./models');
+const { Op } = require('sequelize');
 
 module.exports = function (server) {
   const io = require('socket.io')(server, {
@@ -79,10 +80,46 @@ module.exports = function (server) {
       await users.update(updateData, {
         where: { userId: payload.user.userId }
       });
+
+      // 도착 여부 판별
+      const groups = await users_groups.findAll({
+        where: {
+          userId: payload.user.userId,
+          arrive: { [Op.ne]: 'leave' }
+        },
+        include: _groups
+      });
+
+      // 도착시간과 현재시간 비교
+      const filter = groups.filter((el) => {
+        let a = new Date(el.time).getTime();
+        let b = new Date().getTime();
+        return Number(Math.floor(a-b/1000 * 60)) < 10;
+      });
+      console.log(filter);
+
+      // 목적지와 현재위치 비교
+      filter.forEach((el) => {
+        if ( (Math.floor(el.x*100)/100) === (Math.floor(data.x*100)/100) &&
+        (Math.floor(el.y*100)/100) === (Math.floor(data.y*100)/100) ) {
+          await users_groups.update({ arrive: 'true' },
+          { where: {
+            groupId: el.groupId,
+            userId: el.userId
+            }
+          });
+          const data = {
+            contents: 2,
+            userId: el.userId
+          }
+          io.to(`group ${el.groupId}`).emit('notify', data);
+        }
+      });
+
       io.to(`pos ${payload.user.userId}`).emit('getPosition', {x:payload.position.x, y:payload.position.y} )
     });
 
-    // ? getPosition: 다른 사람의 위치 정보 요청 시 요청한 클라이언트에 위치 정보 전달
+    // ! getPosition: 다른 사람의 위치 정보 요청 시 요청한 클라이언트에 위치 정보 전달
     // * 요청 데이터: { userId: 본인, target: 대상 }
     // - 사용자의 위도&경도를 조회하는 API가 없음
     // - socket.io 이벤트로 전달
@@ -98,20 +135,59 @@ module.exports = function (server) {
       });
     });
 
+    // ! overtime
+    socket.on('overtime', async (payload) => {
+      // groupId: string, userId: string, time: string
+      await users_groups.update({ overtime: payload.time },
+        { where: {
+          groupId: payload.groupId,
+          userId: payload.userId
+        }
+      });
+      const data = {
+        overtime: payload.time,
+        userId: payload.userId
+      }
+      io.to(`group ${payload.groupId}`).emit('overtime', data);
+    });    
+
     // ! 알림 핸들링
     // * 요청 데이터: { contents: 알림 종류, sender: 본인, groupId: 그룹 번호 }
     socket.on('notify', async (payload) => {
       if (payload.contents === 1) {
-          // console.log(payload.inviteId);
-          // for (let i = 0; i < payload.inviteId.length; i++) {
-          //   io.to(`user ${payload.inviteId[i]}`).emit('inviteId', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
-          // }
-
         // 초대 알림
+        for (let i = 0; i < payload.groupMember.length; i++) {
+          await notifications_users.create({
+            sender: payload.userId,
+            receiver: payload.groupMember[i],
+            notifyId: 1
+          });
+          const data = {
+            contents: 1,
+            userId: payload.groupMember[i]
+          }
+          io.to(`user ${payload.groupMember[i]}`).emit('notify', data);
+        }          
       }
+      // console.log(payload.inviteId);
+      // for (let i = 0; i < payload.inviteId.length; i++) {
+      //   io.to(`user ${payload.inviteId[i]}`).emit('inviteId', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
+      // }
 
       if (payload.contents === 2) {
         // 도착 알림
+        for (let i = 0; i < payload.groupMember.length; i++) {
+          await notifications_users.create({
+            sender: payload.userId,
+            receiver: payload.groupMember[i],
+            notifyId: 2
+          });
+        }
+        const data = {
+          contents: 2,
+          userId: payload.userId
+        };
+        io.to(`group ${payload.groupId}`).emit('notify', data);
       }
 
       if (payload.contents === 3) {
@@ -127,11 +203,12 @@ module.exports = function (server) {
         socket.leave(`group ${payload.groupId}`);
         const data = {
           contents: 3,
-          userId: ''
+          userId: payload.userId
         };
-        io.to(`group ${payload.groupId}`).emit('notify', '탈퇴 알림');
+        io.to(`group ${payload.groupId}`).emit('notify', data);
       }
     });
+
     // ! logout
     socket.on('logout', (payload) => {
       console.log(`user ${payload.userId} logout`);
