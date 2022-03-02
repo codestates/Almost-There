@@ -163,12 +163,15 @@ function Group ({ user }: GroupProps) {
   },[]);  
   
   useEffect(() => {
-    const check = member.every((el) => {
-      return el.arrive === 'true' || el.arrive === 'leave'
-    })
-    console.log(check);
-    if (check) {
-      navigate('/complete');
+    if (member.length > 0) {
+      const check = member.every((el) => {
+        console.log(el.arrive);
+        return el.arrive === 'leave'
+      })
+      console.log(check);
+      if (check) {
+        navigate('/complete');
+      }
     }
   }, [member])
     
