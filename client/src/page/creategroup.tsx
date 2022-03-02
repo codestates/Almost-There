@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { Calendar, Invite, Location } from '../component/index'
 import { socket, SocketContext } from '../context';
 import url from '../url';
+/* IO */ import { io, Socket } from 'socket.io-client';
+/* IO */ import { socket } from '../context';
 
 declare global {
   interface Show {
@@ -37,7 +39,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
     location: false,
     invite: false
   })
-  const [groupName, setGroupName] = useState<string>('');
+  const [groupName, setGroupName] = useState<string>('동아리 모임');
   const [edit, setEdit] = useState<boolean>(false);
   const refGroupName = useRef<HTMLInputElement>(null);
   const refPlace = useRef<HTMLButtonElement>(null);
@@ -91,7 +93,6 @@ function CreateGroup ({ user }: CreateGroupProps) {
   const handleDelete = (idx: number) => {
     setInviteList([...inviteList.slice(0,idx), ...inviteList.slice(idx+1)])
   }
-
   const handleCreateButton = async () => {
     if (groupName && place.name) {
       let hour;
@@ -118,6 +119,17 @@ function CreateGroup ({ user }: CreateGroupProps) {
     } else {
       refPlace.current?.classList.add("focus");
     }
+    const { year, month, day, minute, hour } = time;
+    const res = await axios.post(`${url}/group/create`, {
+      name: groupName,
+      time: `${year}.${month}.${day} ${hour}:${minute}:00`,
+      place: place.name,
+      inviteId: inviteList,
+      x: place.x,
+      y: place.y
+    }, {withCredentials: true});
+    const id = res.data.data;
+    navigate(`/group/${id}`);
   }
 
   return (

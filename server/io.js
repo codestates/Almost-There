@@ -42,9 +42,9 @@ module.exports = function (server) {
           socket.join(`group ${result[i].dataValues.groupId}`);
         }
         console.log(socket.rooms);
-        socket.on('thisUser', (payload) => {
-          socket.join(payload)
-        })
+        // socket.on('joinGroup', (groupId) => {
+        //   socket.join(`group ${groupId}`)
+        // })
       } catch (err) {
         io.emit('error', err);
       }
@@ -66,23 +66,34 @@ module.exports = function (server) {
       }
     });
 
-    // ! create group / 그룹 생성: group/create (POST)
-    socket.on('joinGroup', (groupId) => {
-      console.log(groupId);
-      socket.join(`group ${groupId}`);
-      io.to(`group ${groupId}`).emit('createRoom', `join group ${groupId}`);
-      console.log(socket.rooms);
-    });
-    socket.on('notify', (payload) => {
-      console.log(payload.inviteId);
-      for (let i = 0; i < payload.inviteId.length; i++) {
-        io.to(`notice ${payload.inviteId[i]}`).emit('notify', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
+    // ! logout
+    socket.on('logout', (payload) => {
+      console.log(`user ${payload.userId} logout`);
+      try {
+        // 채널 나가기
+        const rooms = socket.rooms;
+        rooms.forEach((room) => {
+          room.includes('group') ? socket.leave(room) : null;
+          room.includes('notice') ? socket.leave(room) : null;
+        });
+      } catch (err) {
+        io.emit('error', err);
       }
     });
-    // a = 초대 알림을 받음
-    // b = 초대 알림을 받음
-    // a,b => 알림을 받은 그룹의 룸에 조인해줘야함
 
+    // ! create group / 그룹 생성: group/create (POST)
+    socket.on('joinGroup', (groupId) => {
+      console.log(payload);
+      socket.join(`group ${groupId}`);
+      io.to(`group ${groupId}`).emit('joinGroup', `join group ${groupId}`);
+      console.log(socket.rooms);
+      // socket.on('joinGroup', (groupId) => {
+      //   socket.join(`group ${groupId}`)
+      // })
+    });
+    socket.on('joinGroup', (groupId) => {
+      socket.join(`group ${groupId}`)
+      })
     // ! 실시간 위치 정보
     // 내 위치 정보 -> 도착 여부 알려주기
     // 업데이트 -> 업데이트 될 때 마다 본인 userId room 에다가 x,y를 보내주기
@@ -115,17 +126,32 @@ module.exports = function (server) {
       console.log(filter);
 
       // 목적지와 현재위치 비교
-      filter.forEach(async (el) => {
-        if ( (Math.floor(payload.position.x*100)/100) === (Math.floor(el.dataValues._groups.x*100)/100) &&
-        (Math.floor(payload.position.y*100)/100) === (Math.floor(el.dataValues._groups.y*100)/100) ) {
+      filter.forEach(async(el) => {
+        if ( (Math.floor(payload.position.x*100)/100) === (Math.floor(el.dataValues._group.dataValues.x*100)/100) &&
+        (Math.floor(payload.position.y*100)/100) === (Math.floor(el.dataValues._group.dataValues.y*100)/100) ) {
           await users_groups.update({ arrive: 'true' },
-          { where: {
-            groupId: el.dataValues.groupId,
-            userId: el.dataValues.userId
+          { 
+            where: {
+              groupId: el.dataValues.groupId,
+              userId: el.dataValues.userId
             }
           });
+
+          const groupMembers = await users_groups.findAll({
+            where: {
+              groupId: el.dataValues.groupId,
+              userId: { [Op.ne]: el.dataValues.userId }
+            }
+          });
+          for (let i = 0; i < groupMembers.length; i++) {
+            await notifications_users.create({
+              sender: el.dataValues.userId,
+              receiver: groupMembers[i].dataValues.userId,
+              notifyId: 3
+            });
+          }
           io.to(`group ${el.dataValues.groupId}`).emit('arrive', el.dataValues.groupId, el.dataValues.userId, 'true');
-          io.to(`group ${el.dataValues.groupId}`).emit('notify', 2, el.dataValues.userId, el.dataValues.groupId);
+          io.to(`group ${el.dataValues.groupId}`).emit('notify', 'arrive', el.dataValues.userId, el.dataValues.groupId);
         }
       });
 
@@ -134,7 +160,6 @@ module.exports = function (server) {
 
     // ! getPosition: 다른 사람의 위치 정보 요청 시 요청한 클라이언트에 위치 정보 전달
     socket.on('getPosition', async (userId) => {
-      console.log(`GET POSITION: user ${userId}`);
       const result = await users.findOne({
         attributes: ['x', 'y'],
         where: { userId }
@@ -153,14 +178,17 @@ module.exports = function (server) {
       io.to(`group ${groupId}`).emit('overtime', groupId, userId, time);
     });    
 
-    // ! 알림
+    // ! notify / 알림
     socket.on('notify', async (type, sender, groupId) => {
       const groupMembers = await users_groups.findAll({
-        where: { groupId }
+        where: {
+          groupId: groupId,
+          userId: { [Op.ne]: sender }
+        }
       });
 
       // 초대 알림
-      if (type === 1) {  
+      if (type === 'invite') {  
         for (let i = 0; i < groupMembers.length; i++) {
           await notifications_users.create({
             sender: sender,
@@ -172,7 +200,7 @@ module.exports = function (server) {
       }
 
       // 도착 알림
-      if (type === 2) {
+      if (type === 'arrive') {
         for (let i = 0; i < groupMembers.length; i++) {
           await notifications_users.create({
             sender: sender,
@@ -184,7 +212,7 @@ module.exports = function (server) {
       }
 
       // 탈퇴 알림
-      if (type === 3) {
+      if (type === 'leave') {
         for (let i = 0; i < groupMembers.length; i++) {
           await notifications_users.create({
             sender: sender,
@@ -207,13 +235,6 @@ module.exports = function (server) {
     socket.on("leave", (userId) => {
       console.log('leave', userId);
       socket.leave(`pos ${userId}`)
-    });
-
-    // ! leaveGroup
-    socket.on('leaveGroup', async (groupId, userId) => {
-      await users_groups.update({ arrive: 'leave' },
-        { where: { groupId, userId } });
-      io.to(`group ${groupId}`).emit('notify', 3, userId, groupId);
     });
 
   });
