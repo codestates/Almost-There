@@ -53,12 +53,6 @@ const handleLogin = async() => {
     });
     socket.emit("login", { userId, name, email });
     setLogin(true);
-    socket.on('notify', (payload) => {
-      console.log(payload) //콘솔 ? 위치 ? App.tsx
-      const regex = /[^0-9]/g;
-      const groupId = payload.replace(regex, "")
-      const thisUser = 'group' + " " + groupId
-    });
     setShow({ login: false, signin: false, notify: false});
   } catch {
     setMsg(true);
@@ -166,7 +160,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-
   @media screen and (max-width: 760px) {
     width: 300px;
   }
@@ -208,7 +201,6 @@ const Links = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-
   @media screen and (max-width: 760px) {
     flex-direction: column;
   }
