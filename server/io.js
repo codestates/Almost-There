@@ -108,14 +108,14 @@ module.exports = function (server) {
 
       // 도착시간과 현재시간 비교
       const filter = groups.filter((el) => {
-        let a = new Date(el.dataValues._groups.time).getTime();
+        let a = new Date(el.dataValues._group.dataValues.time).getTime();
         let b = new Date().getTime();
         return Number(Math.floor(a-b/1000 * 60)) < 10;
       });
       console.log(filter);
 
       // 목적지와 현재위치 비교
-      filter.forEach((el) => {
+      filter.forEach(async(el) => {
         if ( (Math.floor(payload.position.x*100)/100) === (Math.floor(el.dataValues._groups.x*100)/100) &&
         (Math.floor(payload.position.y*100)/100) === (Math.floor(el.dataValues._groups.y*100)/100) ) {
           await users_groups.update({ arrive: 'true' },
@@ -212,7 +212,7 @@ module.exports = function (server) {
     // ! leaveGroup
     socket.on('leaveGroup', async (groupId, userId) => {
       await users_groups.update({ arrive: 'leave' },
-        { where: groupId, userId });
+        { where: {groupId, userId} });
       io.to(`group ${groupId}`).emit('notify', 3, userId, groupId);
     });
 
