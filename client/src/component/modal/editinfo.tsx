@@ -109,22 +109,24 @@ function EditInfo ({
         }}
       >
       <DialogBox onClick={(e) => e.stopPropagation()}>
-
-      <div className="mypage-input-box">  
-        <div> 모달창구성</div>
+        <div className="mypage-input-box">  
+        {/* <div> 모달창구성</div> */}
         <div>{errorMessage}</div>
-          <div className="mypage-input-box-email">      
-            <input
+        <div className="mypage-input-box-email">
+            <EmailInput
               className="mypage-input"
               type="email"
               placeholder="변경할 이메일"
               onChange={handleInputValue('email')}
               value={users.email}
-              // value >> state로 
             />
+            {/* </EmailInput>       */}
+
           </div>
-          <div className="mypage-input-box-name">      
-            <input
+          <div></div>
+
+          {/* <div className="mypage-input-box-name">     */}
+            <NameInput
               className="mypage-input"
               type="text"
               placeholder="변경할 이름"
@@ -135,7 +137,7 @@ function EditInfo ({
           <button className="mypage-button" onClick={handleUserinfo}> 
               변경완료
           </button>
-    </div>
+    {/* </div> */}
       </DialogBox>
 
         
@@ -182,6 +184,23 @@ const Backdrop = styled.div`
   z-index: 9999;
   background-color: rgba(0, 0, 0, 0.2);
 `;
+
+const EmailInput = styled.input`
+  
+  height:50px;
+  border: 3px none;
+  border-bottom: 2px solid rgb(165, 165, 165);
+  margin: 20px 0px 20px 0px;
+`;
+
+const NameInput = styled.input`
+  
+  height:50px;
+  border: 3px none;
+  border-bottom: 2px solid rgb(165, 165, 165);
+  margin: 0px 0px 120px 0px;
+`;
+
 
 
 
