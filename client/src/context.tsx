@@ -15,9 +15,12 @@ interface MyPosition {
 // axios.post로 위치 정보를 바꿀 때 마다 socket.to(userId).emit("getPosition", data: MyPosition);
 // io.to(userId).emit("invite", userId: string); // for 문 돌려서 보내기
 // arrive leave => to(groupId)
+// axios.post로 위치 정보를 바꿀 때 마다 socket.to(userId).emit("getPosition", data: MyPosition);
+// io.to(userId).emit("invite", userId: string); // for 문 돌려서 보내기
+// arrive leave => to(groupId)
 interface ServerToClientEvents {
   getPosition: (data:Pos) => void
-  notify: (contents: string, userId: string, id: string) => void
+  notify: (type: string, sender: string, groupId:string) => void
   overtime: (groupId: string, userId: string, overtime: string) => void
   arrive: (groupId: string, userId: string, arrive: string) => void
 }
@@ -35,6 +38,7 @@ interface ClientToServerEvents {
   getPosition: (userId: string) => void
   overtime: (groupId: string, userId: string, time: string) => void
   leaveGroup: (groupId: string, userId: string) => void
+  joinGroup: (groupId: string) => void;
   notify: (type: string, sender: string, groupId:string) => void// 도착, 초대, 탈퇴
 }
 

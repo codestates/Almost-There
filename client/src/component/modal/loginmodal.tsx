@@ -160,7 +160,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-
   @media screen and (max-width: 760px) {
     width: 300px;
   }
@@ -202,7 +201,6 @@ const Links = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-
   @media screen and (max-width: 760px) {
     flex-direction: column;
   }

@@ -6,7 +6,10 @@ import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-d
 import SignUpModal from './component/modal/signupmodal';
 import axios from 'axios';
 import url from './url';
-import { SocketContext, socket } from './context';
+/* IO */ import { socket, SocketContext } from './context';
+
+
+
 
 declare global {
   interface User {
@@ -63,6 +66,7 @@ function App() {
     }
   ]);
 
+  /* IO */
   useEffect(() => {
     console.log(user);
     const getUserInfo = async () => {
