@@ -71,7 +71,7 @@ function Mypage ({user,setUser}:mypageprops) {
     const filter = _groups.filter((el)=>{
       return String(el.id)!== e
     })
-    socket.emit("leaveGroup", e, user.userId);
+    socket.emit("notify", "leave", user.userId, e);
     console.log("group successfully deleted");
     console.log(filter);
     setGroups([...filter])

@@ -120,15 +120,6 @@ function CreateGroup ({ user }: CreateGroupProps) {
     }
   }
 
-  // useEffect(() => {
-  //   if (refGroupName) {
-  //     refGroupName.current?.focus();
-  //   }
-  // }, [edit]);
-
-  useEffect(() => {
-  }, []);
-
   return (
     <>
     <Background>

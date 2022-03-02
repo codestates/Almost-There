@@ -20,7 +20,8 @@ interface GroupInfo {
 interface Member {
   userId: string,
   overtime: string,
-  arrive: string
+  arrive: string,
+  name: string
 }
 
 type GroupProps = {
@@ -98,7 +99,7 @@ function Group ({ user }: GroupProps) {
     const time = `${Number(date[1])}월 ${Number(date[2])}일  ${ampm} ${date[3]}시 ${date[4]}분`;
     setGroupInfo({name, place, time, leaderId, x, y});
     const mapping = res.data.member.map((el:any) => {
-      return { userId: el.userId, overtime: el.overtime, arrive: "false"}
+      return { userId: el.userId, overtime: el.overtime, name: el.name, arrive: el.arrive}
     })
     // setMember([...res.data.member]);
     setMember([...mapping])
@@ -128,6 +129,7 @@ function Group ({ user }: GroupProps) {
             return {
               overtime: el.overtime,
               userId: el.userId,
+              name: el.name,
               arrive: arrive
             }
           } else {
@@ -144,7 +146,8 @@ function Group ({ user }: GroupProps) {
             return {
               overtime: overtime,
               userId: el.userId,
-              arrive: el.arrive
+              arrive: el.arrive,
+              name: el.name
             }
           } else {
             return el;
@@ -216,7 +219,7 @@ function Group ({ user }: GroupProps) {
               member.map((el) => {
                 return (
                   <Li key={el.userId}>
-                    <NameBox className={el.arrive}>{el.userId}
+                    <NameBox className={el.arrive}>{el.name}
                     </NameBox>
                     {checkloc
                       ? <PosBox className='on' onClick={() => checkPosition(el.userId)}>
