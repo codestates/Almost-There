@@ -14,7 +14,6 @@ module.exports = {
           password: hashPassword
         }
       });
-
       if (!result) {
         return res.status(401).send({ message: 'Invalid user or password' });
       }

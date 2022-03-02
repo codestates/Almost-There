@@ -18,9 +18,10 @@ module.exports = {
         } else {
           const { userId } = userInfo;
           const user = await users.findOne({
-            attributes: ['id', 'userId', 'name', 'email', 'createdAt', 'updatedAt'],
+            attributes: ['id', 'userId', 'name', 'email', 'x', 'y', 'createdAt', 'updatedAt'],
             where: { userId }
           });
+          // console.log(user.dataValues.email)
           return res.status(200).send({ user });
         }
       }

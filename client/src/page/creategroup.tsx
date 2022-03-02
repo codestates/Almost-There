@@ -32,12 +32,13 @@ type CreateGroupProps = {
 }
 
 function CreateGroup ({ user }: CreateGroupProps) {
+  const socket = useContext(SocketContext);
   const [modal, setModal] = useState<Show>({
     calendar: false,
     location: false,
     invite: false
   })
-  const [groupName, setGroupName] = useState<string>('');
+  const [groupName, setGroupName] = useState<string>('동아리 모임');
   const [edit, setEdit] = useState<boolean>(false);
   const refGroupName = useRef<HTMLInputElement>(null);
   const refPlace = useRef<HTMLButtonElement>(null);
@@ -91,7 +92,6 @@ function CreateGroup ({ user }: CreateGroupProps) {
   const handleDelete = (idx: number) => {
     setInviteList([...inviteList.slice(0,idx), ...inviteList.slice(idx+1)])
   }
-
   const handleCreateButton = async () => {
     if (groupName && place.name) {
       let hour;
