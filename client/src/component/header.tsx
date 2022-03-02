@@ -30,6 +30,7 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm
     navigator.geolocation.clearWatch(watch.current.id);
     socket.emit("logout", user);
     setUser({ userId: '', name: '', email: '' });
+    setAlarm(false);
     setLogin(false);
   }
   

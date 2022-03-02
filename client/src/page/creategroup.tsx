@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import { Calendar, Invite, Location } from '../component/index'
 import { socket, SocketContext } from '../context';
 import url from '../url';
-/* IO */ import { io, Socket } from 'socket.io-client';
-/* IO */ import { socket } from '../context';
 
 declare global {
   interface Show {
@@ -34,6 +32,7 @@ type CreateGroupProps = {
 }
 
 function CreateGroup ({ user }: CreateGroupProps) {
+  const socket = useContext(SocketContext);
   const [modal, setModal] = useState<Show>({
     calendar: false,
     location: false,
@@ -119,17 +118,6 @@ function CreateGroup ({ user }: CreateGroupProps) {
     } else {
       refPlace.current?.classList.add("focus");
     }
-    const { year, month, day, minute, hour } = time;
-    const res = await axios.post(`${url}/group/create`, {
-      name: groupName,
-      time: `${year}.${month}.${day} ${hour}:${minute}:00`,
-      place: place.name,
-      inviteId: inviteList,
-      x: place.x,
-      y: place.y
-    }, {withCredentials: true});
-    const id = res.data.data;
-    navigate(`/group/${id}`);
   }
 
   return (

@@ -186,7 +186,7 @@ const UserinfoDetail = styled.div`
   }
 `
 const MypageStyle = styled.div`
-  /* background-color: #e1bee7; */
+  background-color: rgb(225, 236, 237);
   width: 100vw;
   height: 93vh;
   font-size: 30px;
