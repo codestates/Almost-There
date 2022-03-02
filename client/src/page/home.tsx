@@ -5,7 +5,16 @@ import url from '../url';
 import styled from "styled-components";
 import { gsap } from "gsap";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Home0 from "../data/Home0.png"
 import Home1 from "../data/Home1.png"
+import Home2 from "../data/Home2.png"
+import Home3 from "../data/Home3.png"
+
+
+// import {Home2} from "../data/index"
+// import Homeaa from "../data/Homeaa.png"
+
+
 
 interface User {
   userId: string,
@@ -25,7 +34,7 @@ function Home ({setLogin, setUser}: HomeProps) {
   const navigate = useNavigate();
   const text1 = " 30분째 거의 다 왔다고만 하는 친구 때문에 \n  더 이상 애태우지 마세요! "
   const text2 = " 나 기다리게 하지 마라... \n 도착했음을 친구들에게 알릴 수 있어요 "
-  const text3 = " 일찍 도착해, 늦게 도착해? \n도착 예정 시간을 친구들에게 미리 알리세요 "
+  const text3 = " 친구가 지금 어디에 있는지 \n 실시간으로 알 수 있습니다. "
 
   useEffect(() => {
     switch (localStorage.getItem('social')) {
@@ -160,6 +169,7 @@ function Home ({setLogin, setUser}: HomeProps) {
           </MainLeft>
           <MainRight>
             <MainRightImage>
+              <img alt="profile" className="scale-down" src={Home0} />
             </MainRightImage>
           </MainRight>
       </IntroduceMain>
@@ -179,10 +189,15 @@ function Home ({setLogin, setUser}: HomeProps) {
             {text2}
           </Text2>
         </TextBox2>
-        <Image2 className='gs_reveal gs_reveal_fromRight'></Image2>
+        <Image2 className='gs_reveal gs_reveal_fromRight'>
+        <img alt="profile" className="scale-down" src={Home2} />
+        </Image2>
       </Introduce2>
       <Introduce3>
-        <Image3 className='gs_reveal gs_reveal_fromLeft'></Image3>
+        <Image3 className='gs_reveal gs_reveal_fromLeft'>
+          <img alt="profile" className="scale-down" src={Home3} />
+
+        </Image3>
         <TextBox3 className='gs_reveal gs_reveal_fromRight'>
           <Text3>
             {text3}
@@ -225,7 +240,7 @@ const Introduce2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: #c5cae9;
-  height: 500px;
+  height: 800px;
   display:flex;
   flex-direction:row;
 
@@ -235,7 +250,7 @@ const Introduce3 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: #b2dfdb;
-  height: 500px;
+  height: 800px;
   display:flex;
   flex-direction:row;
 
@@ -266,9 +281,18 @@ const MainRightImage = styled.div`
   border-radius : 1px;
   border: solid blue;
   background-color:gray;
-  height:350px;
+  height:450px;
   width:35vw;
-  margin: 0px 150px 0px 150px;   
+  margin: 0px 150px 0px 150px;
+  .scale-down{
+    width: 550px; height: 400px;
+    object-fit: scale-down;
+  }
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }     
 `
 
 
@@ -302,9 +326,9 @@ const Image1 = styled.div`
   height: 800px;
   width: 40vw;
   margin: 70px 50px 70px 50px;
-  img {
-    width: 40vw;
-    height: 800px; 
+  .scale-down{
+    width: 550px; height: 700px;
+    object-fit: scale-down;
   }
   &.gs_reveal {
     opacity: 0;
@@ -317,20 +341,36 @@ const Image2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: gray;
-  height: 500px;
+  height: 700px;
   width: 50vw;
-  height: 350px;
-  width: 40vw;
+  /* width: 40vw; */
   margin: 70px 50px 70px 50px;   
-
+  .scale-down{
+    width: 550px; height: 700px;
+    object-fit: scale-down;
+  }
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }  
 `
 const Image3 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: gray;
-  height: 350px;
+  height: 700px;
   width: 40vw;
-  margin: 70px 50px 70px 50px;   
+  margin: 70px 50px 70px 50px;
+  .scale-down{
+    width: 550px; height: 700px;
+    object-fit: scale-down;
+  }
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }     
 
 `
 const TextBox1 = styled.div`
@@ -396,7 +436,6 @@ const Text2 = styled.div`
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
-
   `
 
 const Text3 = styled.div`
