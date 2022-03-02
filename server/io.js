@@ -66,6 +66,22 @@ module.exports = function (server) {
       }
     });
 
+    // ! logout
+    socket.on('logout', (payload) => {
+      console.log(`user ${payload.userId} logout`);
+      try {
+        // 채널 나가기
+        const rooms = socket.rooms;
+        rooms.forEach((room) => {
+          room.includes('group') ? socket.leave(room) : null;
+          room.includes('notice') ? socket.leave(room) : null;
+        });
+        console.log(rooms);
+      } catch (err) {
+        io.emit('error', err);
+      }
+    });
+
     // ! create group / 그룹 생성: group/create (POST)
     socket.on('joinGroup', (groupId) => {
       console.log(payload);
