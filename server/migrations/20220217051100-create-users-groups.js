@@ -17,6 +17,9 @@ module.exports = {
       overtime: {
         type: Sequelize.TIME
       },
+      arrive: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
