@@ -73,12 +73,6 @@ module.exports = function (server) {
       io.to(`group ${groupId}`).emit('createRoom', `join group ${groupId}`);
       console.log(socket.rooms);
     });
-    socket.on('notify', (payload) => {
-      console.log(payload.inviteId);
-      for (let i = 0; i < payload.inviteId.length; i++) {
-        io.to(`notice ${payload.inviteId[i]}`).emit('notify', `group ${payload.room}번 모임에서 초대가 왔습니다.`);
-      }
-    });
     // a = 초대 알림을 받음
     // b = 초대 알림을 받음
     // a,b => 알림을 받은 그룹의 룸에 조인해줘야함
