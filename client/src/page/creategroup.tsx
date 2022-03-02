@@ -42,6 +42,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
   const [groupName, setGroupName] = useState<string>('동아리 모임');
   const [edit, setEdit] = useState<boolean>(false);
   const refGroupName = useRef<HTMLInputElement>(null);
+  const refPlace = useRef<HTMLButtonElement>(null);
   const [time, setTime] = useState<Time>({
     year: 2022,
     month: 1,
@@ -75,6 +76,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
   }
   
   const handleLocation = () => {
+    refPlace.current?.classList.remove("focus");
     setModal({
       ...modal,
       location: true
@@ -92,13 +94,30 @@ function CreateGroup ({ user }: CreateGroupProps) {
     setInviteList([...inviteList.slice(0,idx), ...inviteList.slice(idx+1)])
   }
   const handleCreateButton = async () => {
-    let hour;
-    if (time.meridium === '오후') {
-      hour = time.hour + 12;
+    if (groupName && place.name) {
+      let hour;
+      if (time.meridium === '오후') {
+        hour = time.hour + 12;
+      } else {
+        hour = time.hour;
+      }
+      const { year, month, day, minute } = time;
+      const res = await axios.post(`${url}/group/create`, {
+        name: groupName,
+        time: `${year}.${month}.${day} ${hour}:${minute}:00`,
+        place: place.name,
+        inviteId: inviteList,
+        x: place.x,
+        y: place.y
+      }, {withCredentials: true});
+      const id = res.data.data;
+      navigate(`/group/${id}`);
+    } else if (!groupName) {
+      setEdit(true);
     } else {
-      hour = time.hour;
+      refPlace.current?.classList.add("focus");
     }
-    const { year, month, day, minute } = time;
+    const { year, month, day, minute, hour } = time;
     const res = await axios.post(`${url}/group/create`, {
       name: groupName,
       time: `${year}.${month}.${day} ${hour}:${minute}:00`,
@@ -109,19 +128,6 @@ function CreateGroup ({ user }: CreateGroupProps) {
     }, {withCredentials: true});
     const id = res.data.data;
     navigate(`/group/${id}`);
-    socket.emit('createRoom', {room:id},);
-    socket.on('createRoom',(payload) => {
-      console.log(payload)
-    })
-    socket.emit('notify', '1', '1' ,'1' );
-    // socket.on('inviteId', (payload) => {
-    //   console.log(payload) //콘솔 ? 위치 ? App.tsx
-    //   const regex = /[^0-9]/g;
-    //   const groupId = payload.replace(regex, "")
-    //   const thisUser = 'group' + " " + groupId
-    //   socket.emit('thisUser', thisUser) // 아직 어떤 식인지는 모름 ex) group 1번 모임에서 초대가 왔습니다.
-    // });
-    
   }
 
   useEffect(() => {
@@ -194,7 +200,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
             </Box2>
             <Box3>
               <div>
-                <button onClick={handleLocation}>약속 장소 선택</button>
+                <button ref={refPlace} onClick={handleLocation}>약속 장소 선택</button>
               </div>
             </Box3>
           </Box1>
@@ -216,6 +222,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
           </List>
         </Contents2>
         <Contents3>
+          <Button2 onClick={() => navigate('/')}>취소</Button2>
           <Button2 onClick={handleCreateButton}>그룹 생성 완료</Button2>
         </Contents3>
       </Container>
@@ -277,7 +284,7 @@ const Contents3 = styled.div`
   width: 550px;
   height: 50px;
   display: flex;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
   border: solid black 1px;
 `
@@ -305,6 +312,12 @@ const Box3 = styled.div`
   justify-content: center;
   align-items: center;
   /* border: solid black 1px; */
+  button {
+    &.focus {
+      border: solid 1px red;
+      transform: translate(-1px, -1px);
+    }
+  }
 `
 const Box4 = styled.div`
   height: 30px;

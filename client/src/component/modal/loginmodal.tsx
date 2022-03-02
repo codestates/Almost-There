@@ -58,7 +58,6 @@ const handleLogin = async() => {
       const regex = /[^0-9]/g;
       const groupId = payload.replace(regex, "")
       const thisUser = 'group' + " " + groupId
-      socket.emit('thisUser', thisUser) // 아직 어떤 식인지는 모름 ex) group 1번 모임에서 초대가 왔습니다.
     });
     setShow({ login: false, signin: false, notify: false});
   } catch {

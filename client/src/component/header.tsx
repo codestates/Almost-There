@@ -5,7 +5,7 @@ import url from '../url';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { SocketContext } from '../context';
-/* IO */ import { socket } from '../context';
+import { SemanticClassificationFormat } from 'typescript';
 
 
 type HeaderProps = {
@@ -15,13 +15,16 @@ type HeaderProps = {
   setShow: React.Dispatch<React.SetStateAction<ShowList>>,
   user: User,
   setUser: React.Dispatch<React.SetStateAction<User>>,
-  watch: React.RefObject<any>
+  watch: React.RefObject<any>,
+  setAlarm: React.Dispatch<React.SetStateAction<boolean>>,
+  alarm: boolean
 }
 
 
-const Header = ({ login, setLogin, show, setShow, user, setUser, watch }: HeaderProps) => {
+const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm, alarm }: HeaderProps) => {
   const [display, setDisplay] = useState<boolean>(false);
-  // const socket = useContext(SocketContext);
+  const socket = useContext(SocketContext);
+
   const clickLogout = async () => {
     await axios.post(`${url}/user/logout`, {}, { withCredentials: true});
     navigator.geolocation.clearWatch(watch.current.id);
@@ -44,10 +47,11 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch }: Header
 
   const clickNotify = () => {
     setShow({login: false, signin: false, notify: !show.notify});
+    setAlarm(false);
   }
 
   useEffect(() => {
-    
+
   }, [login])
 
   return (
@@ -66,7 +70,13 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch }: Header
             <Menu login={login} onClick={clickMenu}>menu</Menu>
             <Direction login={login} show={display} 
               onClick={() => setDisplay(false)}>
-              <Tap onClick={clickNotify}>알림</Tap>
+              <Tap onClick={clickNotify}>
+                알림
+                {alarm
+                  ? <Alarm></Alarm>
+                  : <></>
+                }
+              </Tap>
               <StyledLink to='/creategroup'>
                 <Tap>그룹 생성</Tap>
               </StyledLink>
@@ -100,6 +110,7 @@ const Background = styled.div`
   align-items: center;
   background-color: wheat;
   height: 7vh;
+  z-index: 2;
   @media screen and (max-width: 760px) {
     background-color: wheat;
     color: black;
@@ -164,6 +175,7 @@ const Direction = styled.div<DirectionI>`
   }
 `
 const Tap = styled.div`
+  position: relative;
   padding: 10px 20px 10px 20px;
   :hover {
     background-color: #004d40;
@@ -191,11 +203,25 @@ const LastTap = styled.div`
     padding: 13px 20px 10px 20px;
   }
 `
+const Alarm = styled.div`
+  position: fixed;
+  top: 10px;
+  right: 380px; 
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: red;
+  z-index:2;
+  @media screen and (max-width: 760px) {
+    top: 60px;
+    left: 80px;
+  }
+`
 const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
   @media screen and (max-width: 760px) {
-    color: white;
+    color: black;
   }
 `
 

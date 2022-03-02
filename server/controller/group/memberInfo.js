@@ -1,5 +1,6 @@
 const { isAuthorized } = require('../tokenFunctions');
 const { users_groups } = require('../../models');
+const { users } = require('../../models');
 const { _groups } = require('../../models');
 const overtime = require('./overtime');
 
@@ -15,22 +16,40 @@ module.exports = {
         const result = await users_groups.findAll({
           where: {
             groupId
-          }
+          },
+          include: _groups
         });
         const arr = [];
         for (let i = 0; i < result.length; i++) {
           a = result[i].dataValues.userId;
           b = result[i].dataValues.overtime;
-          arr.push({ userId: a, overtime: b });
+          c = result[i].dataValues.arrive
+          arr.push({ userId: a, overtime: b,  arrive:c });
+        }
+        const arr2 = []
+        for(let i = 0; i < arr.length; i ++){
+          arr2.push(await users.findOne({
+            where: { userId: arr[i].userId}
+          }))
+        }
+        const arr3 = []
+        for(let i = 0; i < arr2.length; i++){
+          arr3.push(arr2[i].name)
+        }
+        for(let i = 0; i < arr.length; i++){ // arr = [{a:1,b:2,c:3},{a:1,b:2,c:3},{a:1,b:2,c:3}]
+          for(let j = 0; j <= i; j++){ // arr3 = [d:4,d:5,d:6]
+            arr[i].name = arr3[j]
+          }
         }
         const result1 = await _groups.findOne({
           where: {
             id: groupId
-          }
+          },
         });
         return res.status(200).send({ member: arr, groupInfo: result1.dataValues });
       }
     } catch (err) {
+      console.log(err)
       return res.status(500).send({ message: 'server error' });
     }
   }

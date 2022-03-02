@@ -1,38 +1,16 @@
 import axios from 'axios';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import url from '../url';
 
 type NotifyProps = {
-  
+  list: Array<any>,
+  setList: React.Dispatch<React.SetStateAction<Array<any>>>
 }
 
-const Notify = ({}: NotifyProps) => {
+const Notify = ({list, setList}: NotifyProps) => {
   const navigate = useNavigate();
-  const [list, setList] = useState<Array<any>>([
-    {
-      id: 1,
-      sender: 'kimcoding',
-      notifyType: 'invite',
-      groupId: 3
-    },
-    {
-      id: 2,
-      sender: 'parkhacker',
-      notifyType: 'arrive'
-    },
-    {
-      id: 3,
-      sender: 'leehacker',
-      notifyType: 'arrive'
-    },
-    {
-      id: 4,
-      sender: 'user1',
-      notifyType: 'invite'
-    }
-  ]);
 
   const handleDrop = async (idx: string) => {
     try {
@@ -44,8 +22,24 @@ const Notify = ({}: NotifyProps) => {
   }
 
   const handleMove = (id: string) => {
-    navigate(`/group/${id}`)
+    navigate(`/group/${id}`);
   }
+
+  useEffect(() => {
+    const getList = async () => {
+      const res = await axios.get(`${url}/notification/list`, { withCredentials: true });
+      console.log(res.data);
+      const filter = res.data.notice.map((el:any) => {
+        return {
+          id :el.id,
+          sender: el.sender,
+          notifyType: el.notification.notifyType
+        }
+      })
+      setList([...filter]);
+    }
+    getList();
+  }, []);
 
   return (
     <MenuWrap>
@@ -72,6 +66,15 @@ const Notify = ({}: NotifyProps) => {
                     </Confirm>
                   </Notice>
                 )
+              case 'leave':
+                return (
+                  <Notice key={el.id}>
+                    <Title>{el.sender}님이 그룹에서 떠났습니다.</Title>
+                    <Confirm>
+                      <Drop id={`${idx}`} onClick={(e) => handleDrop(e.currentTarget.id)}>확인</Drop>
+                    </Confirm>
+                  </Notice>
+                )
               default:
                 break;
             }
@@ -92,7 +95,7 @@ const MenuWrap = styled.div`
   overflow: auto;
   background-color: rgba(0, 0, 255, 0.4);
   border-radius: 10px;
-  z-index: -1;
+  z-index: 1;
 
   @keyframes reveal {
     from {
