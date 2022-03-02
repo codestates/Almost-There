@@ -38,7 +38,7 @@ interface ClientToServerEvents {
   getPosition: (userId: string) => void
   overtime: (groupId: string, userId: string, time: string) => void
   leaveGroup: (groupId: string, userId: string) => void
-  joinGroup: (groupId: string) => void;
+  joinGroup: (groupId: string) => void
   notify: (type: string, sender: string, groupId:string) => void// 도착, 초대, 탈퇴
 }
 

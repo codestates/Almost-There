@@ -77,16 +77,16 @@ function EditPW ({
       >
       <DialogBox onClick={(e) => e.stopPropagation()}>
       <div className="mypage-input-box">  
-      <div> 모달창구성</div>
+      {/* <div> 모달창구성</div> */}
       <div >      
-        <input
+        <PWInput
           type="text"
           placeholder="현재 비밀번호"
           onChange={handleInputValue2('password')}
         />
       </div>
       <div className="mypage-input-box-email">      
-        <input
+        <NewPWInput
           className="mypage-input"
           type="text"
           placeholder="변경할 비밀번호"
@@ -94,7 +94,7 @@ function EditPW ({
         />
       </div>
       <div className="mypage-input-box-name">      
-        <input
+        <PWCheck
           className="mypage-input"
           type="text"
           placeholder="비밀번호 변경확인"
@@ -142,6 +142,29 @@ const Backdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.2);
 `;
 
+const PWInput = styled.input`
+  
+  height:50px;
+  border: 3px none;
+  border-bottom: 2px solid rgb(165, 165, 165);
+  margin: 10px 0px 10px 0px;
+`;
+
+const NewPWInput = styled.input`
+  
+  height:50px;
+  border: 3px none;
+  border-bottom: 2px solid rgb(165, 165, 165);
+  margin: 10px 0px 10px 0px;
+`;
+
+const PWCheck = styled.input`
+  
+  height:50px;
+  border: 3px none;
+  border-bottom: 2px solid rgb(165, 165, 165);
+  margin: 10px 0px 90px 0px;
+`;
 
 
 export default EditPW;

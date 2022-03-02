@@ -5,7 +5,7 @@ import url from '../url';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { SocketContext } from '../context';
-import { SemanticClassificationFormat } from 'typescript';
+import '@fortawesome/fontawesome-free/js/all'
 
 
 type HeaderProps = {
@@ -67,7 +67,11 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm
       {login 
         ?
           <Taps>
-            <Menu login={login} onClick={clickMenu}>menu</Menu>
+            <Menu login={login} onClick={clickMenu}>
+              <div>
+                <i className="fa-solid fa-bars"></i>
+              </div>
+            </Menu>
             <Direction login={login} show={display} 
               onClick={() => setDisplay(false)}>
               <Tap onClick={clickNotify}>
@@ -108,11 +112,10 @@ const Background = styled.div`
   top: 0;
   justify-content: space-between;
   align-items: center;
-  background-color: wheat;
   height: 7vh;
   z-index: 2;
   @media screen and (max-width: 760px) {
-    background-color: wheat;
+    
     color: black;
   }
 `
@@ -149,6 +152,8 @@ const Menu = styled.div<MenuI>`
   display: none;
   @media screen and (max-width: 760px) {
     display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     top: 0;
     left: ${(props) => props.login ? 0 : 'none'}px;
@@ -171,7 +176,8 @@ const Direction = styled.div<DirectionI>`
     left: ${(props) => props.login ? 0 : 'none'};
     right: ${(props) => props.login ? 'none' : 0};
     display: ${(props) => props.show ? 'flex' : 'none'};
-    background-color: black;
+    background-color: white;
+    border-top: solid black 1px;
   }
 `
 const Tap = styled.div`
@@ -184,9 +190,12 @@ const Tap = styled.div`
   }
   @media screen and (max-width: 760px) {
     width: 100px;
-    height: 40px;
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 10px 0px;
-    color: white;
+    border-bottom: solid black 1px;
   }
 `
 const LastTap = styled.div`

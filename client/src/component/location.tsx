@@ -35,58 +35,54 @@ const Location = ({ setModal, setPlace }: LocationProps) => {
   }, []);
 
   return (
-    <>
-      <Input value={key} onChange={e => setKey(e.target.value)}></Input>
-      <Button onClick={handleSend}>검색하기</Button>
-      <KeyMap location={location} setPlace={setPlace} setModal={setModal}/>
-      <GoBack onClick={handleBack}>
-        {/* <LeftIcon></LeftIcon> */}
-        <Text>돌아가기</Text>
-      </GoBack>
-    </>
+    <BackDrop onClick={handleBack}>
+      <View onClick={e => e.stopPropagation()}>
+        <Search>
+          <Input value={key} onChange={e => setKey(e.target.value)}></Input>
+          <Button onClick={handleSend}>검색하기</Button>
+        </Search>
+        <KeyMap location={location} setPlace={setPlace} setModal={setModal}/>
+      </View>
+    </BackDrop>
   )
 }
 
-const Input = styled.input`
-  width: 165px;
+const BackDrop = styled.div`
   position: fixed;
-  top: 5px;
-  left: 20px;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.3);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+`
+const View = styled.div`
+`
+const Search = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+`
+const Input = styled.input`
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
+  padding: 0px 5px;
+  position: relative;
   z-index: 20;
 `
 const Button = styled.button`
-  position: fixed;
-  top: 5px;
-  left: 185px;
+  position: relative;
+  font-weight: bold;
   z-index: 20;
   cursor: pointer;
   :hover {
     background-color: black;
     color: white;
   }
-`
-const GoBack = styled.div`
-  width: 150px;
-  height: 75px;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 20;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  color: white;
-  background-color: #448aff;
-  border-radius: 10px;
-  cursor: pointer;
-`
-const LeftIcon = styled.div`
-  font-size: 80px;
-  margin-bottom: 20px;
-`
-const Text = styled.div`
-  font-size: 25px;
-  font-weight: bold;
 `
 
 export default Location;

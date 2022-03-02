@@ -89,7 +89,7 @@ const MenuWrap = styled.div`
   position: fixed;
   animation: reveal 1s;
   top: 7vh;
-  right: 100px;
+  right: 0px;
   width: 350px;
   height: 40vh;
   overflow: auto;
@@ -99,10 +99,10 @@ const MenuWrap = styled.div`
 
   @keyframes reveal {
     from {
-      transform: translateY(-100%);
+      transform: translateX(100%);
     }
     to {
-      transform: translateY(0%);
+      transform: translateX(0%);
     }
   }
   @keyframes disappear {

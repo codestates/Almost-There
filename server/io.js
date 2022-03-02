@@ -119,7 +119,7 @@ module.exports = function (server) {
 
       // 도착시간과 현재시간 비교
       const filter = groups.filter((el) => {
-        let a = new Date(el.dataValues._groups.dataValues.time).getTime();
+        let a = new Date(el.dataValues._group.dataValues.time).getTime();
         let b = new Date().getTime();
         return Number(Math.floor(a-b/1000 * 60)) < 10;
       });
@@ -127,8 +127,8 @@ module.exports = function (server) {
 
       // 목적지와 현재위치 비교
       filter.forEach(async(el) => {
-        if ( (Math.floor(payload.position.x*100)/100) === (Math.floor(el.dataValues._groups.dataValues.x*100)/100) &&
-        (Math.floor(payload.position.y*100)/100) === (Math.floor(el.dataValues._groups.dataValues.y*100)/100) ) {
+        if ( (Math.floor(payload.position.x*100)/100) === (Math.floor(el.dataValues._group.dataValues.x*100)/100) &&
+        (Math.floor(payload.position.y*100)/100) === (Math.floor(el.dataValues._group.dataValues.y*100)/100) ) {
           await users_groups.update({ arrive: 'true' },
           { 
             where: {
@@ -224,6 +224,19 @@ module.exports = function (server) {
         io.to(`group ${groupId}`).emit('notify', type, sender, groupId);
       }
     });
+
+    // ! join
+    socket.on("join", (userId) => {
+      console.log('join', userId);
+      socket.join(`pos ${userId}`)
+    });
+
+    // ! leave
+    socket.on("leave", (userId) => {
+      console.log('leave', userId);
+      socket.leave(`pos ${userId}`)
+    });
+
   });
   return io;
 };

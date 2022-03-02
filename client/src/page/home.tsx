@@ -4,7 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import url from '../url';
 import styled from "styled-components";
 import { gsap } from "gsap";
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Home0 from "../data/Home0.png"
 import Home1 from "../data/Home1.png"
+import Home2 from "../data/Home2.png"
+import Home3 from "../data/Home3.png"
+
+
+// import {Home2} from "../data/index"
+// import Homeaa from "../data/Homeaa.png"
+
+
 
 interface User {
   userId: string,
@@ -20,10 +30,11 @@ type HomeProps = {
 function Home ({setLogin, setUser}: HomeProps) {
   let code = new URL(window.location.href).searchParams.get('code');
   let userState = new URL(window.location.href).searchParams.get('state');
+  const homeRef = useRef(null);
   const navigate = useNavigate();
   const text1 = " 30분째 거의 다 왔다고만 하는 친구 때문에 \n  더 이상 애태우지 마세요! "
   const text2 = " 나 기다리게 하지 마라... \n 도착했음을 친구들에게 알릴 수 있어요 "
-  const text3 = " 일찍 도착해, 늦게 도착해? \n도착 예정 시간을 친구들에게 미리 알리세요 "
+  const text3 = " 친구가 지금 어디에 있는지 \n 실시간으로 알 수 있습니다. "
 
   useEffect(() => {
     switch (localStorage.getItem('social')) {
@@ -81,39 +92,40 @@ function Home ({setLogin, setUser}: HomeProps) {
   }, []);
 
   
-  // function animateFrom(elem:any, direction:any) {
-  //   direction = direction || 1;
-  //   var x = 0,
-  //       y = direction * 100;
-  //   if(elem.classList.contains("gs_reveal_fromLeft")) {
-  //     x = -100;
-  //     y = 0;
-  //   } else if (elem.classList.contains("gs_reveal_fromRight")) {
-  //     x = 100;
-  //     y = 0;
-  //   }
-  //   elem.style.transform = "translate(" + x + "px, " + y + "px)";
-  //   elem.style.opacity = "0";
-  //   gsap.fromTo(elem, {x: x, y: y, autoAlpha: 0}, {
-  //     duration: 1.25, 
-  //     x: 0,
-  //     y: 0, 
-  //     autoAlpha: 1, 
-  //     ease: "expo", 
-  //     overwrite: "auto"
-  //   });
-  // }
   
-  // function hide(elem:any) {
-  //   gsap.set(elem, {autoAlpha: 0});
-  // }
-
-  // document.addEventListener("DOMContentLoaded", function() {
+  function animateFrom(elem:HTMLElement , direction?:any) {
+    direction = direction || 1;
+    var x = 0,
+        y = direction * 100;
+    if(elem.classList.contains("gs_reveal_fromLeft")) {
+      x = -100;
+      y = 0;
+    } else if (elem.classList.contains("gs_reveal_fromRight")) {
+      x = 100;
+      y = 0;
+    }
+    elem.style.transform = "translate(" + x + "px, " + y + "px)";
+    elem.style.opacity = "0";
+    gsap.fromTo(elem, {x: x, y: y, autoAlpha: 0}, {
+      duration: 3, 
+      x: 0,
+      y: 0, 
+      autoAlpha: 1, 
+      ease: "expo", 
+      overwrite: "auto"
+    });
+  }
+  
+  function hide(elem:HTMLElement) {
+    gsap.set(elem, {autoAlpha: 0});
+  }
+  
+  // document.addEventListener("DOMContentLoaded",function() {
   //   gsap.registerPlugin(ScrollTrigger);
     
-  //   gsap.utils.toArray(".gs_reveal").forEach(function(elem) {
+  //   gsap.utils.toArray(".gs_reveal").forEach(function(elem:any) {
   //     hide(elem); // assure that the element is hidden when scrolled into view
-      
+  //     // console.log(elem);
   //     ScrollTrigger.create({
   //       trigger: elem,
   //       onEnter: function() { animateFrom(elem) }, 
@@ -122,14 +134,27 @@ function Home ({setLogin, setUser}: HomeProps) {
   //     });
   //   });
   // });
-  
-  
-
-
+  useEffect(() => {
+    function foo() {
+      gsap.registerPlugin(ScrollTrigger);
+      
+      gsap.utils.toArray(".gs_reveal").forEach(function(elem:any) {
+        hide(elem); // assure that the element is hidden when scrolled into view
+        // console.log(elem);
+        ScrollTrigger.create({
+          trigger: elem,
+          onEnter: function() { animateFrom(elem) }, 
+          onEnterBack: function() { animateFrom(elem, -1) },
+          onLeave: function() { hide(elem) } // assure that the element is hidden when scrolled into view
+        });
+      });
+    }
+    foo();
+  }, [])
 
   return (
     <>
-    <div>
+    <div ref={homeRef}>
       <IntroduceMain>
           <MainLeft>
             <Slogan>
@@ -144,30 +169,36 @@ function Home ({setLogin, setUser}: HomeProps) {
           </MainLeft>
           <MainRight>
             <MainRightImage>
+              <img alt="profile" className="scale-down" src={Home0} />
             </MainRightImage>
           </MainRight>
       </IntroduceMain>
       <Introduce1>
-        <Image1>
+        <Image1 className="gs_reveal gs_reveal_fromLeft">
           <img alt="profile" className="scale-down" src={Home1} />
         </Image1>
-        <TextBox1>
+        <TextBox1 className="gs_reveal gs_reveal_fromRight">
           <Text1>
             {text1}
           </Text1>
         </TextBox1>
       </Introduce1>
       <Introduce2>
-        <TextBox2>
+        <TextBox2 className='gs_reveal gs_reveal_fromLeft'>
           <Text2>
             {text2}
           </Text2>
         </TextBox2>
-        <Image2></Image2>
+        <Image2 className='gs_reveal gs_reveal_fromRight'>
+        <img alt="profile" className="scale-down" src={Home2} />
+        </Image2>
       </Introduce2>
       <Introduce3>
-        <Image3></Image3>
-        <TextBox3>
+        <Image3 className='gs_reveal gs_reveal_fromLeft'>
+          <img alt="profile" className="scale-down" src={Home3} />
+
+        </Image3>
+        <TextBox3 className='gs_reveal gs_reveal_fromRight'>
           <Text3>
             {text3}
           </Text3>
@@ -182,9 +213,6 @@ function Home ({setLogin, setUser}: HomeProps) {
     </>
   )
 }
-
-export default Home;
-
 
 
 
@@ -207,14 +235,12 @@ const Introduce1 = styled.div`
   height: 1000px;
   display:flex;
   flex-direction:row;
-
-
 `
 const Introduce2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: #c5cae9;
-  height: 500px;
+  height: 800px;
   display:flex;
   flex-direction:row;
 
@@ -224,7 +250,7 @@ const Introduce3 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: #b2dfdb;
-  height: 500px;
+  height: 800px;
   display:flex;
   flex-direction:row;
 
@@ -255,9 +281,18 @@ const MainRightImage = styled.div`
   border-radius : 1px;
   border: solid blue;
   background-color:gray;
-  height:350px;
+  height:450px;
   width:35vw;
-  margin: 0px 150px 0px 150px;   
+  margin: 0px 150px 0px 150px;
+  .scale-down{
+    width: 550px; height: 400px;
+    object-fit: scale-down;
+  }
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }     
 `
 
 
@@ -290,32 +325,52 @@ const Image1 = styled.div`
   background-color: gray;
   height: 800px;
   width: 40vw;
-  margin: 70px 50px 70px 50px;   
+  margin: 70px 50px 70px 50px;
   .scale-down{
-                width: 550px; height: 700px;
-                object-fit: scale-down;
-            }
-  
+    width: 550px; height: 700px;
+    object-fit: scale-down;
+  }
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }  
 `
 
 const Image2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: gray;
-  height: 500px;
+  height: 700px;
   width: 50vw;
-  height: 350px;
-  width: 40vw;
+  /* width: 40vw; */
   margin: 70px 50px 70px 50px;   
-
+  .scale-down{
+    width: 550px; height: 700px;
+    object-fit: scale-down;
+  }
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }  
 `
 const Image3 = styled.div`
   border-radius : 1px;
   border: solid yellow;
   background-color: gray;
-  height: 350px;
+  height: 700px;
   width: 40vw;
-  margin: 70px 50px 70px 50px;   
+  margin: 70px 50px 70px 50px;
+  .scale-down{
+    width: 550px; height: 700px;
+    object-fit: scale-down;
+  }
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }     
 
 `
 const TextBox1 = styled.div`
@@ -332,7 +387,11 @@ const TextBox1 = styled.div`
   display:flex;
   align-items: center;
   justify-content: center;
-
+  &.gs_reveal {
+    opacity: 0;
+    visibility: hidden;
+    will-change: transform, opacity;
+  }
 
 `
 const TextBox2 = styled.div`
@@ -377,7 +436,6 @@ const Text2 = styled.div`
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
-
   `
 
 const Text3 = styled.div`
@@ -391,7 +449,7 @@ const Text3 = styled.div`
 
   `
 
-
+export default Home;
 
 
 
