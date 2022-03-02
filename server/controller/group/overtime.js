@@ -12,7 +12,6 @@ module.exports = {
       } else {
         const { groupId, overtime } = req.body;
         const { userId } = userInfo;
-        console.log(userId, groupId, overtime);
         // groupId에 속하는 userId 찾아서 overtime 값 변경 // 그룹 두개에 같은 userId가 포함되어 있을 수 있기 때문에 조건에 groupId 달아줘야함
         const result = await users_groups.update({
           overtime: overtime

@@ -46,6 +46,10 @@ const View = styled.div`
   justify-content: space-evenly;
   align-items: center;
   border-radius: 10px;
+  div {
+    width: 150px;
+    height: 40px;
+  }
 `
 
 export default MsgModal;

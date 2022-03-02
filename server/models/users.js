@@ -11,8 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       users.hasMany(models.users_groups, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'cascade' });
+      // users.hasMany(models.users_groups, {foreignKey: 'x', sourceKey: 'x', onDelete:'cascade'});
+      // users.hasMany(models.users_groups, {foreignKey: 'y', sourceKey: 'y', onDelete:'cascade'});
       users.hasMany(models.notifications_users, { foreignKey: 'sender', sourceKey: 'userId', onDelete: 'cascade' });
       users.hasMany(models.notifications_users, { foreignKey: 'receiver', sourceKey: 'userId', onDelete: 'cascade' });
+      
     }
   }
   users.init({
@@ -25,7 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     social: DataTypes.STRING,
     x: DataTypes.STRING,
-    y: DataTypes.STRING
+    y: DataTypes.STRING,
+    
+    
   }, {
     sequelize,
     modelName: 'users'

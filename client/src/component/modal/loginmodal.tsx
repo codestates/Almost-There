@@ -104,7 +104,7 @@ const handleGoogleLogin = async () => {
             onChange={(e) => setInfo({...info, userId: e.target.value})}></Input>
           </div>
           <div>
-            <Input placeholder='비밀번호' value={info.password}
+            <Input placeholder='비밀번호' value={info.password} type="password"
             onChange={(e) => setInfo({...info, password: e.target.value})}></Input>
           </div>
           { 
@@ -160,7 +160,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-
   @media screen and (max-width: 760px) {
     width: 300px;
   }
@@ -202,7 +201,6 @@ const Links = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-
   @media screen and (max-width: 760px) {
     flex-direction: column;
   }

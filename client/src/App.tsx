@@ -1,12 +1,15 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 import './App.css';
-import { Home, Mypage, CreateGroup, Group, Map} from './page/index';
+import { Home, Mypage, CreateGroup, Group, Map, Complete} from './page/index';
 import { Header, LoginModal, Notify } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
 import axios from 'axios';
 import url from './url';
-import { SocketContext, socket } from './context';
+/* IO */ import { socket, SocketContext } from './context';
+
+
+
 
 declare global {
   interface User {
@@ -39,30 +42,10 @@ function App() {
   });
   const latlng = useRef<LatLng>({ y: 0, x: 0 });
   const watch = useRef({ id: 0 });
-  const [alarm, setAlarm] = useState<boolean>(true);
-  const [list, setList] = useState<Array<any>>([
-    {
-      id: 1,
-      sender: 'kimcoding',
-      notifyType: 'invite',
-    },
-    {
-      id: 2,
-      sender: 'parkhacker',
-      notifyType: 'arrive'
-    },
-    {
-      id: 3,
-      sender: 'leehacker',
-      notifyType: 'arrive'
-    },
-    {
-      id: 4,
-      sender: 'user1',
-      notifyType: 'invite'
-    }
-  ]);
+  const [alarm, setAlarm] = useState<boolean>(false);
+  const [list, setList] = useState<Array<any>>([]);
 
+  /* IO */
   useEffect(() => {
     console.log(user);
     const getUserInfo = async () => {
@@ -78,7 +61,16 @@ function App() {
       }
     };
     if (login) {
+      const getList = async () => {
+        const res = await axios.get(`${url}/notification/list`, { withCredentials: true });
+        console.log(res.data.notice.length);
+        if (res.data.notice.length > 0) {
+          setAlarm(true);
+        } 
+      }
+      getList();
       socket.on("notify", (type, sender, id) => {
+        console.log(type, sender, id);
         setAlarm(true);
         setList(
           [{
@@ -87,6 +79,9 @@ function App() {
             notifyType: type
           }, 
           ...list]);
+        if (type === "invite") {
+          socket.emit("joinGroup", id);
+        }
       })
       watch.current.id = 
       navigator.geolocation.watchPosition(async(coor) => {
@@ -135,8 +130,10 @@ function App() {
                     <Route path='/group/:id' element={<Group user={user}/>} />
                     <Route path='/map/:groupId/:userId' element={<Map user={user}/>} />
                     <Route path='/map/:groupId' element={<Map user={user}/>} />
+                    <Route path='/complete' element={<Complete />} />
                 </>
               : <>
+                  <Route path='/complete' element={<Complete />} />
                   <Route path='/*' element={<Navigate to='/' />} />
                 </>
             }
@@ -154,7 +151,7 @@ function App() {
           }
           {
             show.notify
-            ? <Notify list={list} setList={setList} />
+            ? <Notify list={list} setList={setList} show={show} setShow={setShow}/>
             : <></>
           }
         </Router>
