@@ -42,3 +42,13 @@ export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(`${
   withCredentials: true
 });
 export const SocketContext = createContext(socket);
+
+/*
+
+! users_groups 필드추가  // arrive : "true", "false", "leave"
+/group/create (POST), /group (DELETE), /group/list (GET) 수정
+
+! overtime 이벤트 추가
+
+! sendPosition -> 도착 조건 추가(+arrive)
+*/

@@ -13,12 +13,11 @@ module.exports = {
         const result = await users_groups.findAll({
           where: {
             userId: userId,
-            overtime: { [Op.ne]: null }
+            arrive: { [Op.ne]: 'leave' }
           },
           include: _groups
         });
         const groups = result.sort((a, b) => a._group.time - b._group.time);
-
 
         return res.send({ groups });
       } catch (err) {
