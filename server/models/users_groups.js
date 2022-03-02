@@ -20,8 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     userId: DataTypes.STRING,
     overtime: DataTypes.TIME,
-    x: DataTypes.STRING,
-    y: DataTypes.STRING,
     arrive: DataTypes.STRING
   },
   {

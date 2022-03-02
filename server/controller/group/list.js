@@ -13,7 +13,7 @@ module.exports = {
         const result = await users_groups.findAll({
           where: {
             userId: userId,
-            overtime: { [Op.ne]: null }
+            arrive: { [Op.ne]: 'leave' }
           },
           include: _groups
         });
