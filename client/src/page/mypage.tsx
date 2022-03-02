@@ -42,8 +42,6 @@ function Mypage ({user,setUser}:mypageprops) {
     navigate(`/group/${groupId}`);
   }
 
-  
-
   const getGrouplist = async () => {
     const res = await axios.get(`${url}/group/list`,{withCredentials:true})
     const filter = res.data.groups.map((el:any)=>{
@@ -85,117 +83,110 @@ function Mypage ({user,setUser}:mypageprops) {
   <MypageStyle>
     <UserGroup>
       <Userinfo>
-        <UserinfoTitle> 회원정보</UserinfoTitle>     
+        <UserinfoTitle> {user.name}님 환영합니다</UserinfoTitle>     
         <UserinfoDetail>
-          <div> {user.name}님 환영합니다 </div>  
-          <div> {user.userId}</div>
-          <div> {user.email} </div>
+          <div> id : {user.userId}</div>
+          <div> email : {user.email} </div>
         </UserinfoDetail>
         <Buttons>
-          <div>
-          <div >
-            {isOpenModal && (
+          {isOpenModal && (
             <EditInfo setUser={setUser} user={user} setOpenModal={setOpenModal}/>
-            )}
-        <DialogButton onClick={onClickToggleModal}>회원정보 수정</DialogButton>  
-          </div>
-          </div>
-        </Buttons>
-        <Buttons>
-        <div>
-          <div >
-            {isOpenModalPW && (
+          )}
+          <DialogButton onClick={onClickToggleModal}>회원정보 수정</DialogButton>  
+          {isOpenModalPW && (
             <EditPW setOpenModalPW={setOpenModalPW}/>
-            )}
-        <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
-          </div>        
-          </div>
+          )}
+          <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
         </Buttons>
+        <Delete>
+          <div >
+            {isOpenModalDeact && (
+              <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
+              </Deactivate>
+            )}
+            <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
+          </div>
+        </Delete>
       </Userinfo>
       <Groupinfo>
-        <GroupTitle>그룹정보</GroupTitle>
-        <GroupBox>
-          {_groups.map((el)=>{
-          return (
-          <Box key={el.id}>
-          <GroupName >
-            <GroupNameText>
-            <GroupI>
-            <div>{el.name}</div>
-            <div>{el.place}</div>
-            <div>{el.time}</div>
-            </GroupI>
-            </GroupNameText>
-          </GroupName>
-            <Group2>
-            <GroupNameButton  onClick={() => clickGroup(el.id)}>
-            <button>그룹정보로 이동 </button>
-            </GroupNameButton>
-              {/* <div> */}
-                {/* <div > 그룹나가기 </div> */}
-                <div id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}>
-                  <i className="fa-solid fa-arrow-right-from-bracket" id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)} />
-                </div>
-              {/* </div> */}
-
-            </Group2>
-
-          </Box>
-          )
-          })}
-        </GroupBox>  
+        <GroupTitle>그룹 리스트</GroupTitle>
+        {_groups.length === 0
+          ? <EmptyBox>
+              <div>소속된 그룹이 없습니다.</div>
+              <DialogButton onClick={() => navigate('/creategroup')}>그룹 생성하기</DialogButton>
+            </EmptyBox>
+          : <GroupBox>
+              {_groups.map((el)=>{
+                return (
+                  <Box key={el.id}>
+                    <GroupName onClick={() => clickGroup(el.id)}>
+                      <GroupNameText>
+                        <GroupI>
+                          <div>{el.name}</div>
+                          <div className='place'>{el.place}</div>
+                          <div className='time'>{el.time}</div>
+                        </GroupI>
+                      </GroupNameText>
+                    </GroupName>
+                    <Group2 id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}>
+                      <div className="out"> 그룹나가기 </div>
+                      <div className="icon" id={el.id}>
+                        {/* <i className="fa-solid fa-arrow-right-from-bracket" id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)} /> */}
+                        <i className="fa-solid fa-trash-can"></i>
+                      </div>
+                    </Group2>
+                  </Box>
+                )
+              })}
+            </GroupBox>  
+        }
       </Groupinfo>
-      <Delete>
-      <div >
-      {isOpenModalDeact && (
-      <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
-      </Deactivate>
-      )}
-      <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
-      </div>
-      </Delete>
     </UserGroup>
   </MypageStyle>
   )
-  }
-  
-  export default Mypage;
+}
 
 const DialogButton = styled.button`
-  width: 160px;
-  height: 48px;
+  width: 120px;
+  height: 40px;
   background-color: blueviolet;
   padding: 0px 10px 0px 10px;
-
   color: white;
-  font-size: 1.2rem;
+  font-size: 15px;
   font-weight: 400;
+  margin: 0 5px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
-
   &:hover {
     transform: translateY(-1px);
   }
 `;
 
 const UserinfoDetail = styled.div`
+  width: 300px;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
   padding: 15px 0px 15px 0px;
-  height: 30vh;
-  font-size: 30px;
+  font-size: 20px;
   text-align: left;
-  width: 35vw;
   border-radius : 1px;
   border: solid blue;
+  div {
+    padding: 10px;
+  }
 `
-
 const MypageStyle = styled.div`
   background-color: #e1bee7;
   width: 100vw;
-  height: 100vh;
+  height: 93vh;
   font-size: 30px;
+  @media screen and (max-width: 760px) {
+    height: 100%;
+  }
 `
 const UserinfoTitle = styled.div`
   padding: 15px 0px 15px 0px;
@@ -203,26 +194,26 @@ const UserinfoTitle = styled.div`
   border: solid yellow;
 `
 const Userinfo = styled.div`
+  width:300px;
+  height:400px;
   background-color: #ffcdd2;
   display: flex;
   /* justify-content:space-around; */
   align-items: center;
-  width:40vw;
   flex-direction: column;
   border-radius : 1px;
   border: solid blue;
+  margin: 10px;
   padding: 0px 0px 0px 0px;
-  height:80vh;
 
   `
 const Buttons = styled.div`
   display: flex;
   justify-content: right;
-  width: 35vw;
+  width: 300px;
   padding: 15px 0px 15px 0px;
   border-radius : 1px;
   border: solid red;
-  
 `
 const Groupinfo = styled.div`
   height: 80vh;
@@ -236,73 +227,167 @@ const GroupBox = styled.div`
   padding: 15px;
   height: 50vh;
   overflow-y: scroll;
-  width: 58vw;
+  /* width: 58vw; */
+  width: 800px;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
+  @media screen and (max-width: 1080px){
+    width: 600px;
+  }
+  @media screen and (max-width: 960px){
+    width: 450px;
+  }
+  @media screen and (max-width: 760px){
+    width: 400px;
+  }
 `
 const GroupTitle = styled.div`
-    padding: 15px 0px 15px 0px;
+  padding: 15px 0px 15px 0px;
 `
 const GroupName = styled.div`
   display: flex;
   justify-content: space-between;  
+  border: solid black 1px;
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-1px);
+    box-shadow: 5px 5px 4px #757575;
+  }
 `
-
 const GroupNameText = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  
-
 `
-
 const GroupNameButton = styled.div`
   /* margin: 5px 10px 5px 0px; */
   /* border-radius : 1px;
   border: solid red; */
+  width: 120px;
+  height: 80px;
+  font-size: 15px;
   cursor: pointer;
-&:hover {
-  transform: translateY(-1px);
-  box-shadow: 5px 5px 4px #757575;
-
-}
+  button {
+    width: 120px;
+    height: 80px;
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 5px 5px 4px #757575;
+    }
+  }
   //flex-wrap
   /* display:inline-block; */
 `
-
 const GroupI = styled.div`
   display:flex;
+  justify-content: space-evenly;
+  align-items: center;
   width: 600px;
   height: 80px;
-  div{
-  width: 150px;    
+  div {
+    width: 150px;
+    &.place {
+      font-size: 20px;
+    }
+    &.time {
+      font-size: 20px;
+    }
+  }
+  @media screen and (max-width: 1080px){
+    width: 400px;
+    div {
+      &.place {
+        display: none;
+      }
+    }
+  }
+  @media screen and (max-width: 960px){
+    width: 300px;
+    div {
+      &.place {
+        display: none;
+      }
+    }
+  }
+  @media screen and (max-width: 760px){
+    width: 300px;
+    div {
+      &.place {
+        display: none;
+      }
+      &.time {
+        /* display: none; */
+      }
+    }
   }
 `
-
-
 const Delete = styled.div`
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+  /* position: absolute; */
+  width: 300px;
+  height: 100px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
   font-size: 20px;
+  /* background-color: blue; */
+  border: solid black 1px;
 `
-
-
 const Box = styled.div`
-display:flex;
-justify-content:space-between;
+  display:flex;
+  /* justify-content:space-between; */
 `
-
 const Group2 =styled.div`
-display:flex;
-flex-direction: row;
+  width: 180px;
+  font-size: 15px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  background-color: #448aff;
+  border-radius: 10px;
+  :hover {
+    cursor: pointer;
+    transform: translateY(-1px);
+    box-shadow: 5px 5px 4px #757575;
+  }
+  div {
+    margin: 5px;
+    &.icon {
+      font-size: 30px;
+    }
+  }
+  @media screen and (max-width: 960px) {
+    width: 100px;
+    background-color: #e1bee7;
+    div {
+      &.out {
+        display: none;
+      }
+    }
+  }
 `
-
-
 const UserGroup =styled.div`
   display:flex;
   flex-direction: row;
+  justify-content: center;
   margin: 0px 15px 0px 0px;
   border-radius : 3px;
   border: solid red;
+  @media screen and (max-width: 760px){
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`
+const EmptyBox = styled.div`
+  height: 50vh;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 15px;
+  border-top: solid black 1px;
+  border-bottom: solid black 1px;
 `
 
+export default Mypage;

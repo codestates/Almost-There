@@ -216,7 +216,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
           </List>
         </Contents2>
         <Contents3>
-          <Button2 onClick={() => navigate('/')}>취소</Button2>
+          <Button2 onClick={() => navigate('/mypage')}>취소</Button2>
           <Button2 onClick={handleCreateButton}>그룹 생성 완료</Button2>
         </Contents3>
       </Container>

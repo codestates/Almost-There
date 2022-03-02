@@ -17,7 +17,7 @@ interface MyPosition {
 // arrive leave => to(groupId)
 interface ServerToClientEvents {
   getPosition: (data:Pos) => void
-  notify: (contents: string, userId: string, id: string) => void
+  notify: (type: string, sender: string, groupId:string) => void
   overtime: (groupId: string, userId: string, overtime: string) => void
   arrive: (groupId: string, userId: string, arrive: string) => void
 }
