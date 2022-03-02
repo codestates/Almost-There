@@ -25,8 +25,9 @@ const Img = styled.img`
 `
 const Text = styled.div`
   position: fixed;
-  top: 40vh;
-  color: white;
+  top:58vh;
+  color: black;
+  text-shadow: white 0px 0px 5px;
   font-size: 30px;
   font-weight: bold;
 `
@@ -34,12 +35,13 @@ const Text = styled.div`
 const StyledLink = styled(Link)`
   position: fixed;
   color: yellow;
+  text-shadow: #000 0px 0px 5px;
   &.home {
-    left: 10vh;
+    left: 20vw;
     bottom: 10vh;
   }
   &.group {
-    right: 10vh;
+    right: 20vw;
     bottom: 10vh;
   }
 `

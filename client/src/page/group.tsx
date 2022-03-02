@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { AddTime, MsgModal, Timer } from '../component';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import '../App.css';
 import { useState, useCallback,useEffect } from "react";
 import url from '../url';
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/js/all.js'
-import { socket } from '../context';
+import { socket, SocketContext } from '../context';
 
 interface GroupInfo {
   name: string,
@@ -29,6 +29,7 @@ type GroupProps = {
 }
 
 function Group ({ user }: GroupProps) {
+  const socket = useContext(SocketContext);
   const [timeModal, setTimeModal] = useState(false);
   const [groupInfo, setGroupInfo] = useState<GroupInfo>();
   const [member, setMember] = useState<Array<Member>>([]);
@@ -122,40 +123,7 @@ function Group ({ user }: GroupProps) {
 
   useEffect(() => {     
     getGroupInfo();
-    socket.on("arrive", (groupId, userId, arrive) => {
-      if (groupId === params.id) {
-        const update = member.map((el) => {
-          if (userId === el.userId) {
-            return {
-              overtime: el.overtime,
-              userId: el.userId,
-              name: el.name,
-              arrive: arrive
-            }
-          } else {
-            return el
-          }
-        })
-        setMember([...update]);
-      }
-    })
-    socket.on("overtime", (groupId, userId, overtime) => {
-      if (groupId === params.id) {
-        const update = member.map((el) => {
-          if (userId === el.userId) {
-            return {
-              overtime: overtime,
-              userId: el.userId,
-              arrive: el.arrive,
-              name: el.name
-            }
-          } else {
-            return el;
-          }
-        })
-        setMember([...update]);
-      }
-    })
+    
     let id = setInterval(() => {
       if (timeleft.current.left < 10 ) {
         setCheckloc(true);
@@ -167,6 +135,49 @@ function Group ({ user }: GroupProps) {
   
   useEffect(() => {
     if (member.length > 0) {
+      socket.on("arrive", (groupId, userId, arrive) => {
+        if (groupId === params.id) {
+          const update = member.map((el) => {
+            if (userId === el.userId) {
+              return {
+                userId: el.userId,
+                overtime: el.overtime,
+                name: el.name,
+                arrive: arrive
+              }
+            } else {
+              return el
+            }
+          })
+          setMember([...update]);
+        }
+      })
+      socket.on("overtime", (groupId, userId, overtime) => {
+        console.log("time");
+        if (groupId === params.id) {
+          console.log(member);
+          const arr = overtime.split(':');
+          arr[0] = Number(arr[0]) > 9 ? arr[0] : `0${arr[0]}`;
+          arr[1] = Number(arr[1]) > 9 ? arr[1] : `0${arr[1]}`;
+          arr[2] = Number(arr[2]) > 9 ? arr[2] : `0${arr[2]}`;
+          const nOvertime = arr.join(':');
+          const update = member.map((el) => {
+            // console.log(userId);
+            if (userId === el.userId) {
+              return {
+                userId: el.userId,
+                overtime: nOvertime,
+                name: el.name,
+                arrive: el.arrive
+              }
+            } else {
+              return el;
+            }
+          })
+          // console.log(update);
+          setMember([...update]);
+        }
+      })
       const check = member.every((el) => {
         console.log(el.arrive);
         return el.arrive === 'leave'

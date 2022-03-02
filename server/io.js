@@ -83,7 +83,7 @@ module.exports = function (server) {
 
     // ! create group / 그룹 생성: group/create (POST)
     socket.on('joinGroup', (groupId) => {
-      console.log(payload);
+      console.log(groupId);
       socket.join(`group ${groupId}`);
       io.to(`group ${groupId}`).emit('joinGroup', `join group ${groupId}`);
       console.log(socket.rooms);
@@ -180,13 +180,14 @@ module.exports = function (server) {
 
     // ! notify / 알림
     socket.on('notify', async (type, sender, groupId) => {
+      console.log('a');
       const groupMembers = await users_groups.findAll({
         where: {
           groupId: groupId,
           userId: { [Op.ne]: sender }
         }
       });
-
+      console.log('b');
       // 초대 알림
       if (type === 'invite') {  
         for (let i = 0; i < groupMembers.length; i++) {

@@ -46,8 +46,8 @@ function Map ({ user }: MapProps) {
   const getlatdes = async () => {
     const res = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`, {withCredentials:true});
     setTarget({
-      x: Number(res.data.groupInfo.x),
-      y: Number(res.data.groupInfo.y)
+      x: Number(res.data.groupInfo.x)+0.3,
+      y: Number(res.data.groupInfo.y)+0.3
     })
     // const res2 = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`,
     // {withCredentials: true});
@@ -59,13 +59,13 @@ function Map ({ user }: MapProps) {
         console.log(data);
         if (!data.x || !data.y) {
           setMember({
-            x: res.data.groupInfo.x,
-            y: res.data.groupInfo.y
+            x: res.data.groupInfo.x + 0.3,
+            y: res.data.groupInfo.y + 0.3
           })
         } else {
           setMember({
-            x: Number(data.x) + Math.random()/10,
-            y: Number(data.y) + Math.random()/10
+            x: Number(data.x) + 0.3,//Math.random()/10,
+            y: Number(data.y) + 0.3//Math.random()/10
           });
         }
       });
