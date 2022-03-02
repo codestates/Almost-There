@@ -11,11 +11,11 @@ module.exports = {
         const groupId = req.params.groupId;
 
         // 소속 그룹 탈퇴
-        await users_groups.update({ 
+        await users_groups.update({
           overtime: '00:00:00',
           arrive: 'leave'
         },
-          { where: { groupId, userId } });
+        { where: { groupId, userId } });
 
         // 다른 그룹원들도 모두 나간 상태면 그 그룹 정보 삭제
         const result = await users_groups.findAll({ where: { groupId } });
