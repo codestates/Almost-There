@@ -1,10 +1,12 @@
 const { users } = require('../../models');
+const { users_groups } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = {
   post: async (req, res) => {
     try {
       const userInfo = await isAuthorized(req);
+      console.log(userInfo)
       if (!userInfo) {
         return res.status(401).send({ message: 'not authorized' });
       } else {
@@ -20,6 +22,7 @@ module.exports = {
         return res.status(200).send({ message: 'ok' });
       }
     } catch (err) {
+      console.log(err)
       return res.status(500).send({ message: 'server error' });
     }
   }

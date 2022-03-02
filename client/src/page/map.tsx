@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import url from '../url';
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
+import { socket } from '../context';
 
 
 
@@ -19,12 +20,16 @@ interface Pos {
 //전역객체
 const { kakao } = window;
 
-function Map () {
+type MapProps = {
+  user: User
+}
+
+function Map ({ user }: MapProps) {
   const [target, setTarget] = useState<Pos>({
     x: 127.03557641134296,
     y: 37.48276303605517
   })
-  const [user, setUser] = useState<Pos>({
+  const [member, setMember] = useState<Pos>({
     x: 127.0350,
     y: 37.4830
   })
@@ -32,25 +37,33 @@ function Map () {
   const navigate = useNavigate();
 
   const handleBack = () => {
+    socket.emit("leave", `${params.userId}`);
     navigate(`/group/${params.groupId}`);
   }
 
   const getlatdes = async () => {
-    const res = await axios.get(`${url}/group/list`, {withCredentials:true});
-    const filtered = res.data.groups.filter((el:any)=>{
-      return String(el.groupId) === params.groupId;    
-    });
+    const res = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`, {withCredentials:true});
     setTarget({
-      x: Number(filtered[0]._group.x),
-      y: Number(filtered[0]._group.y)
+      x: Number(res.data.groupInfo.x),
+      y: Number(res.data.groupInfo.y)
     })
     // const res2 = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`,
     // {withCredentials: true});
-    if (params.userId) {
-      setUser({
-        x: Number(filtered[0]._group.x) + 0.0005,
-        y: Number(filtered[0]._group.y) + 0.0005
-      })
+    if (params.userId) { //socket으로 변환
+      socket.emit("join", `${params.userId}`);
+      socket.emit("getPosition", `${params.userId}`);
+      socket.on("getPosition", (data) => {
+        console.log('getPosition');
+        console.log(data);
+        setMember({
+          x: data.x,
+          y: data.y
+        });
+      });
+      // setMember({
+      //   x: Number(res.data.groupInfo.x) + 0.0005,
+      //   y: Number(res.data.groupInfo.y) + 0.0005
+      // })
     }
   }
 
@@ -62,16 +75,15 @@ function Map () {
     const markerPosition  = new kakao.maps.LatLng(target.y, target.x);  
     const container = document.getElementById("map");
     const options = params.userId 
-      ? { center: new kakao.maps.LatLng(user.y, user.x) }
+      ? { center: new kakao.maps.LatLng(member.y, member.x) }
       : { center: new kakao.maps.LatLng(target.y,target.x) }
-    console.log(options);
     const map = new kakao.maps.Map(container, options);
     const marker = new kakao.maps.Marker({
       position: markerPosition
     });
     if (params.userId) {
       const content = '<span class="user">!</span>';
-      const position = new kakao.maps.LatLng(user.y, user.x);  
+      const position = new kakao.maps.LatLng(member.y, member.x);  
       const customOverlay = new kakao.maps.CustomOverlay({
           position: position,
           content: content   
@@ -81,7 +93,7 @@ function Map () {
     
     marker.setMap(map);
 
-  }, [target, user]);
+  }, [target, member]);
 
   return(
     <div>

@@ -32,7 +32,7 @@ module.exports = {
           for (let i = 0; i < inviteId.length; i++) {
             await users_groups.create({
               groupId: group.dataValues.id,
-              userId: inviteId[i], // userId에 값 생성이 안되는 문제 -_- // foreign key 설정 해놓은 상태라서 초대하고자 하는 userId가 users table에 있어야함
+              userId: inviteId[i],
               overtime: '00:00:00'
             });
           }

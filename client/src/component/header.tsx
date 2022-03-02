@@ -15,7 +15,7 @@ type HeaderProps = {
   setShow: React.Dispatch<React.SetStateAction<ShowList>>,
   user: User,
   setUser: React.Dispatch<React.SetStateAction<User>>,
-  watch: React.MutableRefObject<any>
+  watch: React.RefObject<any>
 }
 
 

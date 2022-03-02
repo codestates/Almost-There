@@ -12,12 +12,17 @@ module.exports = (sequelize, DataTypes) => {
     static associate (models) {
       users_groups.belongsTo(models._groups, { foreignKey: 'groupId', sourceKey: 'id', onDelete: 'cascade' });
       users_groups.belongsTo(models.users, { foreignKey: 'userId', sourceKey: 'userId', onDelete: 'cascade' });
+      // users_groups.belongsTo(models.users, { foreignKey: 'x', sourceKey: 'x', onUpdate: 'cascade', onDelete: 'cascade' });
+      // users_groups.belongsTo(models.users, { foreignKey: 'y', sourceKey: 'y', onUpdate: 'cascade', onDelete: 'cascade' });
     }
   }
   users_groups.init({
     groupId: DataTypes.INTEGER,
     userId: DataTypes.STRING,
-    overtime: DataTypes.TIME
+    overtime: DataTypes.TIME,
+    x: DataTypes.STRING,
+    y: DataTypes.STRING,
+    arrive: DataTypes.STRING
   },
   {
     sequelize,

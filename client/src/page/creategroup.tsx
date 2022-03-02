@@ -113,7 +113,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
     socket.on('createRoom',(payload) => {
       console.log(payload)
     })
-    socket.emit('notify', {} );
+    socket.emit('notify', '1', '1' ,'1' );
     // socket.on('inviteId', (payload) => {
     //   console.log(payload) //콘솔 ? 위치 ? App.tsx
     //   const regex = /[^0-9]/g;
@@ -124,12 +124,6 @@ function CreateGroup ({ user }: CreateGroupProps) {
     
   }
 
-    /* IO */
-
-    socket.on('error', (error) => {
-      console.log(error);
-    });
-    /* IO */
   useEffect(() => {
   }, []);
 

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { SocketContext } from '../../context';
 import { logoN, logoK, logoG } from '../../data';
 import url from '../../url';
 
@@ -22,6 +23,7 @@ type LoginModalProps = {
 }
 
 function LoginModal ({ setLogin, setShow, setUser }: LoginModalProps) {
+const socket = useContext(SocketContext);
 
 const [info, setInfo] = useState<Info>({
   userId: '',
@@ -49,7 +51,15 @@ const handleLogin = async() => {
       name,
       email
     });
+    socket.emit("login", { userId, name, email });
     setLogin(true);
+    socket.on('notify', (payload) => {
+      console.log(payload) //콘솔 ? 위치 ? App.tsx
+      const regex = /[^0-9]/g;
+      const groupId = payload.replace(regex, "")
+      const thisUser = 'group' + " " + groupId
+      socket.emit('thisUser', thisUser) // 아직 어떤 식인지는 모름 ex) group 1번 모임에서 초대가 왔습니다.
+    });
     setShow({ login: false, signin: false, notify: false});
   } catch {
     setMsg(true);

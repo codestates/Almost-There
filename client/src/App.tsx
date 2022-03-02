@@ -6,7 +6,6 @@ import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-d
 import SignUpModal from './component/modal/signupmodal';
 import axios from 'axios';
 import url from './url';
-/* IO */ import { io, Socket } from 'socket.io-client';
 /* IO */ import { socket, SocketContext } from './context';
 
 
@@ -44,9 +43,6 @@ function App() {
   const latlng = useRef<LatLng>({ x: 0, y: 0 });
   const watch = useRef({ id: 0 });
 
-  socket.on('error', (error) => {
-    console.log(error);
-  });
   /* IO */
   useEffect(() => {
     console.log(user);
@@ -75,6 +71,13 @@ function App() {
           latlng.current.x = x;
           latlng.current.y = y;
         }
+        socket.emit("sendPosition", {
+          user: user,
+          position: {
+            x: x,
+            y: y
+          }
+        })
       }, () => console.log('denied'), {
         enableHighAccuracy: false,
         timeout: 50000,
@@ -82,29 +85,7 @@ function App() {
       });
     }
     getUserInfo();
-    /* IO */
-    if (login) {
-      console.log(user.userId);
-      console.log(user)
-      socket.emit('login', user);
-      socket.on('login', (payload) => {
-        console.log(payload);
-      });
-      socket.on('notify', (payload) => {
-        console.log(payload) //콘솔 ? 위치 ? App.tsx
-        const regex = /[^0-9]/g;
-        const groupId = payload.replace(regex, "")
-        const thisUser = 'group' + " " + groupId
-        socket.emit('thisUser', thisUser) // 아직 어떤 식인지는 모름 ex) group 1번 모임에서 초대가 왔습니다.
-      });
-    } 
-    if (!login) {
-      socket.emit('logout', user);
-      socket.on('logout', (payload) => {
-        console.log(payload);
-      });
-    }
-    /* IO */
+    console.log(watch);
   }, [login]);
 
 
@@ -121,9 +102,9 @@ function App() {
               ? <>
                     <Route path='/mypage' element={<Mypage setUser={setUser} user={user} />}  />     
                     <Route path='/creategroup' element={<CreateGroup user={user}/>} /> 
-                    <Route path='/group/:id' element={<Group />} />
-                    <Route path='/map/:groupId/:userId' element={<Map />} />
-                    <Route path='/map/:groupId' element={<Map />} />
+                    <Route path='/group/:id' element={<Group user={user}/>} />
+                    <Route path='/map/:groupId/:userId' element={<Map user={user}/>} />
+                    <Route path='/map/:groupId' element={<Map user={user}/>} />
                 </>
               : <>
                   <Route path='/*' element={<Navigate to='/' />} />

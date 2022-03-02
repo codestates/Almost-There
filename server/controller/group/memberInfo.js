@@ -12,13 +12,11 @@ module.exports = {
         return res.status(400).send({ message: 'bad request' });
       } else {
         const { groupId } = req.query;
-        // groupId, userId, overtime
         const result = await users_groups.findAll({
           where: {
             groupId
           }
-        }); // result = [{groupId,userId,overtime},{groupId,userId,overtime},{groupId,userId,overtime}]
-        console.log(result);
+        });
         const arr = [];
         for (let i = 0; i < result.length; i++) {
           a = result[i].dataValues.userId;

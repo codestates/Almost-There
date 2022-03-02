@@ -7,35 +7,79 @@ import url from '../url';
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
 
-  // console.log(filtered)  
-  // console.log(groupInfo)
-  // console.log(newInfo)  
+interface GroupInfo {
+  name: string,
+  place: string,
+  time: string,
+  leaderId: string,
+  x: string,
+  y: string
+}
+interface Member {
+  userId: string,
+  overtime: string
+}
 
-function Group () {
-  const [groupInfo, setGroupInfo] = useState<Array<any>>([]);
-  const [newInfo, setnewInfo] = useState<Object>([]);
+type GroupProps = {
+  user: User
+}
+
+function Group ({ user }: GroupProps) {
+  const [groupInfo, setGroupInfo] = useState<GroupInfo>();
+  const [member, setMember] = useState<Array<Member>>([]);
+  const [arriveTime, setArriveTime] = useState<Array<string>>([]);
   const navigate = useNavigate();
   const params= useParams();
+  let date: Array<any>;
 
+//   groupInfo:
+//     createdAt: "2022-02-27T02:17:14.000Z"
+//     id: 1
+//     leaderId: "test"
+//     name: "group1"
+//     place: "남산서울타워"
+//     time: "2022-02-27T16:00:00.000Z"
+//     updatedAt: "2022-02-27T02:17:14.000Z"
+//     x: "126.988217046052"
+//     y: "37.551279740966"
+//   member: Array(3)
+//     0: "test"
+//     1: "test2"
+//     2: "test3"
   const getGroupInfo = async () => {
-    const res = await axios.get(`${url}/group/list`,{withCredentials:true});
-    const filtered = res.data.groups.filter((el:any)=>{
-      return el.id === Number(params.id);    
-    });    
-    setGroupInfo([...filtered]);
-    setnewInfo(groupInfo);
+    const res = await axios.get(`${url}/group/memberInfo?groupId=${params.id}`,{withCredentials:true});
+    const { name, place, leaderId, x, y } = res.data.groupInfo;
+    date = res.data.groupInfo.time.split(/[TZ\:\.-]/);
+    console.log(date); 
+    date[3] = Number(date[3]) + 9 > 24 ? `${Number(date[3]) + 9 - 24}` : `${Number(date[3]) + 9}`;
+    date[3] = Number(date[3]) > 11 
+      ? Number(date[3]) !== 12 ? `오후 ${Number(date[3])}` : `오후 ${date[3]}`
+      : `오전 ${date[3]}`;
+    const time = `${date[1]}월 ${date[2]}일 ${date[3]}시 ${date[4]}분`;
+    setGroupInfo({name, place, time, leaderId, x, y});
+    const mapping = res.data.member.map((el:any) => {
+      let arr = el.overtime.split(':');
+      arr[0] = Number(arr[0]) + Number(date[3].slice(3));
+      // if (Number(arr[0]) > 24);
+      // arr[1] = `${Number(arr[1]) + Number(date[4])}`;
+      // if (Number(arr[1]) > 59) {
+      //   arr[0] = `${Number(arr[0]) + 1}`;
+      // }
+      let overtime = arr.join(':');
+      return { userId: el.userId, overtime: overtime}
+    })
+    setMember([...res.data.member]);
   }
   const clickMap = () => {
     navigate(`/map/${params.id}`);
   }
 
-  const checkPosition = (n: number) => {
-    navigate(`/map/${params.id}/${n}`);
+  const checkPosition = (userId: string) => {
+    navigate(`/map/${params.id}/${userId}`);
   }
 
-  useEffect(() => {      
+  useEffect(() => {     
     getGroupInfo();
-    // console.log(groupInfo[0])
   },[]);  
     
   return (
@@ -43,57 +87,31 @@ function Group () {
       <Container>
         <Contents1>
           <List1>
-          {/* <GroupBox>
-          {groupInfo.map((el)=>{
-          return (
-          <Box>
-          <GroupName 
-          // key={el.id}
-          >
-          {el.name}
-          </GroupName>
-          </Box>
-          )
-          })}
-          </GroupBox>  
- */}
-            <Title1 onClick={getGroupInfo} >{groupInfo[0]?._group.name}</Title1>
-            <Icon>
-              그룹원
-            </Icon>
+            <Title1 onClick={getGroupInfo} >{groupInfo?.name}</Title1>
           </List1>
           <List1>
-            <Title1>{groupInfo[0]?._group.place}</Title1>
+            <Title1>{groupInfo?.place}</Title1>
             <Icon onClick={clickMap}>지도</Icon>
           </List1>
           <List1>
-            <Title3>{groupInfo[0]?._group.time}</Title3>
+            <Title3>{groupInfo?.time}</Title3>
           </List1>
         </Contents1>
         <Timer />
         <Contents3>
           <Title2><button>시간 추가</button></Title2>
           <List2>
-            <Li>
-              <NameBox>멤버1</NameBox>
-              <PosBox onClick={() => checkPosition(1)}>위치 확인</PosBox>
-              <ATBox>17:10</ATBox>
-            </Li>
-            <Li>
-              <NameBox>멤버2</NameBox>
-              <PosBox>위치 확인</PosBox>
-              <ATBox>17:15</ATBox>
-            </Li>
-            <Li>
-              <NameBox>멤버3</NameBox>
-              <PosBox>위치 확인</PosBox>
-              <ATBox>17:17</ATBox>
-            </Li>
-            <Li>
-              <NameBox>멤버4</NameBox>
-              <PosBox>위치 확인</PosBox>
-              <ATBox>17:05</ATBox>
-            </Li>
+            {
+              member.map((el) => {
+                return (
+                  <Li key={el.userId}>
+                    <NameBox>{el.userId}</NameBox>
+                    <PosBox onClick={() => checkPosition(el.userId)}>위치 확인</PosBox>
+                    <ATBox>{el.overtime}</ATBox>
+                  </Li>
+                )
+              })
+            }
           </List2>
         </Contents3>
       </Container>
@@ -213,7 +231,6 @@ const List2 = styled.div`
   overflow: scroll;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
   border: solid red 1px;
 `
@@ -223,6 +240,7 @@ const Li = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 10px;
   border: solid blue 1px;
 `
 const NameBox = styled.div`
@@ -233,6 +251,11 @@ const PosBox = styled.div`
   width: 100px;
   margin: 0 5px;
   background-color: white;
+  cursor: pointer;
+  :hover {
+    color: white;
+    background-color: black;
+  }
 `
 const ATBox = styled.div`
   width: 100px;
