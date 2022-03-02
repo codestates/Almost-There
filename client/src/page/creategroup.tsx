@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Calendar, Invite, Location } from '../component/index'
-import { SocketContext } from '../context';
+import { socket, SocketContext } from '../context';
 import url from '../url';
 
 declare global {
@@ -110,6 +110,8 @@ function CreateGroup ({ user }: CreateGroupProps) {
         y: place.y
       }, {withCredentials: true});
       const id = res.data.data;
+      socket.emit("joinGroup", id);
+      socket.emit("notify", "invite", user.userId, id);
       navigate(`/group/${id}`);
     } else if (!groupName) {
       setEdit(true);
@@ -231,7 +233,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #9ccc65;
+  /* background-color: #9ccc65; */
   border: solid black 1px;
 `
 const Container = styled.div`
@@ -244,12 +246,13 @@ const Container = styled.div`
   align-items: center;
   background-color: #eeeeee;
   border: solid black 1px;
+  border-radius: 5px;
 `
 const Title = styled.div`
   font-size: 20px;
   font-weight: bold;
   padding: 20px 0px;
-  border: solid black 1px;
+  /* border: solid black 1px; */
   `
 const Title2 = styled.div`
   width: 200px;
@@ -258,29 +261,31 @@ const Title2 = styled.div`
 `
 const Contents1 = styled.div`
   height : 200px;
-  width: 550px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  border: solid black 1px;
+  background-color: white;
+  border-radius: 5px;
+  /* border: solid black 1px; */
 `
 const Contents2 = styled.div`
-  width: 550px;
+  width: 500px;
   height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  border: solid black 1px;
+  /* border: solid black 1px; */
 `
 const Contents3 = styled.div`
-  width: 550px;
+  width: 500px;
   height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: solid black 1px;
+  /* border: solid black 1px; */
 `
 const Box1 = styled.div`
   width: 500px;
@@ -288,7 +293,7 @@ const Box1 = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  border: solid red 1px;
+  border-bottom: solid red 1px;
 `
 const Box2 = styled.div`
   width: 250px;
@@ -308,7 +313,7 @@ const Box3 = styled.div`
   /* border: solid black 1px; */
   button {
     &.focus {
-      border: solid 1px red;
+      border: solid red 1px;
       transform: translate(-1px, -1px);
     }
   }
@@ -338,7 +343,9 @@ const TitleBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border: solid blue 1px;
+  background-color: #83b9ff;
+  border: solid black 1px;
+  border-radius: 5px 5px 0px 0px;
   `
 const Title3 = styled.div`
   width: 200px;
@@ -347,6 +354,7 @@ const Title3 = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: bold;
+  /* background-color: #83b9ff; */
   /* border: solid black 1px; */
 `
 const InviteBox = styled.div`
@@ -361,7 +369,9 @@ const List = styled.div`
   width: 500px;
   height: 300px;
   overflow: scroll;
-  border: solid red 1px;
+  background-color: white;
+  border-radius: 0px 0px 5px 5px;
+  border: solid black 1px;
   ::-webkit-scrollbar {
     display: none;
   }

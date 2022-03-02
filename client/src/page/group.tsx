@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { AddTime, Timer } from '../component';
+import { AddTime, MsgModal, Timer } from '../component';
 import React, { useRef } from 'react';
 import '../App.css';
 import { useState, useCallback,useEffect } from "react";
@@ -32,6 +32,7 @@ function Group ({ user }: GroupProps) {
   const [groupInfo, setGroupInfo] = useState<GroupInfo>();
   const [member, setMember] = useState<Array<Member>>([]);
   const [arriveTime, setArriveTime] = useState<Array<string>>([]);
+  const [showMsg, setShowMsg] = useState(false);
   const timeleft = useRef({
     left: 30
   })
@@ -58,6 +59,7 @@ function Group ({ user }: GroupProps) {
   const getGroupInfo = async () => {
     const res = await axios.get(`${url}/group/memberInfo?groupId=${params.id}`,{withCredentials:true});
     // arrive : "true", "false", "leave"
+    console.log(res.data);
     const { name, place, leaderId, x, y } = res.data.groupInfo;
     date = res.data.groupInfo.time.split(/[TZ\:\.-]/);
     const lastDay = Number(date[0])%4 === 0 ? monthLength2[Number(date[1]) - 1] : monthLength[Number(date[1]) - 1];
@@ -151,38 +153,6 @@ function Group ({ user }: GroupProps) {
         setMember([...update]);
       }
     })
-    // group1, group2, group3
-    // 도착 완료 - client에서 장소가 바뀔 떄 마다 x,y, userId
-    // userId가 포함된 그룹들 res = await (users_groups 와 _groups를 조인한 테이블) where userId;
-    // const filter = res.filter((el) => {
-    //   let a = new Date(el.time).getTime();
-    //   let b = new Date().getTime();
-    //   return Number(Math.floor(a-b/1000*60)) < 10
-    // })
-    // console.log(filter);
-    // filter.forEach((el) => { //x 127.1234 , y 37.1234
-    //   if ( (Math.floor(el.x*100)/100) === (Math.floor(data.x*100)/100) 
-    // && (Math.floor(el.y*100)/100) === (Math.floor(data.y*100)/100)) {
-    // db => 도착완료로 바꾸고
-    // io.to(`group ${el.groupId}`).emit("groupInfo", (a, b, c))  
-    // }
-    //
-    // }) 
-    // 도착 완료, 시간 추가
-    // -- --
-    // socket.on("groupinfo", () => {
-    /*
-      socket.on("Enter Group", (GroupId) => {
-        socket.join(`Group ${GroupId}`);
-      })
-      socket.on("time", () => {
-        io.to(`Group ${GroupId}`).emit(data);
-      })
-      socket.on("arrive", () => {
-        io.to(`Group ${GroupId}`).emit(data);
-      })
-     */
-    // })
     let id = setInterval(() => {
       if (timeleft.current.left < 10 ) {
         setCheckloc(true);
@@ -191,11 +161,25 @@ function Group ({ user }: GroupProps) {
     }, 60000);
     return () => clearInterval(id)
   },[]);  
+  
+  useEffect(() => {
+    const check = member.every((el) => {
+      return el.arrive === 'true' || el.arrive === 'leave'
+    })
+    console.log(check);
+    if (check) {
+      navigate('/complete');
+    }
+  }, [member])
     
   return (
     <Background>
       {timeModal
         ? <AddTime user={user} setTimeModal={setTimeModal}/>
+        : <></>
+      }
+      {showMsg
+        ? <MsgModal setView={setShowMsg} msg={'약속 시간 10분 전부터 확인할 수 있습니다.'} />
         : <></>
       }
       <Container>
@@ -204,20 +188,21 @@ function Group ({ user }: GroupProps) {
           {/* <List1>
           </List1> */}
           <List1>
-            <Title3>{groupInfo?.place}</Title3>
-            <Icon onClick={clickMap}><i className="fa-solid fa-earth-asia" ></i></Icon>
+            <Title3>
+              {groupInfo?.place}
+              <Icon onClick={clickMap}><i className="fa-solid fa-earth-asia" ></i></Icon>
+            </Title3>
           </List1>
           <List1>
             <Title3>{groupInfo?.time}</Title3>
           </List1>
         </Contents1>
-        <Timer />
         <Contents3>
           {/* <Title2 onClick={addTime}><button>도착 예정 시간</button></Title2> */}
           <TableBox>
             <ArriveBox>
               도착<div className="arrive"></div>
-              가는 중<div className="yet"></div>
+              {/* 가는 중<div className="yet"></div> */}
               불참<div className="leave"></div>
             </ArriveBox>
             <PositionBox>위치 확인</PositionBox>
@@ -234,7 +219,7 @@ function Group ({ user }: GroupProps) {
                       ? <PosBox className='on' onClick={() => checkPosition(el.userId)}>
                           <i className="fa-solid fa-earth-asia" ></i>
                         </PosBox>
-                      : <PosBox className='off'>
+                      : <PosBox className='off' onClick={() => setShowMsg(true)}>
                           <i className="fa-solid fa-hourglass"></i>
                         </PosBox>
                     }
@@ -248,13 +233,14 @@ function Group ({ user }: GroupProps) {
             }
           </List2>
         </Contents3>
+        <Timer />
       </Container>
-      <Leave onClick={leaveGroup}>
+      {/* <Leave onClick={leaveGroup}>
         <div>그룹 나가기</div>
       </Leave>
       <MyPage onClick={() => navigate('/mypage')}>
         <div>마이페이지</div>
-      </MyPage>
+      </MyPage> */}
     </Background>
   )
 }
@@ -265,7 +251,7 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #6d98cf;
+  background-color: #ffffff;
   border: solid black 1px;
 `
 const Container = styled.div`
@@ -275,7 +261,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  background-color: #f8ecd6;
+  background-color: #eeeeee;
   border: solid black 1px;
 `
 const Contents1 = styled.div`
@@ -285,7 +271,7 @@ const Contents1 = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  border: solid black 1px;
+  /* border: solid black 1px; */
 `
 const List1 = styled.div`
   position: relative;  
@@ -301,12 +287,11 @@ const Title1 = styled.div`
   height: 40px;
   font-size: 30px;
   letter-spacing: 5px;
-  word-spacing: 10px;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: solid black 1px; */
+  border-bottom: solid black 1px;
 `
 const Icon = styled.span`
   /* position: absolute; */
@@ -326,6 +311,10 @@ const Icon = styled.span`
 `
 const Title3 = styled.div`
   width: 400px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 const Contents3 = styled.div`
   width: 500px;
@@ -337,7 +326,7 @@ const Contents3 = styled.div`
   border: solid green 1px;
 `
 const TableBox = styled.div`
-  width: 450px;
+  width: 500px;
   height: 40px;
   font-weight: bold;
   display: flex;
@@ -361,11 +350,11 @@ const ArriveBox = styled.div`
       height: 10px;
       background-color: #21b965;
     }
-    &.yet {
+    /* &.yet {
       width: 10px;
       height: 10px;
       background-color: #ffd600;
-    }
+    } */
     &.leave{
       width: 10px;
       height: 10px;
@@ -391,23 +380,23 @@ const OvertimeBox = styled.div`
   margin: 0 5px;
 `
 const List2 = styled.div`
-  width: 450px;
+  width: 500px;
   height: 300px;
   overflow: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #83b9ff;
-  border: solid red 1px;
+  background-color: #ffffff;
+  /* border: solid red 1px; */
 `
 const Li = styled.div`
-  width: 450px;
+  width: 500px;
   height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
-  border: solid blue 1px;
+  border-bottom: solid black 1px;
 `
 const NameBox = styled.div`
   width: 200px;
@@ -421,7 +410,7 @@ const NameBox = styled.div`
     background-color: #21b965;
   }
   &.false {
-    background-color: #ffd600;
+    /* background-color: #ffd600; */
   }
   &.leave {
     color: white;

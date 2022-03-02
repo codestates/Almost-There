@@ -25,6 +25,7 @@ function Mypage ({user,setUser}:mypageprops) {
   const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
   const [_groups, setGroups] = useState<Array<any>>([])
   const navigate = useNavigate();
+  const month = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
@@ -47,7 +48,8 @@ function Mypage ({user,setUser}:mypageprops) {
     const filter = res.data.groups.map((el:any)=>{
       const date = new Date(el._group.time);
       const arr = date.toString().split(' ');
-      const time = `${arr[1]} ${arr[2]} ${arr[4]}`;
+      arr[1] = month.indexOf(arr[1]).toString();
+      const time = `${arr[1]}월 ${arr[2]}일 ${arr[4].slice(0, 5)}`;
       console.log(date)
       //Sun Jan 02 2022 00:00:00 GMT+0900 (한국 표준시)
       return {
@@ -97,14 +99,15 @@ function Mypage ({user,setUser}:mypageprops) {
             <EditPW setOpenModalPW={setOpenModalPW}/>
           )}
           <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
-        </Buttons>
-        <Delete>
-          <div >
-            {isOpenModalDeact && (
+          {isOpenModalDeact && (
               <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
               </Deactivate>
             )}
-            <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
+          <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
+        </Buttons>
+        <Delete>
+          <div >
+            
           </div>
         </Delete>
       </Userinfo>
@@ -153,19 +156,22 @@ const DialogButton = styled.button`
   padding: 0px 10px 0px 10px;
   color: white;
   font-size: 15px;
-  font-weight: 400;
-  margin: 0 5px;
+  font-weight: bold;
+  margin: 5px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
   &:hover {
     transform: translateY(-1px);
   }
+  @media screen and (max-width: 760px) {
+    font-size: 12px;
+  }
 `;
 
 const UserinfoDetail = styled.div`
   width: 300px;
-  height: 30vh;
+  height: 400px;
   display: flex;
   flex-direction: column;
   border-top: solid black 1px;
@@ -174,13 +180,13 @@ const UserinfoDetail = styled.div`
   font-size: 20px;
   text-align: left;
   border-radius : 1px;
-  border: solid blue;
+  /* border: solid blue; */
   div {
     padding: 10px;
   }
 `
 const MypageStyle = styled.div`
-  background-color: #e1bee7;
+  /* background-color: #e1bee7; */
   width: 100vw;
   height: 93vh;
   font-size: 30px;
@@ -191,29 +197,38 @@ const MypageStyle = styled.div`
 const UserinfoTitle = styled.div`
   padding: 15px 0px 15px 0px;
   border-radius : 1px;
-  border: solid yellow;
+  /* border: solid yellow; */
 `
 const Userinfo = styled.div`
   width:300px;
-  height:400px;
-  background-color: #ffcdd2;
+  height: 90vh;
+  background-color: #eeeeee;
   display: flex;
   /* justify-content:space-around; */
   align-items: center;
   flex-direction: column;
   border-radius : 1px;
-  border: solid blue;
+  border: solid black;
   margin: 10px;
   padding: 0px 0px 0px 0px;
-
-  `
+  @media screen and (max-width: 760px) { 
+    width: 450px;
+    height: 300px;
+  }
+`
 const Buttons = styled.div`
   display: flex;
-  justify-content: right;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
   width: 300px;
+  height: 100%;
   padding: 15px 0px 15px 0px;
   border-radius : 1px;
-  border: solid red;
+  /* border: solid red; */
+  @media screen and (max-width: 760px) {
+    flex-direction: row;
+  }
 `
 const Groupinfo = styled.div`
   height: 80vh;
@@ -221,7 +236,7 @@ const Groupinfo = styled.div`
   flex-direction: column;
   align-items: center;
   border-radius : 1px;
-  border: solid pink;
+  /* border: solid pink; */
 `
 const GroupBox = styled.div`
   padding: 15px;
@@ -256,26 +271,7 @@ const GroupName = styled.div`
 `
 const GroupNameText = styled.div`
   border-radius : 1px;
-  border: solid yellow;
-`
-const GroupNameButton = styled.div`
-  /* margin: 5px 10px 5px 0px; */
-  /* border-radius : 1px;
-  border: solid red; */
-  width: 120px;
-  height: 80px;
-  font-size: 15px;
-  cursor: pointer;
-  button {
-    width: 120px;
-    height: 80px;
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 5px 5px 4px #757575;
-    }
-  }
-  //flex-wrap
-  /* display:inline-block; */
+  /* border: solid yellow; */
 `
 const GroupI = styled.div`
   display:flex;
@@ -329,7 +325,7 @@ const Delete = styled.div`
   align-items: center;
   font-size: 20px;
   /* background-color: blue; */
-  border: solid black 1px;
+  /* border: solid black 1px; */
 `
 const Box = styled.div`
   display:flex;
@@ -367,11 +363,13 @@ const Group2 =styled.div`
 `
 const UserGroup =styled.div`
   display:flex;
+  width: 100vw;
+  height: 100%;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
   margin: 0px 15px 0px 0px;
   border-radius : 3px;
-  border: solid red;
+  border: solid blue;
   @media screen and (max-width: 760px){
     flex-direction: column;
     justify-content: center;
@@ -388,6 +386,15 @@ const EmptyBox = styled.div`
   padding: 15px;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
+  @media screen and (max-width: 1080px){
+    width: 600px;
+  }
+  @media screen and (max-width: 960px){
+    width: 450px;
+  }
+  @media screen and (max-width: 760px){
+    width: 400px;
+  }
 `
 
 export default Mypage;

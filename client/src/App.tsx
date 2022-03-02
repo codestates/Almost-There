@@ -1,6 +1,6 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 import './App.css';
-import { Home, Mypage, CreateGroup, Group, Map} from './page/index';
+import { Home, Mypage, CreateGroup, Group, Map, Complete} from './page/index';
 import { Header, LoginModal, Notify } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
@@ -87,6 +87,9 @@ function App() {
             notifyType: type
           }, 
           ...list]);
+        if (type === "invite") {
+          socket.emit("joinGroup", id);
+        }
       })
       watch.current.id = 
       navigator.geolocation.watchPosition(async(coor) => {
@@ -135,8 +138,10 @@ function App() {
                     <Route path='/group/:id' element={<Group user={user}/>} />
                     <Route path='/map/:groupId/:userId' element={<Map user={user}/>} />
                     <Route path='/map/:groupId' element={<Map user={user}/>} />
+                    <Route path='/complete' element={<Complete />} />
                 </>
               : <>
+                  <Route path='/complete' element={<Complete />} />
                   <Route path='/*' element={<Navigate to='/' />} />
                 </>
             }

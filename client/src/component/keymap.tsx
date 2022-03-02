@@ -38,7 +38,7 @@ const KeyMap = ({ location, setPlace, setModal }: KeyMapProps) => {
   useEffect(() => {
     let markers:Array<any> = [];
     const keyword = location;
-    const mapContainer = document.getElementById('map'),
+    const mapContainer = mapRef.current,
     mapOption = {
       center: new kakao.maps.LatLng(37.566826, 126.9786567),
       level: 3 
@@ -127,12 +127,34 @@ const KeyMap = ({ location, setPlace, setModal }: KeyMapProps) => {
 
   return (
     <MapWrap>
-      <Map ref={mapRef} id="map"></Map>
-      <MenuWrap ref={menuRef} id="menu_wrap" >
+      <Map ref={mapRef}>
+      <MenuWrap ref={menuRef} search={location}>
         <Option>
         </Option>
         <div>
-          <Ul ref={placesListRef} id="placesList">
+          <Ul ref={placesListRef}>
+            {places
+              ? places.map((el, idx) => {
+                  return (
+                    <li key={el.id} id={`${idx}`} onClick={(e) => selectPlace(e.currentTarget.id)}>
+                      <h5>{el.place_name}</h5>
+                      <div>{el.address_name}</div>
+                      <div>{el.phone}</div>
+                    </li>
+                  )
+                })
+              : <></>
+            }
+          </Ul>
+        </div>
+      </MenuWrap>
+
+      </Map>
+      <MenuWrap ref={menuRef} className='hidden' search={location}>
+        <Option>
+        </Option>
+        <div>
+          <Ul ref={placesListRef}>
             {places
               ? places.map((el, idx) => {
                   return (
@@ -153,38 +175,50 @@ const KeyMap = ({ location, setPlace, setModal }: KeyMapProps) => {
 }
 
 const MapWrap = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 10;
-  background-color: rgba(0, 0, 0, 0.3);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  display: flex;
+  width: 600px;
+  height: 600px;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    height: 100%;
+  }
 `
 const Map = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 600px;
+  height: 600px;
   position: relative;
   overflow: hidden;
-  background-color: blue;
+  border-radius: 10px;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
 `
-const MenuWrap = styled.div`
-  position:absolute;
-  top:0;
-  left:0;
-  bottom:0;
-  width:250px;
-  margin:10px 0 30px 10px;
+interface MenuWrapI {
+  search: string;
+}
+const MenuWrap = styled.div<MenuWrapI>`
+  position:relative;
+  width:200px;
+  height: 600px;
   padding:5px;
   overflow-y:auto;
-  background:rgba(255, 255, 255, 0.7);
+  display: ${(props) => props.search === '' ? 'none' : 'flex'};
+  justify-content: center;
+  background-color: rgba(131, 185, 255, 0.7);
   z-index: 12;
   font-size:12px;
   border-radius: 10px;
-  
+  &.hidden {
+    display: none;
+    @media screen and (max-width: 600px) {
+      display: flex;
+      justify-content: center;
+      width: 300px;
+      background-color: rgba(131, 185, 255, 1);
+    }
+  }
 `
 const Option = styled.div`
   text-align: center;
