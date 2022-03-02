@@ -23,9 +23,7 @@ function Timer () {
     const filtered = res.data.groups.filter((el:any)=>{
       return el.groupId === Number(params.id);    
     });
-    console.log(filtered[0]?._group.time)
-    console.log(res.data)
-
+    console.log(filtered[0]?._group.time);
     let setDate = new Date(filtered[0]?._group.time);
 
     const now = new Date();

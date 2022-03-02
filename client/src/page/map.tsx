@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import url from '../url';
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
@@ -33,6 +33,8 @@ function Map ({ user }: MapProps) {
     x: 127.0350,
     y: 37.4830
   })
+  const mapRef = useRef<HTMLDivElement>(null);
+  // const [once, setOnce] = useState<boolean>(false);
   const params= useParams();
   const navigate = useNavigate();
 
@@ -51,18 +53,26 @@ function Map ({ user }: MapProps) {
     // {withCredentials: true});
     if (params.userId) { //socket으로 변환
       socket.emit("join", `${params.userId}`);
+      socket.emit("getPosition", `${params.userId}`);
       socket.on("getPosition", (data) => {
         console.log('getPosition');
         console.log(data);
-        setMember({
-          x: data.x,
-          y: data.y
-        });
+        if (!data.x || !data.y) {
+          setMember({
+            x: res.data.groupInfo.x,
+            y: res.data.groupInfo.y
+          })
+        } else {
+          setMember({
+            x: Number(data.x) + Math.random()/10,
+            y: Number(data.y) + Math.random()/10
+          });
+        }
       });
-      setMember({
-        x: Number(res.data.groupInfo.x) + 0.0005,
-        y: Number(res.data.groupInfo.y) + 0.0005
-      })
+      // setMember({
+      //   x: Number(res.data.groupInfo.x) + 0.0005,
+      //   y: Number(res.data.groupInfo.y) + 0.0005
+      // })
     }
   }
 
@@ -72,7 +82,7 @@ function Map ({ user }: MapProps) {
 
   useEffect(() => {
     const markerPosition  = new kakao.maps.LatLng(target.y, target.x);  
-    const container = document.getElementById("map");
+    const container = mapRef.current;
     const options = params.userId 
       ? { center: new kakao.maps.LatLng(member.y, member.x) }
       : { center: new kakao.maps.LatLng(target.y,target.x) }
@@ -98,7 +108,7 @@ function Map ({ user }: MapProps) {
     <div>
       <Outer>          
       <div>
-        <Mapbox id="map"  >
+        <Mapbox ref={mapRef} id="map"  >
         {/* <div id="map" /> */}
         </Mapbox>
       </div>
@@ -112,14 +122,12 @@ function Map ({ user }: MapProps) {
 }
 
 const Mapbox = styled.div`
-  
   width:100vw;
   height:93vh;
   /* @media screen and (max-width:760px){
   width:360px;
   height:360px;
   } */
-
   span {
     display: inline-block;
     width: 20px;

@@ -26,7 +26,8 @@ module.exports = {
           await users_groups.create({
             userId: userId,
             groupId: group.dataValues.id,
-            overtime: '00:00:00'
+            overtime: '00:00:00',
+            arrive: 'false'
           });
           // 반복문 돌려서 초대 인원만큼 users_groups 테이블에 groupId, userId 추가
           for (let i = 0; i < inviteId.length; i++) {
@@ -34,7 +35,8 @@ module.exports = {
             await users_groups.create({
               groupId: group.dataValues.id,
               userId: inviteId[i], // userId에 값 생성이 안되는 문제 -_- // foreign key 설정 해놓은 상태라서 초대하고자 하는 userId가 users table에 있어야함
-              overtime: '00:00:00'
+              overtime: '00:00:00',
+              arrive: 'false'
             });
           }
         }

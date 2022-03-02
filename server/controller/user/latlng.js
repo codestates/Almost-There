@@ -10,7 +10,7 @@ module.exports = {
       } else {
         const { userId } = userInfo;
         const { x, y } = req.body;
-        console.log(x,y)
+        console.log(x, y);
         const updateInfo = {
           x: x,
           y: y
