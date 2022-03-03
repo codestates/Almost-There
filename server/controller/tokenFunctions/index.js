@@ -35,25 +35,5 @@ module.exports = {
     } catch (err) {
       return null;
     }
-  },
-  authorizeSocket: (cookie) => {
-    if (!cookie) return null;
-    const token = cookie.split('jwt=')[1].split('; ')[0];
-    try {
-      return verify(token, process.env.ACCESS_SECRET, async (err, result) => {
-        if (err) return null;
-        else {
-          const { userId } = result;
-          const user = await users.findOne({
-            attributes: ['id', 'userId'],
-            where: { userId }
-          });
-          if (!user) return null;
-          else return result;
-        }
-      });
-    } catch (err) {
-      return null;
-    }
   }
 };
