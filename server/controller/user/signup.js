@@ -10,7 +10,7 @@ module.exports = {
         return res.status(400).send({ message: 'bad request' });
       }
       const hashPassword = crypto.createHash('sha512').update(password).digest('hex');
-      const [userInfo, created] = await users.findOrCreate({
+      const [userInfo] = await users.findOrCreate({
         where: { userId },
         defaults: { userId, password: hashPassword, name, email, social: 'AT' },
         raw: true

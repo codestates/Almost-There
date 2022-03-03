@@ -1,5 +1,3 @@
-const group = require('.');
-const { _groups } = require('../../models');
 const { users_groups } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 module.exports = {

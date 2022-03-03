@@ -1,4 +1,4 @@
-const { notifications_users, notifications } = require('../../models');
+const { notifications_users, _groups } = require('../../models');
 const { isAuthorized } = require('../tokenFunctions');
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
           where: {
             receiver: userId
           },
-          include: notifications
+          include: _groups
         });
         const notice = result.sort((a, b) => a.createdAt - b.createdAt);
         return res.send({ notice });

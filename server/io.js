@@ -33,18 +33,12 @@ module.exports = function (server) {
 
         // 채널 들어가기(본인 아이디)
         socket.join(`notice ${userId}`);
-        // socket.join(`send position ${userId}`)
-        // socket.join(`accept notice ${userId}`)
 
         // 채널 들어가기(소속된 그룹)
         const result = await users_groups.findAll({ where: { userId } });
         for (let i = 0; i < result.length; i++) {
           socket.join(`group ${result[i].dataValues.groupId}`);
         }
-        console.log(socket.rooms);
-        // socket.on('joinGroup', (groupId) => {
-        //   socket.join(`group ${groupId}`)
-        // })
       } catch (err) {
         io.emit('error', err);
       }
@@ -60,7 +54,6 @@ module.exports = function (server) {
           room.includes('group') ? socket.leave(room) : null;
           room.includes('notice') ? socket.leave(room) : null;
         });
-        console.log(rooms);
       } catch (err) {
         io.emit('error', err);
       }
@@ -68,14 +61,10 @@ module.exports = function (server) {
 
     // ! create group / 그룹 생성: group/create (POST)
     socket.on('joinGroup', (groupId) => {
-      console.log(groupId);
       socket.join(`group ${groupId}`);
       io.to(`group ${groupId}`).emit('joinGroup', `join group ${groupId}`);
-      console.log(socket.rooms);
-      // socket.on('joinGroup', (groupId) => {
-      //   socket.join(`group ${groupId}`)
-      // })
     });
+
     // ! 실시간 위치 정보
     // 내 위치 정보 -> 도착 여부 알려주기
     // 업데이트 -> 업데이트 될 때 마다 본인 userId room 에다가 x,y를 보내주기
@@ -85,8 +74,7 @@ module.exports = function (server) {
       const updateData = {
         x: payload.position.x,
         y: payload.position.y
-      }
-      console.log(payload);
+      };
       await users.update(updateData, {
         where: { userId: payload.user.userId }
       });
@@ -103,23 +91,23 @@ module.exports = function (server) {
       console.log(groups);
       // 도착시간과 현재시간 비교
       const filter = groups.filter((el) => {
-        let a = new Date(el.dataValues._group.dataValues.time).getTime();
-        let b = new Date().getTime();
-        return Number(Math.floor((a-b)/(1000 * 60))) < 10;
+        const a = new Date(el.dataValues._group.dataValues.time).getTime();
+        const b = new Date().getTime();
+        return Number(Math.floor((a - b) / (1000 * 60))) < 10;
       });
       console.log(filter);
 
       // 목적지와 현재위치 비교
-      filter.forEach(async(el) => {
-        if ( (Math.floor(payload.position.x*100)/100) === (Math.floor(el.dataValues._group.dataValues.x*100)/100) &&
-        (Math.floor(payload.position.y*100)/100) === (Math.floor(el.dataValues._group.dataValues.y*100)/100) ) {
+      filter.forEach(async (el) => {
+        if ((Math.floor(payload.position.x * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.x * 100) / 100) &&
+        (Math.floor(payload.position.y * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.y * 100) / 100)) {
           await users_groups.update({ arrive: 'true' },
-          { 
-            where: {
-              groupId: el.dataValues.groupId,
-              userId: el.dataValues.userId
-            }
-          });
+            {
+              where: {
+                groupId: el.dataValues.groupId,
+                userId: el.dataValues.userId
+              }
+            });
 
           const groupMembers = await users_groups.findAll({
             where: {
@@ -131,7 +119,8 @@ module.exports = function (server) {
             await notifications_users.create({
               sender: el.dataValues.userId,
               receiver: groupMembers[i].dataValues.userId,
-              notifyId: 3
+              notifyId: 3,
+              groupId: groupId
             });
           }
           io.to(`group ${el.dataValues.groupId}`).emit('arrive', el.dataValues.groupId, el.dataValues.userId, 'true');
@@ -139,7 +128,7 @@ module.exports = function (server) {
         }
       });
 
-      io.to(`pos ${payload.user.userId}`).emit('getPosition', {x:payload.position.x, y:payload.position.y} )
+      io.to(`pos ${payload.user.userId}`).emit('getPosition', { x: payload.position.x, y: payload.position.y });
     });
 
     // ! getPosition: 다른 사람의 위치 정보 요청 시 요청한 클라이언트에 위치 정보 전달
@@ -156,71 +145,91 @@ module.exports = function (server) {
 
     // ! overtime
     socket.on('overtime', async (groupId, userId, time) => {
-      await users_groups.update({ overtime: time }, { 
+      await users_groups.update({ overtime: time }, {
         where: { groupId, userId }
       });
       io.to(`group ${groupId}`).emit('overtime', groupId, userId, time);
-    });    
+    });
 
     // ! notify / 알림
     socket.on('notify', async (type, sender, groupId) => {
+      const group = await _groups.findOne({ where: { id: groupId } });
+      const groupName = group.dataValues.name;
       const groupMembers = await users_groups.findAll({
         where: {
           groupId: groupId,
-          userId: { [Op.ne]: sender }
+          userId: { [Op.ne]: sender },
+          arrive: { [Op.ne]: 'leave' }
         }
       });
+
       // 초대 알림
-      if (type === 'invite') {  
+      if (type === 'invite') {
         for (let i = 0; i < groupMembers.length; i++) {
-          await notifications_users.create({
+          const notice = await notifications_users.create({
             sender: sender,
             receiver: groupMembers[i].dataValues.userId,
-            notifyId: 1
+            notifyId: 1,
+            groupId: groupId
           });
-          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, groupId);
-        }          
+          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+        }
       }
 
       // 도착 알림
       if (type === 'arrive') {
         for (let i = 0; i < groupMembers.length; i++) {
-          await notifications_users.create({
+          const notice = await notifications_users.create({
             sender: sender,
             receiver: groupMembers[i].dataValues.userId,
-            notifyId: 2
+            notifyId: 2,
+            groupId: groupId
           });
+          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
-        io.to(`group ${groupId}`).emit('notify', type, sender, groupId);
       }
 
       // 탈퇴 알림
       if (type === 'leave') {
         for (let i = 0; i < groupMembers.length; i++) {
-          await notifications_users.create({
+          const notice = await notifications_users.create({
             sender: sender,
             receiver: groupMembers[i].dataValues.userId,
-            notifyId: 3
+            notifyId: 3,
+            groupId: groupId
           });
+          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
         socket.leave(`group ${groupId}`);
-        io.to(`group ${groupId}`).emit('notify', type, sender, groupId);
         io.to(`group ${groupId}`).emit('leave', groupId, sender, 'leave');
       }
     });
 
     // ! join
-    socket.on("join", (userId) => {
+    socket.on('join', (userId) => {
       console.log('join', userId);
-      socket.join(`pos ${userId}`)
+      socket.join(`pos ${userId}`);
     });
 
     // ! leave
-    socket.on("leave", (userId) => {
+    socket.on('leave', (userId) => {
       console.log('leave', userId);
-      socket.leave(`pos ${userId}`)
+      socket.leave(`pos ${userId}`);
     });
-
   });
   return io;
 };
+
+/*
+
+! 쓰지 않는 API 삭제 -> notification/send (POST), user/info (GET) query 옵션
+
+! 알림 -> 불참한 사람 제외하는 쿼리 추가
+
+! notifications_users 필드 추가 -> notify 이벤트에 그룹 관련 정보 포함
+
+*/
+
+// notifications_users id
+// socket ('notify' 이벤트) ->
+// type, sender, notifyId(알림의 고유번호), groupId, groupName

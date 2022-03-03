@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       _groups.hasMany(models.users_groups, { foreignKey: 'groupId', sourceKey: 'id', onDelete: 'cascade' });
+      _groups.hasMany(models.notifications_users, { foreignKey: 'groupId', sourceKey: 'id', onDelete: 'cascade' });
     }
   }
   _groups.init({
