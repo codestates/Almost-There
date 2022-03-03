@@ -9,14 +9,14 @@ module.exports = {
       try {
         const { userId } = userInfo;
         const groupId = req.params.groupId;
-        console.log('1');
+
         // 소속 그룹 탈퇴
         await users_groups.update({
           overtime: '00:00:00',
           arrive: 'leave'
         },
         { where: { groupId, userId } });
-        console.log('2');
+
         // 다른 그룹원들도 모두 나간 상태면 그 그룹 정보 삭제
         const result = await users_groups.findAll({ where: { groupId } });
         const isAllMemberLeave = result.every(member => member.arrive === 'leave');
@@ -28,15 +28,10 @@ module.exports = {
             where: { groupId }
           });
         }
-        console.log('3');
         return res.send({ message: 'success' });
       } catch (err) {
-        console.log(err);
         return res.status(500).send({ message: 'server error' });
       }
     }
   }
 };
-
-// ! +그룹 탈퇴 알림(user=true)
-// 그룹 탈퇴했다고 다른 3명(불참하지 않는 사람에게만)에게 알림

@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       // users.hasMany(models.users_groups, {foreignKey: 'y', sourceKey: 'y', onDelete:'cascade'});
       users.hasMany(models.notifications_users, { foreignKey: 'sender', sourceKey: 'userId', onDelete: 'cascade' });
       users.hasMany(models.notifications_users, { foreignKey: 'receiver', sourceKey: 'userId', onDelete: 'cascade' });
-      
     }
   }
   users.init({
@@ -28,9 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     social: DataTypes.STRING,
     x: DataTypes.STRING,
-    y: DataTypes.STRING,
-    
-    
+    y: DataTypes.STRING
+
   }, {
     sequelize,
     modelName: 'users'
