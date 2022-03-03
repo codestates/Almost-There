@@ -66,21 +66,6 @@ module.exports = function (server) {
       }
     });
 
-    // ! logout
-    socket.on('logout', (payload) => {
-      console.log(`user ${payload.userId} logout`);
-      try {
-        // 채널 나가기
-        const rooms = socket.rooms;
-        rooms.forEach((room) => {
-          room.includes('group') ? socket.leave(room) : null;
-          room.includes('notice') ? socket.leave(room) : null;
-        });
-      } catch (err) {
-        io.emit('error', err);
-      }
-    });
-
     // ! create group / 그룹 생성: group/create (POST)
     socket.on('joinGroup', (groupId) => {
       console.log(groupId);
@@ -91,9 +76,6 @@ module.exports = function (server) {
       //   socket.join(`group ${groupId}`)
       // })
     });
-    socket.on('joinGroup', (groupId) => {
-      socket.join(`group ${groupId}`)
-      })
     // ! 실시간 위치 정보
     // 내 위치 정보 -> 도착 여부 알려주기
     // 업데이트 -> 업데이트 될 때 마다 본인 userId room 에다가 x,y를 보내주기
@@ -180,14 +162,12 @@ module.exports = function (server) {
 
     // ! notify / 알림
     socket.on('notify', async (type, sender, groupId) => {
-      console.log('a');
       const groupMembers = await users_groups.findAll({
         where: {
           groupId: groupId,
           userId: { [Op.ne]: sender }
         }
       });
-      console.log('b');
       // 초대 알림
       if (type === 'invite') {  
         for (let i = 0; i < groupMembers.length; i++) {
