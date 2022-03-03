@@ -30,6 +30,10 @@ const Notify = ({list, setList, show, setShow}: NotifyProps) => {
   }
 
   const handleMove = (id: string) => {
+    setShow({
+      ...show,
+      notify: false
+    });
     navigate(`/group/${id}`);
   }
 
@@ -39,7 +43,6 @@ const Notify = ({list, setList, show, setShow}: NotifyProps) => {
       notify: false
     })
   }
-
   useEffect(() => {
     const getList = async () => {
       const res = await axios.get(`${url}/notification/list`, { withCredentials: true });
@@ -49,7 +52,9 @@ const Notify = ({list, setList, show, setShow}: NotifyProps) => {
         return {
           id :el.id,
           sender: el.sender,
-          notifyType: el.notification.notifyType
+          notifyType: el.notifyId,
+          groupId: el.groupId,
+          groupName: el._group.name
         }
       })
       setList([...filter]);
@@ -64,29 +69,29 @@ const Notify = ({list, setList, show, setShow}: NotifyProps) => {
           {
             list.map((el) => {
               switch (el.notifyType) {
-                case 'invite':
+                case 1:
                   return (
                     <Notice key={el.id}>
-                      <Title>{el.sender}님의 그룹에 초대되었습니다.</Title>
+                      <Title>{el.sender}님의 {el.groupName}에 초대되었습니다.</Title>
                       <Confirm>
-                        {/* <Move id={`${el.groupId}`} onClick={(e) => handleMove(e.currentTarget.id)}>그룹으로 이동</Move> */}
+                        <Move id={`${el.groupId}`} onClick={(e) => handleMove(e.currentTarget.id)}>그룹으로 이동</Move>
                         <Drop id={`${el.id}`} onClick={(e) => handleDrop(e.currentTarget.id)}><Text>확인</Text></Drop>
                       </Confirm>
                     </Notice>
                   )
-                case 'arrive':
+                case 2:
                   return (
                     <Notice key={el.id}>
-                      <Title>{el.sender}님이 약속 장소에 도착했습니다.</Title>
+                      <Title>{el.sender}님이 {el.groupName}에 도착했습니다.</Title>
                       <Confirm>
                         <Drop id={`${el.id}`} onClick={(e) => handleDrop(e.currentTarget.id)}><Text>확인</Text></Drop>
                       </Confirm>
                     </Notice>
                   )
-                case 'leave':
+                case 3:
                   return (
                     <Notice key={el.id}>
-                      <Title>{el.sender}님이 그룹에서 떠났습니다.</Title>
+                      <Title>{el.sender}님이 {el.groupName}에서 떠났습니다.</Title>
                       <Confirm>
                         <Drop id={`${el.id}`} onClick={(e) => handleDrop(e.currentTarget.id)}><Text>확인</Text></Drop>
                       </Confirm>

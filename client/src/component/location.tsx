@@ -38,7 +38,7 @@ const Location = ({ setModal, setPlace }: LocationProps) => {
     <BackDrop onClick={handleBack}>
       <View onClick={e => e.stopPropagation()}>
         <Search>
-          <Input value={key} onChange={e => setKey(e.target.value)}></Input>
+          <Input value={key} onChange={e => setKey(e.target.value)} autoFocus></Input>
           <Button onClick={handleSend}>검색하기</Button>
         </Search>
         <KeyMap location={location} setPlace={setPlace} setModal={setModal}/>
@@ -62,9 +62,12 @@ const BackDrop = styled.div`
 const View = styled.div`
 `
 const Search = styled.div`
+  position: fixed;
+  z-index: 15;
+  left: 30%;
+  right: 30%;
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
 `
 const Input = styled.input`
   width: 200px;
@@ -72,11 +75,20 @@ const Input = styled.input`
   font-size: 20px;
   padding: 0px 5px;
   position: relative;
+  border-radius: 10px 0px 0px 10px;
   z-index: 20;
 `
-const Button = styled.button`
+const Button = styled.div`
   position: relative;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
+  background-color: #448aff;
+  border-radius: 0 10px 10px 0;
+  color: white;
   z-index: 20;
   cursor: pointer;
   :hover {

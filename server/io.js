@@ -78,7 +78,7 @@ module.exports = function (server) {
       await users.update(updateData, {
         where: { userId: payload.user.userId }
       });
-
+      console.log('a');
       // 도착 여부 판별
       const groups = await users_groups.findAll({
         where: {
@@ -87,12 +87,13 @@ module.exports = function (server) {
         },
         include: _groups
       });
-
+      console.log('b');
+      console.log(groups);
       // 도착시간과 현재시간 비교
       const filter = groups.filter((el) => {
         const a = new Date(el.dataValues._group.dataValues.time).getTime();
         const b = new Date().getTime();
-        return Number(Math.floor(a - b / 1000 * 60)) < 10;
+        return Number(Math.floor((a - b) / (1000 * 60))) < 10;
       });
       console.log(filter);
 
@@ -171,7 +172,7 @@ module.exports = function (server) {
             notifyId: 1,
             groupId: groupId
           });
-          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
       }
 
@@ -184,7 +185,7 @@ module.exports = function (server) {
             notifyId: 2,
             groupId: groupId
           });
-          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
       }
 
@@ -197,7 +198,7 @@ module.exports = function (server) {
             notifyId: 3,
             groupId: groupId
           });
-          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
         socket.leave(`group ${groupId}`);
         io.to(`group ${groupId}`).emit('leave', groupId, sender, 'leave');
