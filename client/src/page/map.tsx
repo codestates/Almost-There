@@ -46,11 +46,9 @@ function Map ({ user }: MapProps) {
   const getlatdes = async () => {
     const res = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`, {withCredentials:true});
     setTarget({
-      x: Number(res.data.groupInfo.x)+0.3,
-      y: Number(res.data.groupInfo.y)+0.3
+      x: Number(res.data.groupInfo.x) + 0.2,
+      y: Number(res.data.groupInfo.y)
     })
-    // const res2 = await axios.get(`${url}/group/memberInfo?groupId=${params.groupId}`,
-    // {withCredentials: true});
     if (params.userId) { //socket으로 변환
       socket.emit("join", `${params.userId}`);
       socket.emit("getPosition", `${params.userId}`);
@@ -59,20 +57,16 @@ function Map ({ user }: MapProps) {
         console.log(data);
         if (!data.x || !data.y) {
           setMember({
-            x: res.data.groupInfo.x + 0.3,
-            y: res.data.groupInfo.y + 0.3
+            x: res.data.groupInfo.x + 0.2,
+            y: res.data.groupInfo.y
           })
         } else {
           setMember({
-            x: Number(data.x) + 0.3,//Math.random()/10,
-            y: Number(data.y) + 0.3//Math.random()/10
+            x: Number(data.x) + 0.2,//Math.random()/10,
+            y: Number(data.y)//Math.random()/10
           });
         }
       });
-      // setMember({
-      //   x: Number(res.data.groupInfo.x) + 0.0005,
-      //   y: Number(res.data.groupInfo.y) + 0.0005
-      // })
     }
   }
 

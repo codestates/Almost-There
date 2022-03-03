@@ -172,7 +172,7 @@ module.exports = function (server) {
             notifyId: 1,
             groupId: groupId
           });
-          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
       }
 
@@ -185,7 +185,7 @@ module.exports = function (server) {
             notifyId: 2,
             groupId: groupId
           });
-          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
       }
 
@@ -198,7 +198,7 @@ module.exports = function (server) {
             notifyId: 3,
             groupId: groupId
           });
-          io.to(`user ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
         }
         socket.leave(`group ${groupId}`);
         io.to(`group ${groupId}`).emit('leave', groupId, sender, 'leave');
