@@ -152,6 +152,23 @@ function Group ({ user }: GroupProps) {
           setMember([...update]);
         }
       })
+      socket.on("leave", (groupId, userId, arrive) => {
+        if (groupId === params.id) {
+          const update = member.map((el) => {
+            if (userId === el.userId) {
+              return {
+                userId: el.userId,
+                overtime: el.overtime,
+                name: el.name,
+                arrive: arrive
+              }
+            } else {
+              return el
+            }
+          })
+          setMember([...update]);
+        }
+      })
       socket.on("overtime", (groupId, userId, overtime) => {
         console.log("time");
         if (groupId === params.id) {
@@ -349,7 +366,7 @@ const TableBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #005ecb;
+  background-color: #448aff;
   color: white;
   border: solid 1px black;
 `
@@ -442,6 +459,7 @@ const PosBox = styled.div`
   align-items: center;
   margin: 0 5px;
   background-color: #448aff;
+  color: white;
   border-radius: 5px;
   &.on {
     :hover {
@@ -464,6 +482,7 @@ const ATBox = styled.div`
   align-items: center;
   margin: 0 5px;
   background-color: #448aff;
+  color: white;
   border-radius: 5px;
   :hover {
     cursor: default;

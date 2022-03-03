@@ -152,7 +152,7 @@ function Mypage ({user,setUser}:mypageprops) {
 const DialogButton = styled.button`
   width: 120px;
   height: 40px;
-  background-color: blueviolet;
+  background-color: #aaaaaa;
   padding: 0px 10px 0px 10px;
   color: white;
   font-size: 15px;
@@ -174,34 +174,32 @@ const UserinfoDetail = styled.div`
   height: 400px;
   display: flex;
   flex-direction: column;
-  border-top: solid black 1px;
-  border-bottom: solid black 1px;
   padding: 15px 0px 15px 0px;
   font-size: 20px;
   text-align: left;
-  border-radius : 1px;
+  border-radius : 5px;
   /* border: solid blue; */
   div {
     padding: 10px;
   }
 `
 const MypageStyle = styled.div`
-  background-color: rgb(225, 236, 237);
+  background-color: #fefefe;
   width: 100vw;
   height: 93vh;
-  font-size: 30px;
   @media screen and (max-width: 760px) {
     height: 100%;
   }
 `
 const UserinfoTitle = styled.div`
   padding: 15px 0px 15px 0px;
+  font-size: 30px;
   border-radius : 1px;
   /* border: solid yellow; */
 `
 const Userinfo = styled.div`
-  width:300px;
-  height: 90vh;
+  width: 300px;
+  height: 440px;
   background-color: #eeeeee;
   display: flex;
   /* justify-content:space-around; */
@@ -258,6 +256,7 @@ const GroupBox = styled.div`
 `
 const GroupTitle = styled.div`
   padding: 15px 0px 15px 0px;
+  font-size: 30px;
 `
 const GroupName = styled.div`
   display: flex;
@@ -280,6 +279,7 @@ const GroupI = styled.div`
   width: 600px;
   height: 80px;
   div {
+    font-size: 20px;
     width: 150px;
     &.place {
       font-size: 20px;
@@ -338,7 +338,7 @@ const Group2 =styled.div`
   justify-content: center;
   align-items: center;
   margin: 10px;
-  background-color: #448aff;
+  background-color: #aaaaaa;
   border-radius: 10px;
   :hover {
     cursor: pointer;
@@ -353,7 +353,7 @@ const Group2 =styled.div`
   }
   @media screen and (max-width: 960px) {
     width: 100px;
-    background-color: #e1bee7;
+    background-color: #aaaaaa;
     div {
       &.out {
         display: none;
@@ -368,8 +368,8 @@ const UserGroup =styled.div`
   flex-direction: row;
   justify-content: space-evenly;
   margin: 0px 15px 0px 0px;
-  border-radius : 3px;
-  border: solid blue;
+  border-radius : 5px;
+  /* border: solid blue; */
   @media screen and (max-width: 760px){
     flex-direction: column;
     justify-content: center;

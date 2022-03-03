@@ -86,10 +86,11 @@ module.exports = function (server) {
         x: payload.position.x,
         y: payload.position.y
       }
+      console.log(payload);
       await users.update(updateData, {
         where: { userId: payload.user.userId }
       });
-
+      console.log('a');
       // 도착 여부 판별
       const groups = await users_groups.findAll({
         where: {
@@ -98,12 +99,13 @@ module.exports = function (server) {
         },
         include: _groups
       });
-
+      console.log('b');
+      console.log(groups);
       // 도착시간과 현재시간 비교
       const filter = groups.filter((el) => {
         let a = new Date(el.dataValues._group.dataValues.time).getTime();
         let b = new Date().getTime();
-        return Number(Math.floor(a-b/1000 * 60)) < 10;
+        return Number(Math.floor((a-b)/(1000 * 60))) < 10;
       });
       console.log(filter);
 
@@ -203,6 +205,7 @@ module.exports = function (server) {
         }
         socket.leave(`group ${groupId}`);
         io.to(`group ${groupId}`).emit('notify', type, sender, groupId);
+        io.to(`group ${groupId}`).emit('leave', groupId, sender, 'leave');
       }
     });
 
