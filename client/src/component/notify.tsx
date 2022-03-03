@@ -44,6 +44,7 @@ const Notify = ({list, setList, show, setShow}: NotifyProps) => {
     const getList = async () => {
       const res = await axios.get(`${url}/notification/list`, { withCredentials: true });
       console.log(res.data);
+      // groupId, groupname
       const filter = res.data.notice.map((el:any) => {
         return {
           id :el.id,
