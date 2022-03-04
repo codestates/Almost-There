@@ -9,6 +9,7 @@ import Home0 from "../data/Home0.png"
 import Home1 from "../data/Home1.png"
 import Home2 from "../data/Home2.png"
 import Home3 from "../data/Home3.png"
+import gps from "../data/gps.png"
 
 
 // import {Home2} from "../data/index"
@@ -25,16 +26,30 @@ interface User {
 type HomeProps = {
   setLogin: React.Dispatch<React.SetStateAction<boolean>>
   setUser: React.Dispatch<React.SetStateAction<User>>
+  login: boolean
 }
 
-function Home ({setLogin, setUser}: HomeProps) {
+function Home ({setLogin, setUser, login }: HomeProps) {
   let code = new URL(window.location.href).searchParams.get('code');
   let userState = new URL(window.location.href).searchParams.get('state');
   const homeRef = useRef(null);
   const navigate = useNavigate();
-  const text1 = " 30분째 거의 다 왔다고만 하는 친구 때문에 \n  더 이상 애태우지 마세요! "
-  const text2 = " 나 기다리게 하지 마라... \n 도착했음을 친구들에게 알릴 수 있어요 "
+  const text0 = "약속장소에 거의 다 왔다고만 하는 친구가 \n 어디에 있는지 궁금할 때"
+  const text1 = " 30분째 거의 다 왔다고만 하는 친구 때문에 \n  답답했던 경험 있으시죠? "
+  // const text11 = "약속시간 10분 전부터 \n 친구의 위치를 파악할 수 있습니다."
+  
+  const text2 = "나의 도착여부를 친구들에게 알릴 수 있어요 "
+  const text21 = "약속장소에 도착한 후 \n 그룹원에게 자동으로 도착알림이 도착합니다."
+
   const text3 = " 친구가 지금 어디에 있는지 \n 실시간으로 알 수 있습니다. "
+  const text31 = "실시간 위치파악기능을 통해 \n 친구의 위치를 파악할 수 있습니다."
+
+  const clickHome = () => {
+    navigate('/creategroup');
+  }
+
+
+
 
   useEffect(() => {
     switch (localStorage.getItem('social')) {
@@ -158,15 +173,25 @@ function Home ({setLogin, setUser}: HomeProps) {
       <IntroduceMain>
           <MainLeft>
             <Slogan>
-              약속장소에 거의 다 왔다고만 하는 친구가 어디에 있는지 궁금할 때
+              {text0}
             </Slogan>
             <Title>
               Almost There
+              <Logo>
+              <img alt="profile" className="scale-down" src={gps} />
+              </Logo>
+
             </Title>
-            <Start>
-              시작하기/체험하기
-            </Start>
+            {/* <Start> */}
+              {login 
+              ? <Start
+              onClick={clickHome}
+              >시작하기</Start>
+              : <Start> 체험하기</Start>
+              }
+            {/* </Start> */}
           </MainLeft>
+          <div></div>
           <MainRight>
             <MainRightImage>
               <img alt="profile" className="scale-down" src={Home0} />
@@ -181,29 +206,44 @@ function Home ({setLogin, setUser}: HomeProps) {
           <Text1>
             {text1}
           </Text1>
+          <Text11>
+            {/* {text11} */}
+          </Text11>
+
         </TextBox1>
       </Introduce1>
-      <Introduce2>
-        <TextBox2 className='gs_reveal gs_reveal_fromLeft'>
-          <Text2>
-            {text2}
-          </Text2>
-        </TextBox2>
-        <Image2 className='gs_reveal gs_reveal_fromRight'>
-        <img alt="profile" className="scale-down" src={Home2} />
-        </Image2>
-      </Introduce2>
       <Introduce3>
-        <Image3 className='gs_reveal gs_reveal_fromLeft'>
-          <img alt="profile" className="scale-down" src={Home3} />
-
-        </Image3>
-        <TextBox3 className='gs_reveal gs_reveal_fromRight'>
+        <TextBox3 className='gs_reveal gs_reveal_fromLeft'>
           <Text3>
             {text3}
           </Text3>
+          <Text31>
+            {text31}
+          </Text31>
+ 
         </TextBox3>
+        <Image3 className='gs_reveal gs_reveal_fromRight'>
+          <img alt="profile" className="scale-down" src={Home3} />
+
+        </Image3>
+
       </Introduce3>
+      <Introduce2>
+        <Image2 className='gs_reveal gs_reveal_fromLeft'>
+        <img alt="profile" className="scale-down" src={Home2} />
+        </Image2>
+        <TextBox2 className='gs_reveal gs_reveal_fromRight'>
+          <Text2>
+            {text2}
+          </Text2>
+          <Text21>
+            {text21}
+          </Text21>
+
+        </TextBox2>
+
+
+      </Introduce2>
 
 
 
@@ -219,11 +259,25 @@ function Home ({setLogin, setUser}: HomeProps) {
 
 const IntroduceMain = styled.div`
   border-radius : 4px;
-  border: solid red;
-  background-color: #e1bee7;
-  height: 500px;
+  /* border: solid red; */
+  background-color: #eeeeee;
+
+  /* background-color: #e1bee7; */
+  /* background-color:#ffffff; */
+  /* background-color:#b6c4d9; */
+    flex-direction:row;
+
+  height: 800px;
   display:flex;
-  flex-direction:row;
+  @media screen and (max-width: 960px){
+    /* width: 450px;     */
+    flex-direction:row;
+  }
+  @media screen and (max-width: 400px){
+    /* width: 450px;     */
+    flex-direction:column;
+  }
+
   padding: 30px 0px 0px 0px;
 
 `
@@ -231,15 +285,34 @@ const IntroduceMain = styled.div`
 const Introduce1 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #f8bbd0;
-  height: 1000px;
+  /* background-color:#a1dec5; */
+  /* background-color: #f8bbd0; */
+  background-color:#e0e0e0;
   display:flex;
-  flex-direction:row;
+  justify-content:space-evenly;
+  align-items:center;
+  @media screen and (max-width: 1300px){
+  }
+
+  @media screen and (max-width: 720px){
+    flex-direction:column
+  }
+
+
+  height: 800px;
+  display:flex;
+  /* @media screen and (max-width: 660px){
+    width: 350px;    
+    flex-direction:column
+  } */
 `
 const Introduce2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #c5cae9;
+  /* background-color:#ffffff; */
+  /* background-color: #fff9c4; */
+
+  background-color: #eeeeee;
   height: 800px;
   display:flex;
   flex-direction:row;
@@ -249,10 +322,19 @@ const Introduce2 = styled.div`
 const Introduce3 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #b2dfdb;
+  background-color:#e0e0e0;
+
+  /* background-color:#ffffff; */
+  /* background-color: #b2dfdb; */
+  /* background-color: #fce4ec; */
+
   height: 800px;
   display:flex;
-  flex-direction:row;
+  /* flex-direction:row; */
+  @media screen and (max-width: 660px){
+    flex-direction:column;
+
+  }
 
 
 `
@@ -260,33 +342,60 @@ const Introduce3 = styled.div`
 
 const MainLeft = styled.div`
   border-radius : 1px;
-  border: solid pink;
+  /* border: solid red; */
   /* height:490px; */
   width:50vw;
   display:flex;
   flex-direction:column;
+  @media screen and (max-width: 720px){
+
+  }
+  @media screen and (max-width: 400px){
+    width: 400px;
+  }
+
 
 
 `
 
 const MainRight = styled.div`
   border-radius : 1px;
-  border: solid blue;
+  /* border: solid blue; */
   /* height:490px; */
   width:50vw;
-
 
 `
 const MainRightImage = styled.div`
   border-radius : 1px;
   border: solid blue;
-  background-color:gray;
+
+  /* background-color:gray; */
+  /* background-color:#b6c4d9; */
+  /* background-color:#ffffff; */
+
   height:450px;
   width:35vw;
-  margin: 0px 150px 0px 150px;
+  margin: 0px 0px 250px 0px;
+
   .scale-down{
-    width: 550px; height: 400px;
+    width: 600px; 
+    height: 600px;
     object-fit: scale-down;
+    @media screen and (max-width: 1300px){
+    width: 500px;   
+    height: 500px; 
+  }
+
+    @media screen and (max-width: 960px){
+    width: 400px;
+    height: 400px 
+  }
+  @media screen and (max-width: 840px){
+    width: 300px;
+    height: 300px 
+  }
+
+
   }
   &.gs_reveal {
     opacity: 0;
@@ -298,23 +407,54 @@ const MainRightImage = styled.div`
 
 const Slogan = styled.div`
   border-radius : 1px;
-  border: solid blue;
-  height:50px;
+  /* border: solid blue; */
+  height:100px;
   font-size:30px;
+  white-space: pre-line;
+  @media screen and (max-width: 1100px){
+    font-size:20px
+  }
+  @media screen and (max-width: 840px){
+    font-size:20px
+  }
+
+
 
 `
-
 const Title = styled.div`
   border-radius : 1px;
-  border: solid blue;
+  /* border: solid blue; */
+  height:400px;
+  font-size:90px;
+  text-align:center;
+
+  @media screen and (max-width: 1100px){
+    font-size:50px
+  }
+  flex-direction:column;
+  @media screen and (max-width: 960px){
+    /* width: 450px;     */
+  }
+  @media screen and (max-width: 840px){
+    font-size:30px;
+    text-align:center
+  }
+
+
+`
+  const Logo = styled.div`
+  border-radius : 1px;
+  /* border: solid red; */
   height:250px;
   font-size:90px;
-
-
+  .scale-down{
+    width: 200px; height: 300px;
+    object-fit: scale-down;
+  }
 `
 const Start = styled.div`
   border-radius : 1px;
-  border: solid blue;
+  /* border: solid blue; */
   height:50px;
   font-size:30px;
 `
@@ -322,13 +462,36 @@ const Start = styled.div`
 const Image1 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: gray;
+  /* background-color:#ffffff; */
+/* 
+  background-color: gray; */
+  /* background-color:#a1dec5; */
+
   height: 800px;
   width: 40vw;
+  @media screen and (max-width: 1300px){
+    width: 300px;
+  }
+  @media screen and (max-width: 960px){
+    width: 300px
+  }
+  @media screen and (max-width: 720px){
+    height:400px;
+  }
+
+
   margin: 70px 50px 70px 50px;
   .scale-down{
-    width: 550px; height: 700px;
+    width: 700px; height: 800px;
     object-fit: scale-down;
+    @media screen and (max-width: 1300px){
+    width: 450px;    
+  }
+  @media screen and (max-width: 960px){
+    width: 300px
+  }
+
+
   }
   &.gs_reveal {
     opacity: 0;
@@ -340,14 +503,20 @@ const Image1 = styled.div`
 const Image2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: gray;
+  /* background-color: #fff9c4; */
+  /* background-color:#ffffff; */
+
   height: 700px;
   width: 50vw;
   /* width: 40vw; */
   margin: 70px 50px 70px 50px;   
   .scale-down{
-    width: 550px; height: 700px;
+    width: 700px; height: 800px;
     object-fit: scale-down;
+    @media screen and (max-width: 660px){
+    width: 450px;    
+  }
+
   }
   &.gs_reveal {
     opacity: 0;
@@ -357,35 +526,50 @@ const Image2 = styled.div`
 `
 const Image3 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
-  background-color: gray;
+  border: solid red;
+  /* background-color:#ffffff; */
+  /* background-color: gray; */
+  /* background-color: #fce4ec; */
+
   height: 700px;
   width: 40vw;
+  /* @media screen and (max-width: 660px){
+    width: 150px;    
+  } */
   margin: 70px 50px 70px 50px;
   .scale-down{
-    width: 550px; height: 700px;
+    width: 700px; height: 800px;
     object-fit: scale-down;
+    @media screen and (max-width: 660px){
+    width: 450px;    
+  }
+
   }
   &.gs_reveal {
     opacity: 0;
     visibility: hidden;
     will-change: transform, opacity;
-  }     
-
+  }
 `
 const TextBox1 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #f8bbd0;
-  background-color: green;
-  /* height: 500px; */
-  /* height: 500px;
-  width: 50vw; */
   height: 350px;
   width: 40vw;
-  margin: 70px 50px 70px 150px;   
+  /* margin: 300px 50px 0px 150px;    */
   display:flex;
   align-items: center;
+  /* vertical-align:middle; */
+  @media screen and (max-width: 1300px){
+    width: 300px;    
+  }
+
+
+  @media screen and (max-width: 400px){
+    width: 200px;    
+  }
+
+  flex-direction:column;
   justify-content: center;
   &.gs_reveal {
     opacity: 0;
@@ -397,51 +581,105 @@ const TextBox1 = styled.div`
 const TextBox2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #f8bbd0;
+  /* background-color:#ffffff; */
+  /* background-color: #fff9c4; */
+
+  /* background-color: #f8bbd0; */
   height: 350px;
   width: 40vw;
   margin: 70px 150px 70px 50px;   
   display:flex;
   align-items: center;
   justify-content: center;
+  flex-direction:column
 
 `
 const TextBox3 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #f8bbd0;
+  /* background-color: #f8bbd0; */
+  /* background-color:#ffffff; */
+  /* background-color: #fce4ec; */
+
+
   height: 350px;
   width: 40vw;
   margin: 70px 50px 70px 150px;   
   display:flex;
   align-items: center;
   justify-content: center;
+  flex-direction:column
+
 
 `
 
 const Text1 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #f8bbd0;
-  font-size:30px;
+  text-align:center;
+  /* line-height: center; */
+  /* background-color: #f8bbd0; */
+  /* background-color:#ffffff; */
+  /* background-color:#a1dec5; */
+  @media screen and (max-width: 1300px){
+    font-size:30px;
+  }
+
+  @media screen and (max-width: 960px){
+    font-size:20px;
+  }
+
+
+
+  font-size:60px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
 `
+
+const Text11 = styled.div`
+
+  font-size:20px;
+  text-align:center;
+  vertical-align:middle;
+  white-space: pre-line;
+  @media screen and (max-width: 400px){
+    font-size:10px;
+  }
+
+`
+
+
 const Text2 = styled.div`
   border-radius : 1px;
   border: solid yellow;
-  background-color: #f8bbd0;
+  /* background-color: #f8bbd0; */
+  /* background-color:#ffffff; */
+  /* background-color: #fff9c4; */
+
   font-size:30px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
   `
+
+const Text21 = styled.div`
+
+  font-size:20px;
+  text-align:center;
+  vertical-align:middle;
+  white-space: pre-line;
+`
+
+
 
 const Text3 = styled.div`
   border-radius : 1px;
+
   border: solid yellow;
-  background-color: #f8bbd0;
+  /* background-color: #fce4ec; */
+  /* background-color:#ffffff; */
+
   font-size:30px;
   text-align:center;
   vertical-align:middle;
@@ -449,6 +687,13 @@ const Text3 = styled.div`
 
   `
 
+const Text31 = styled.div`
+
+font-size:20px;
+text-align:center;
+vertical-align:middle;
+white-space: pre-line;
+`
 export default Home;
 
 

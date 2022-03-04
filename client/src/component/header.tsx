@@ -112,7 +112,7 @@ const Background = styled.div`
   position: sticky;
   top: 0;
   justify-content: space-between;
-  background-color:white;
+  background-color:#edf0f2;
   align-items: center;
   height: 7vh;
   z-index: 2;

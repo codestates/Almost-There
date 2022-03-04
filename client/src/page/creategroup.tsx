@@ -225,6 +225,9 @@ const Background = styled.div`
   justify-content: center;
   align-items: center;
   /* background-color: #9ccc65; */
+  /* background-color: #ffffff; */
+  /* background-color: #b7c5da ; */
+  background-color:  #f8fdd5;
   border: solid black 1px;
 `
 const Container = styled.div`
@@ -235,7 +238,14 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  background-color: #eeeeee;
+  /* background-color: #eeeeee; */
+  /* background-color:  #b3e5fc; */
+  /* background-color: #e1f5fe; */
+  /* background-color: #b7c5da ; */
+  /* background-color: #ffffff ; */
+  /* background-color:  #e3f2fd; */
+  background-color: #8ad270;
+  /* background-color:  #64b5f6; */
   border: solid black 1px;
   border-radius: 5px;
 `
@@ -243,12 +253,24 @@ const Title = styled.div`
   font-size: 20px;
   font-weight: bold;
   padding: 20px 0px;
+  /* background-color: #b7c5da ; */
+  /* background-color: #eeeeee; */
+  /* background-color:  #b3e5fc; */
+  /* background-color: #e1f5fe; */
+  /* background-color: #b7c5da ; */
+  /* background-color: #83b9ff; */
+  background-color: #a5d6a7;
+
   /* border: solid black 1px; */
   `
 const Title2 = styled.div`
   width: 200px;
   font-weight: bold;
   border-bottom: solid black 1px;
+  /* background-color: #bbdefb; */
+  /* background-color: #83b9ff; */
+  background-color: #a5d6a7; 
+
 `
 const Contents1 = styled.div`
   height : 200px;
@@ -257,7 +279,10 @@ const Contents1 = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  background-color: white;
+  /* background-color: white; */
+  /* background-color: #bbdefb; */
+  background-color: #a5d6a7;
+
   border-radius: 5px;
   /* border: solid black 1px; */
 `
@@ -300,6 +325,9 @@ const Box3 = styled.div`
   height: 60px;
   display: flex;
   justify-content: center;
+  background-color: #4caf50;
+
+  /* background-color: #bbdefb; */
   align-items: center;
   /* border: solid black 1px; */
   button {
@@ -327,6 +355,9 @@ const Input4 = styled.input`
 const Button3 = styled.button`
   width: 107.43px;
   height: 24.4px;
+  /* background-color: #83b9ff; */
+  background-color:#b7c5da;
+  /* background-color:#a5d6a7; */
 `
 const TitleBox = styled.div`
   width: 500px;
@@ -334,7 +365,9 @@ const TitleBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #83b9ff;
+  /* background-color: #83b9ff; */
+  background-color: #4caf50;
+
   border: solid black 1px;
   border-radius: 5px 5px 0px 0px;
   `
@@ -346,7 +379,10 @@ const Title3 = styled.div`
   align-items: center;
   font-weight: bold;
   /* background-color: #83b9ff; */
-  /* border: solid black 1px; */
+  /* background-color: #8bc34a; */
+  background-color: #4caf50;
+  
+/* border: solid black 1px; */
 `
 const InviteBox = styled.div`
   width: 100px;
@@ -360,9 +396,10 @@ const List = styled.div`
   width: 500px;
   height: 300px;
   overflow: scroll;
-  background-color: white;
   border-radius: 0px 0px 5px 5px;
   border: solid black 1px;
+  /* background-color: #bbdefb; */
+  background-color: #a5d6a7;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -374,6 +411,7 @@ const Li = styled.div`
   justify-content: space-around;
   align-items: center;
   border-bottom: solid green 1px;
+  
 `
 const NameBox = styled.div`
   width: 200px;
@@ -381,6 +419,7 @@ const NameBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  
   /* border: solid black 1px; */
 `
 const DropButton = styled.div`
@@ -389,12 +428,18 @@ const DropButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  
   /* border: solid black 1px; */
 `
 const Button2 = styled.button`
   width: 150px;
   height: 40px;
   margin: 10px;
+  /* background-color: #bbdefb; */
+  /* background-color: #01579b */
+  /* background-color: #83b9ff; */
+  background-color:#0d9652;
+
 `
 
 export default CreateGroup;
