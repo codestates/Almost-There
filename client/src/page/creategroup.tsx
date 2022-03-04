@@ -235,9 +235,13 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  background-color: #95d0f8;
+  background-color: #eceff1;
   border: solid black 1px;
   border-radius: 5px;
+  @media screen and (max-width: 600px) {
+    width: 400px;
+    height: 93vh;
+  }
 `
 const Title = styled.div`
   display: flex;
@@ -264,6 +268,9 @@ const Contents1 = styled.div`
   border-radius: 5px;
   border-top: solid black 1px;
   margin-bottom: 20px;
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Contents2 = styled.div`
   width: 500px;
@@ -274,6 +281,9 @@ const Contents2 = styled.div`
   align-items: center;
   margin-bottom: 20px;
   /* border: solid black 1px; */
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Contents3 = styled.div`
   width: 500px;
@@ -282,6 +292,9 @@ const Contents3 = styled.div`
   justify-content: space-between;
   align-items: center;
   /* border: solid black 1px; */
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Box1 = styled.div`
   width: 500px;
@@ -290,6 +303,9 @@ const Box1 = styled.div`
   justify-content: space-evenly;
   align-items: center;
   border-bottom: solid black 1px;
+  @media screen and (max-width: 600px) {
+    width: 400px;
+  }
 `
 const Box2 = styled.div`
   width: 250px;
@@ -342,7 +358,7 @@ const Button3 = styled.div`
   align-items: center;
   border-radius: 10px;
   border: solid black 1px;
-  background-color: #eeeeee;
+  background-color: #dddddd;
   font-weight: 600;
   :hover {
     background-color: #1a1a1a;
@@ -356,9 +372,12 @@ const TitleBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #dddddd;
+  background-color: #cccccc;
   border: solid black 1px;
   border-radius: 5px 5px 0px 0px;
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
   `
 const Title3 = styled.div`
   width: 200px;
@@ -390,6 +409,9 @@ const List = styled.div`
   border: solid black 1px;
   ::-webkit-scrollbar {
     display: none;
+  }
+  @media screen and (max-width: 600px) {
+    width: 380px;
   }
 `
 const Li = styled.div`

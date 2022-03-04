@@ -20,22 +20,36 @@ const Background = styled.div`
   align-items: center;
 `
 const Img = styled.img`
-  width: 100vw;
-  height: 93vh;
+  width: 80vw;
+  height: 80vh;
 `
 const Text = styled.div`
   position: fixed;
-  top:58vh;
+  top: 35vh;
   color: black;
+  background-color: white;
+  border-radius: 5px;
   text-shadow: white 0px 0px 5px;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
 `
 
 const StyledLink = styled(Link)`
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
-  color: yellow;
-  text-shadow: #000 0px 0px 5px;
+  color: black;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  font-size: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  :hover {
+    background-color: black;
+    color: white;
+  }
   &.home {
     left: 20vw;
     bottom: 10vh;

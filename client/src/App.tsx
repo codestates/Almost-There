@@ -53,6 +53,7 @@ function App() {
         const res = await axios.get(`${url}/user/info`, { withCredentials: true });
         const { userId, name, email } = res.data.user;
         setUser({ userId, name, email });
+        socket.emit("login", { userId, name, email });
         setLogin(true);
       } catch (err) {
         if (watch.current.id !== 0)
@@ -98,6 +99,8 @@ function App() {
       navigator.geolocation.watchPosition(async(coor) => {
         const x = Math.round(coor.coords.longitude*10000)/10000;
         const y = Math.round(coor.coords.latitude*10000)/10000;
+        // const x = coor.coords.longitude;
+        // const y = coor.coords.latitude;
         if (x !== latlng.current.x || y !== latlng.current.y) {
           console.log('send position to server');
           await axios.post(`${url}/user/latlng`,{
