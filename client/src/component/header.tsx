@@ -61,7 +61,7 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm
         <StyledLink to='/'>
           <Logo>
             <Img src={atlogo}/>
-            Almost There
+            <div>Almost There</div>
           </Logo>
         </StyledLink> 
       </Taps>
@@ -77,10 +77,6 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm
               onClick={() => setDisplay(false)}>
               <Tap onClick={clickNotify}>
                 알림
-                {alarm
-                  ? <Alarm></Alarm>
-                  : <></>
-                }
               </Tap>
               <StyledLink to='/creategroup'>
                 <Tap>그룹 생성</Tap>
@@ -90,18 +86,26 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm
               </StyledLink>
             </Direction>
             <LastTap onClick={clickLogout}>로그아웃</LastTap>
+            {alarm
+              ? <Alarm show={display}></Alarm>
+              : <></>
+            }
           </Taps>
         : 
           <Taps>
-            <Menu login={login} onClick={clickMenu}>menu</Menu>
+            <Menu login={login} onClick={clickMenu}>
+              <div>
+                <i className="fa-solid fa-bars"></i>
+              </div>
+            </Menu>
             <Direction login={login} show={display}
               onClick={() => setDisplay(false)}>
               <StyledLink to='/'>
                 <Tap>체험하기</Tap>
               </StyledLink>
-              <Tap onClick={clickLogin}>로그인</Tap>
               <Tap onClick={clickSignin}>회원가입</Tap>
             </Direction>
+            <LastTap onClick={clickLogin}>로그인</LastTap>
           </Taps>
       }
     </Background>
@@ -111,24 +115,28 @@ const Background = styled.div`
   display: flex;
   position: sticky;
   top: 0;
+  background-color: #eceff1;
   justify-content: space-between;
   background-color:#edf0f2;
   align-items: center;
   height: 7vh;
   z-index: 2;
-  @media screen and (max-width: 760px) {
+  box-shadow: 0px 1px 2px black;
+  @media screen and (max-width: 480px) {
     
-    color: black;
   }
 `
 const Taps = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 20px;
 `
 const Logo = styled.div`
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
+  font-weight: bold;
   :hover {
     cursor: pointer;
   }
@@ -138,11 +146,20 @@ const Logo = styled.div`
     left: 30%;
     right: 30%;
   }
+  @media screen and (max-width: 480px) {
+    position: fixed;
+    top: 14px;
+    left: 30%;
+    right: 30%;
+  }
 `
 const Img = styled.img`
   height: 50px;
   :hover {
     color: white;
+  }
+  @media screen and (max-width: 480px) {
+    display: none;
   }
 `
 interface MenuI {
@@ -158,8 +175,7 @@ const Menu = styled.div<MenuI>`
     align-items: center;
     position: fixed;
     top: 0;
-    left: ${(props) => props.login ? 0 : 'none'}px;
-    right: ${(props) => props.login ? 'none' : 0}px;
+    left: 0;
     padding: 10px 20px 10px 20px;
   }
 `
@@ -169,24 +185,27 @@ interface DirectionI {
 }
 const Direction = styled.div<DirectionI>`
   display: flex;
-  width: 320px;
+  width: ${(props) => props.login ? '400px' : '260px'};
   @media screen and (max-width: 760px) {
     width: 100px;
     position: fixed;
     flex-direction: column;
     top: 7vh;
-    left: ${(props) => props.login ? 0 : 'none'};
-    right: ${(props) => props.login ? 'none' : 0};
+    left: 0;
     display: ${(props) => props.show ? 'flex' : 'none'};
-    background-color: white;
+    background-color: #eceff1;
     border-top: solid black 1px;
+    box-shadow: 1px 1px 3px black;
   }
 `
 const Tap = styled.div`
+  width: 130px;
   position: relative;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 0px;
+  font-weight: bold;
+  border-radius: 20px;
   :hover {
-    background-color: #004d40;
+    background-color: #1a1a1a;
     color: white;
     cursor: pointer;
   }
@@ -198,39 +217,52 @@ const Tap = styled.div`
     align-items: center;
     padding: 10px 0px;
     border-bottom: solid black 1px;
+    border-radius: 0px;
   }
 `
 const LastTap = styled.div`
-  padding: 10px 40px 10px 20px;
+  width: 130px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0px;
+  margin-right: 20px;
+  font-weight: bold;
+  border-radius: 20px;
+  align-items: center;
   :hover {
-    background-color: #004d40;
+    background-color: #1a1a1a;
     color: white;
     cursor: pointer;
   }
   @media screen and (max-width: 760px) {
-    position: fixed;
-    top: 0;
-    right: 0;
-    padding: 13px 20px 10px 20px;
+    width : 100px;
+    margin-right: 0px;
   }
 `
-const Alarm = styled.div`
+interface AlarmI {
+  show: boolean
+}
+const Alarm = styled.div<AlarmI>`
   position: fixed;
   top: 10px;
-  right: 380px; 
+  right: 450px; 
   width: 10px;
   height: 10px;
   border-radius: 5px;
   background-color: red;
   z-index:2;
   @media screen and (max-width: 760px) {
-    top: 60px;
-    left: 80px;
+    top: ${(props) => props.show ? '60px': '10px'};
+    left: ${(props) => props.show ? '80px' : '70px'};
   }
 `
 const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
   @media screen and (max-width: 760px) {
     color: black;
   }

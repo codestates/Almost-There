@@ -35,7 +35,7 @@ function Home ({setLogin, setUser, login }: HomeProps) {
   const homeRef = useRef(null);
   const navigate = useNavigate();
   const text0 = "약속장소에 거의 다 왔다고만 하는 친구가 \n 어디에 있는지 궁금할 때"
-  const text1 = " 30분째 거의 다 왔다고만 하는 친구 때문에 \n  답답했던 경험 있으시죠? "
+  const text1 = " 30분째 거의 다 왔다고만 \n하는 친구 때문에 \n  답답했던 경험 있으시죠? "
   // const text11 = "약속시간 10분 전부터 \n 친구의 위치를 파악할 수 있습니다."
   
   const text2 = "나의 도착여부를 친구들에게 알릴 수 있어요 "
@@ -283,15 +283,15 @@ const IntroduceMain = styled.div`
 `
 
 const Introduce1 = styled.div`
+  height: 800px;
   border-radius : 1px;
-  border: solid yellow;
-  /* background-color:#a1dec5; */
-  /* background-color: #f8bbd0; */
+  /* border: solid red; */
   background-color:#e0e0e0;
   display:flex;
   justify-content:space-evenly;
   align-items:center;
   @media screen and (max-width: 1300px){
+    height:500px;
   }
 
   @media screen and (max-width: 720px){
@@ -299,43 +299,47 @@ const Introduce1 = styled.div`
   }
 
 
-  height: 800px;
   display:flex;
-  /* @media screen and (max-width: 660px){
-    width: 350px;    
-    flex-direction:column
-  } */
 `
 const Introduce2 = styled.div`
-  border-radius : 1px;
-  border: solid yellow;
-  /* background-color:#ffffff; */
-  /* background-color: #fff9c4; */
-
-  background-color: #eeeeee;
   height: 800px;
+  border-radius : 1px;
+  /* border: solid blue; */
+  background-color:#e0e0e0;
   display:flex;
-  flex-direction:row;
+  justify-content:space-evenly;
+  align-items:center;
+  @media screen and (max-width: 1300px){
+    height:500px;
+  }
 
+  @media screen and (max-width: 720px){
+    flex-direction:column;
+    height: 700px;
+  }
+
+
+  display:flex;
 
 `
 const Introduce3 = styled.div`
-  border-radius : 1px;
-  border: solid yellow;
-  background-color:#e0e0e0;
-
-  /* background-color:#ffffff; */
-  /* background-color: #b2dfdb; */
-  /* background-color: #fce4ec; */
-
   height: 800px;
+  border-radius : 1px;
+  /* border: solid red; */
+  background-color:#eeeeee;
   display:flex;
-  /* flex-direction:row; */
-  @media screen and (max-width: 660px){
-    flex-direction:column;
-
+  justify-content:space-evenly;
+  align-items:center;
+  @media screen and (max-width: 1300px){
+    height:500px;
   }
 
+  @media screen and (max-width: 720px){
+    flex-direction:column-reverse;
+    height: 700px;
+
+  }
+  
 
 `
 
@@ -352,6 +356,7 @@ const MainLeft = styled.div`
   }
   @media screen and (max-width: 400px){
     width: 400px;
+    height:400px;
   }
 
 
@@ -367,7 +372,7 @@ const MainRight = styled.div`
 `
 const MainRightImage = styled.div`
   border-radius : 1px;
-  border: solid blue;
+  /* border: solid blue; */
 
   /* background-color:gray; */
   /* background-color:#b6c4d9; */
@@ -461,35 +466,38 @@ const Start = styled.div`
 
 const Image1 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
-  /* background-color:#ffffff; */
-/* 
-  background-color: gray; */
-  /* background-color:#a1dec5; */
-
+  /* border: solid yellow; */
   height: 800px;
   width: 40vw;
+  /* margin: 70px 50px 70px 50px; */
   @media screen and (max-width: 1300px){
-    width: 300px;
-  }
-  @media screen and (max-width: 960px){
-    width: 300px
-  }
-  @media screen and (max-width: 720px){
-    height:400px;
-  }
-
-
-  margin: 70px 50px 70px 50px;
+    height: 500px;
+    width: 500px;
+    }
+    @media screen and (max-width: 840px){
+    height: 400px;
+    width:300px;
+    }
   .scale-down{
     width: 700px; height: 800px;
     object-fit: scale-down;
     @media screen and (max-width: 1300px){
-    width: 450px;    
-  }
-  @media screen and (max-width: 960px){
-    width: 300px
-  }
+    height: 500px;
+    width: 500px;
+    }
+    @media screen and (max-width: 960px){
+      height: 400px;
+      width:400px;
+    }
+    @media screen and (max-width: 840px){
+      height: 300px;
+      width:300px;
+    }
+    @media screen and (max-width: 400px){
+      height: 200px;
+      width: 200px;
+
+    }
 
 
   }
@@ -502,20 +510,49 @@ const Image1 = styled.div`
 
 const Image2 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
-  /* background-color: #fff9c4; */
-  /* background-color:#ffffff; */
+  /* border: solid yellow; */
+  height: 800px;
+  width: 40vw;
+  /* margin: 70px 50px 70px 50px; */
+  @media screen and (max-width: 1400px){
+    height: 500px;
+    width: 450px;
+    }
 
-  height: 700px;
-  width: 50vw;
-  /* width: 40vw; */
-  margin: 70px 50px 70px 50px;   
+  @media screen and (max-width: 1300px){
+    height: 500px;
+    width: 300px;
+    }
+    @media screen and (max-width: 840px){
+    height: 400px;
+    width:300px;
+    }
   .scale-down{
     width: 700px; height: 800px;
     object-fit: scale-down;
-    @media screen and (max-width: 660px){
-    width: 450px;    
-  }
+    @media screen and (max-width: 1400px){
+    height: 450px;
+    width: 450px;
+    }
+
+    @media screen and (max-width: 1300px){
+    height: 400px;
+    width: 400px;
+    }
+    @media screen and (max-width: 960px){
+      height: 400px;
+      width:300px;
+    }
+    @media screen and (max-width: 840px){
+      height: 300px;
+      width:300px;
+    }
+    @media screen and (max-width: 400px){
+      height: 200px;
+      width: 200px;
+
+    }
+
 
   }
   &.gs_reveal {
@@ -526,34 +563,50 @@ const Image2 = styled.div`
 `
 const Image3 = styled.div`
   border-radius : 1px;
-  border: solid red;
-  /* background-color:#ffffff; */
-  /* background-color: gray; */
-  /* background-color: #fce4ec; */
-
-  height: 700px;
+  /* border: solid yellow; */
+  height: 800px;
   width: 40vw;
-  /* @media screen and (max-width: 660px){
-    width: 150px;    
-  } */
-  margin: 70px 50px 70px 50px;
+  /* margin: 70px 50px 70px 50px; */
+  @media screen and (max-width: 1300px){
+    height: 400px;
+    width: 400px;
+    }
+    @media screen and (max-width: 840px){
+    height: 300px;
+    width:400px;
+    }
   .scale-down{
     width: 700px; height: 800px;
     object-fit: scale-down;
-    @media screen and (max-width: 660px){
-    width: 450px;    
-  }
+    @media screen and (max-width: 1300px){
+    height: 400px;
+    width: 400px;
+    }
+    @media screen and (max-width: 960px){
+      height: 400px;
+      width:300px;
+    }
+    @media screen and (max-width: 840px){
+      height: 300px;
+      width:300px;
+    }
+    @media screen and (max-width: 400px){
+      height: 200px;
+      width: 200px;
+
+    }
+
 
   }
   &.gs_reveal {
     opacity: 0;
     visibility: hidden;
     will-change: transform, opacity;
-  }
+  }  
 `
 const TextBox1 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
+  /* border: solid yellow; */
   height: 350px;
   width: 40vw;
   /* margin: 300px 50px 0px 150px;    */
@@ -580,14 +633,14 @@ const TextBox1 = styled.div`
 `
 const TextBox2 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
+  /* border: solid yellow; */
   /* background-color:#ffffff; */
   /* background-color: #fff9c4; */
 
   /* background-color: #f8bbd0; */
   height: 350px;
   width: 40vw;
-  margin: 70px 150px 70px 50px;   
+  /* margin: 70px 150px 70px 50px;    */
   display:flex;
   align-items: center;
   justify-content: center;
@@ -596,15 +649,11 @@ const TextBox2 = styled.div`
 `
 const TextBox3 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
-  /* background-color: #f8bbd0; */
-  /* background-color:#ffffff; */
-  /* background-color: #fce4ec; */
-
+  /* border: solid yellow; */
 
   height: 350px;
-  width: 40vw;
-  margin: 70px 50px 70px 150px;   
+  width: 47vw;
+  /* margin: 70px 50px 70px 150px;    */
   display:flex;
   align-items: center;
   justify-content: center;
@@ -615,23 +664,27 @@ const TextBox3 = styled.div`
 
 const Text1 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
+  /* border: solid yellow; */
   text-align:center;
   /* line-height: center; */
   /* background-color: #f8bbd0; */
   /* background-color:#ffffff; */
   /* background-color:#a1dec5; */
+  @media screen and (max-width: 1450px){
+    font-size:30px;
+  }
+
   @media screen and (max-width: 1300px){
     font-size:30px;
   }
 
   @media screen and (max-width: 960px){
-    font-size:20px;
+    font-size:25px;
   }
 
 
 
-  font-size:60px;
+  font-size:50px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
@@ -643,6 +696,11 @@ const Text11 = styled.div`
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
+  @media screen and (max-width: 840px){
+    font-size:20px;
+  }
+
+
   @media screen and (max-width: 400px){
     font-size:10px;
   }
@@ -652,7 +710,7 @@ const Text11 = styled.div`
 
 const Text2 = styled.div`
   border-radius : 1px;
-  border: solid yellow;
+  /* border: solid yellow; */
   /* background-color: #f8bbd0; */
   /* background-color:#ffffff; */
   /* background-color: #fff9c4; */
@@ -676,7 +734,7 @@ const Text21 = styled.div`
 const Text3 = styled.div`
   border-radius : 1px;
 
-  border: solid yellow;
+  /* border: solid yellow; */
   /* background-color: #fce4ec; */
   /* background-color:#ffffff; */
 

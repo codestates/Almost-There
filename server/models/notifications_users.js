@@ -13,12 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       notifications_users.belongsTo(models.users, { foreignKey: 'sender', targetKey: 'userId', onDelete: 'cascade' });
       notifications_users.belongsTo(models.users, { foreignKey: 'receiver', targetKey: 'userId', onDelete: 'cascade' });
       notifications_users.belongsTo(models.notifications, { foreignKey: 'notifyId', targetKey: 'id', onDelete: 'cascade' });
+      notifications_users.belongsTo(models._groups, { foreignKey: 'groupId', targetKey: 'id', onDelete: 'cascade' });
     }
   }
   notifications_users.init({
     sender: DataTypes.STRING,
     receiver: DataTypes.STRING,
-    notifyId: DataTypes.INTEGER
+    notifyId: DataTypes.INTEGER,
+    groupId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'notifications_users'

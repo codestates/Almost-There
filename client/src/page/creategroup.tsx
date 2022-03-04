@@ -41,7 +41,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
   const [groupName, setGroupName] = useState<string>('동아리 모임');
   const [edit, setEdit] = useState<boolean>(false);
   const refGroupName = useRef<HTMLInputElement>(null);
-  const refPlace = useRef<HTMLButtonElement>(null);
+  const refPlace = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState<Time>({
     year: 2022,
     month: 1,
@@ -176,7 +176,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
             </Box2>
             <Box3>
               <div>
-                <button onClick={handleTime}>약속 시간 선택</button>
+                <Button3 onClick={handleTime}>약속 시간 선택</Button3>
               </div>
             </Box3>
           </Box1>
@@ -187,7 +187,7 @@ function CreateGroup ({ user }: CreateGroupProps) {
             </Box2>
             <Box3>
               <div>
-                <button ref={refPlace} onClick={handleLocation}>약속 장소 선택</button>
+                <Button3 ref={refPlace} onClick={handleLocation}>약속 장소 선택</Button3>
               </div>
             </Box3>
           </Box1>
@@ -195,14 +195,14 @@ function CreateGroup ({ user }: CreateGroupProps) {
         <Contents2>
           <TitleBox>
             <Title3>초대 목록</Title3>
-            <InviteBox><button onClick={handleInvite}>초대 하기</button></InviteBox>
+            <InviteBox><Button3 onClick={handleInvite}>초대 하기</Button3></InviteBox>
           </TitleBox>
           <List>
             {inviteList.map((el, idx) => {
               return (
                 <Li key={idx}>
                   <NameBox>{el}</NameBox>
-                  <DropButton><button onClick={() => handleDelete(idx)}>&times;</button></DropButton>    
+                  <DropButton><div onClick={() => handleDelete(idx)}>&times;</div></DropButton>    
                 </Li>
               )})
             }
@@ -225,9 +225,6 @@ const Background = styled.div`
   justify-content: center;
   align-items: center;
   /* background-color: #9ccc65; */
-  /* background-color: #ffffff; */
-  /* background-color: #b7c5da ; */
-  background-color:  #f8fdd5;
   border: solid black 1px;
 `
 const Container = styled.div`
@@ -238,39 +235,28 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  /* background-color: #eeeeee; */
-  /* background-color:  #b3e5fc; */
-  /* background-color: #e1f5fe; */
-  /* background-color: #b7c5da ; */
-  /* background-color: #ffffff ; */
-  /* background-color:  #e3f2fd; */
-  background-color: #8ad270;
-  /* background-color:  #64b5f6; */
+  background-color: #eceff1;
   border: solid black 1px;
   border-radius: 5px;
+  vertical-align:middle;
+  @media screen and (max-width: 600px) {
+    width: 400px;
+    height: 93vh;
+  }
 `
 const Title = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 20px;
   font-weight: bold;
-  padding: 20px 0px;
-  /* background-color: #b7c5da ; */
-  /* background-color: #eeeeee; */
-  /* background-color:  #b3e5fc; */
-  /* background-color: #e1f5fe; */
-  /* background-color: #b7c5da ; */
-  /* background-color: #83b9ff; */
-  background-color: #a5d6a7;
-
+  height: 50px;
   /* border: solid black 1px; */
   `
 const Title2 = styled.div`
   width: 200px;
   font-weight: bold;
   border-bottom: solid black 1px;
-  /* background-color: #bbdefb; */
-  /* background-color: #83b9ff; */
-  background-color: #a5d6a7; 
-
 `
 const Contents1 = styled.div`
   height : 200px;
@@ -279,12 +265,13 @@ const Contents1 = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  /* background-color: white; */
-  /* background-color: #bbdefb; */
-  background-color: #a5d6a7;
-
+  background-color: white;
   border-radius: 5px;
-  /* border: solid black 1px; */
+  border-top: solid black 1px;
+  margin-bottom: 20px;
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Contents2 = styled.div`
   width: 500px;
@@ -293,7 +280,11 @@ const Contents2 = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  margin-bottom: 20px;
   /* border: solid black 1px; */
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Contents3 = styled.div`
   width: 500px;
@@ -302,6 +293,9 @@ const Contents3 = styled.div`
   justify-content: space-between;
   align-items: center;
   /* border: solid black 1px; */
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Box1 = styled.div`
   width: 500px;
@@ -309,7 +303,10 @@ const Box1 = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  border-bottom: solid red 1px;
+  border-bottom: solid black 1px;
+  @media screen and (max-width: 600px) {
+    width: 400px;
+  }
 `
 const Box2 = styled.div`
   width: 250px;
@@ -325,9 +322,6 @@ const Box3 = styled.div`
   height: 60px;
   display: flex;
   justify-content: center;
-  background-color: #4caf50;
-
-  /* background-color: #bbdefb; */
   align-items: center;
   /* border: solid black 1px; */
   button {
@@ -339,9 +333,14 @@ const Box3 = styled.div`
 `
 const Box4 = styled.div`
   height: 30px;
+  width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
+  /* color: #3d5afe; */
+  color: black;
+  font-size: 15px;
+  font-weight: 500;
   /* border: solid black 1px; */
 `
 const Input4 = styled.input`
@@ -352,12 +351,21 @@ const Input4 = styled.input`
     outline: none;
   }
 `
-const Button3 = styled.button`
-  width: 107.43px;
-  height: 24.4px;
-  /* background-color: #83b9ff; */
-  background-color:#b7c5da;
-  /* background-color:#a5d6a7; */
+const Button3 = styled.div`
+  width: 110px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border: solid black 1px;
+  background-color: #dddddd;
+  font-weight: 600;
+  :hover {
+    background-color: #1a1a1a;
+    color: white;
+    cursor: pointer;
+  }
 `
 const TitleBox = styled.div`
   width: 500px;
@@ -365,11 +373,12 @@ const TitleBox = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* background-color: #83b9ff; */
-  background-color: #4caf50;
-
+  background-color: #cccccc;
   border: solid black 1px;
   border-radius: 5px 5px 0px 0px;
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
   `
 const Title3 = styled.div`
   width: 200px;
@@ -379,13 +388,10 @@ const Title3 = styled.div`
   align-items: center;
   font-weight: bold;
   /* background-color: #83b9ff; */
-  /* background-color: #8bc34a; */
-  background-color: #4caf50;
-  
-/* border: solid black 1px; */
+  /* border: solid black 1px; */
 `
 const InviteBox = styled.div`
-  width: 100px;
+  width: 120px;
   height: 50px;
   display: flex;
   justify-content: center;
@@ -396,22 +402,26 @@ const List = styled.div`
   width: 500px;
   height: 300px;
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
   border-radius: 0px 0px 5px 5px;
   border: solid black 1px;
-  /* background-color: #bbdefb; */
-  background-color: #a5d6a7;
   ::-webkit-scrollbar {
     display: none;
   }
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Li = styled.div`
-  width: 500px;
+  width: 480px;
   height: 50px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-bottom: solid green 1px;
-  
+  border-bottom: solid black 1px;
 `
 const NameBox = styled.div`
   width: 200px;
@@ -419,7 +429,10 @@ const NameBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  
+  font-size: 20px;
+  font-weight: 500;
+  /* color: #3d5afe; */
+  color: black;
   /* border: solid black 1px; */
 `
 const DropButton = styled.div`
@@ -428,18 +441,32 @@ const DropButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  
   /* border: solid black 1px; */
+  div {
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    :hover {
+      cursor: pointer;
+    }
+  }
 `
-const Button2 = styled.button`
+const Button2 = styled.div`
   width: 150px;
   height: 40px;
   margin: 10px;
-  /* background-color: #bbdefb; */
-  /* background-color: #01579b */
-  /* background-color: #83b9ff; */
-  background-color:#0d9652;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  border: solid black 1px;
+  border-radius: 10px;
+  background-color: #dddddd;
+  :hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
 `
 
 export default CreateGroup;

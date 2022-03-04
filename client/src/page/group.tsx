@@ -65,21 +65,21 @@ function Group ({ user }: GroupProps) {
     const { name, place, leaderId, x, y } = res.data.groupInfo;
     date = res.data.groupInfo.time.split(/[TZ\:\.-]/);
     const lastDay = Number(date[0])%4 === 0 ? monthLength2[Number(date[1]) - 1] : monthLength[Number(date[1]) - 1];
-    timeleft.current.left = Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime())/(1000*60));
+    timeleft.current.left = Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime() - 32400000)/1000);
     if (Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime())/(1000*60)) < 10) {
       setCheckloc(true);
     }
-    if (Number(date[3]) + 9 > 24) {
-      if (Number(date[2]) === lastDay) {
-        date[2] = 1;
-        date[1] = Number(date[1]) + 1;
-      } else {
-        date[2] = Number(date[2]) + 1;
-      }
-    } 
+    // if (Number(date[3]) + 9 > 24) {
+    //   if (Number(date[2]) === lastDay) {
+    //     date[2] = 1;
+    //     date[1] = Number(date[1]) + 1;
+    //   } else {
+    //     date[2] = Number(date[2]) + 1;
+    //   }
+    // } 
     let ampm = '';
     date[3] = Number(date[3]);
-    date[3] = date[3] + 9 > 24 ? date[3] + 9 - 24 : date[3] + 9
+    // date[3] = date[3] + 9 > 24 ? date[3] + 9 - 24 : date[3] + 9
     if (date[3] > 12) {
       date[3] = date[3] - 12;
       ampm = '오후'
@@ -117,25 +117,42 @@ function Group ({ user }: GroupProps) {
     setTimeModal(true);
   }
 
-  const leaveGroup = () => {
-    socket.emit("leaveGroup", `${params.groupId}`, user.userId);
-  }
-
   useEffect(() => {     
     getGroupInfo();
     
     let id = setInterval(() => {
-      if (timeleft.current.left < 10 ) {
+      if (timeleft.current.left < 600 ) {
         setCheckloc(true);
       }
       timeleft.current.left = timeleft.current.left - 1;
-    }, 60000);
+    }, 1000);
     return () => clearInterval(id)
   },[]);  
   
   useEffect(() => {
+    let id: any;
     if (member.length > 0) {
       socket.on("arrive", (groupId, userId, arrive) => {
+        if (groupId.toString() === params.id) {
+          console.log(member);
+          const update = member.map((el) => {
+            console.log(el);
+            if (userId === el.userId) {
+              return {
+                userId: el.userId,
+                overtime: el.overtime,
+                name: el.name,
+                arrive: arrive
+              }
+            } else {
+              return el
+            }
+          })
+          console.log(update);
+          setMember([...update]);
+        }
+      })
+      socket.on("leave", (groupId, userId, arrive) => {
         if (groupId === params.id) {
           const update = member.map((el) => {
             if (userId === el.userId) {
@@ -179,14 +196,15 @@ function Group ({ user }: GroupProps) {
         }
       })
       const check = member.every((el) => {
-        console.log(el.arrive);
-        return el.arrive === 'leave'
+        return (el.arrive === 'leave' || el.arrive === 'true')
       })
-      console.log(check);
       if (check) {
-        navigate('/complete');
+        id = setTimeout(() => {
+          navigate('/complete');
+        }, 5000);
       }
     }
+    return () => clearTimeout(id);
   }, [member])
     
   return (
@@ -218,12 +236,12 @@ function Group ({ user }: GroupProps) {
           {/* <Title2 onClick={addTime}><button>도착 예정 시간</button></Title2> */}
           <TableBox>
             <ArriveBox>
-              도착<div className="arrive"></div>
+              도착<div className="true"></div>
               {/* 가는 중<div className="yet"></div> */}
               불참<div className="leave"></div>
             </ArriveBox>
             <PositionBox>위치 확인</PositionBox>
-            <OvertimeBox>추가 시간</OvertimeBox>
+            <OvertimeBox>지각 시간</OvertimeBox>
           </TableBox>
           <List2>
             {
@@ -280,6 +298,10 @@ const Container = styled.div`
   align-items: center;
   background-color: #eeeeee;
   border: solid black 1px;
+  @media screen and (max-width: 600px) {
+    width: 400px;
+    height: 93vh;
+  }
 `
 const Contents1 = styled.div`
   width: 500px;
@@ -289,6 +311,9 @@ const Contents1 = styled.div`
   justify-content: space-evenly;
   align-items: center;
   /* border: solid black 1px; */
+  @media screen and (max-width: 600px) {
+    width: 400px;
+  }
 `
 const List1 = styled.div`
   position: relative;  
@@ -321,7 +346,7 @@ const Icon = styled.span`
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  background-color: skyblue;
+  /* background-color: skyblue; */
   :hover {
     cursor: zoom-in;
   }
@@ -340,7 +365,10 @@ const Contents3 = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: solid green 1px;
+  /* border: solid green 1px; */
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const TableBox = styled.div`
   width: 500px;
@@ -349,9 +377,12 @@ const TableBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #005ecb;
-  color: white;
+  background-color: #aaaaaa;
+  color: black;
   border: solid 1px black;
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const ArriveBox = styled.div`
   width: 200px;
@@ -362,21 +393,16 @@ const ArriveBox = styled.div`
   margin: 0 5px;
   div {
     margin: 0 10px 0 0;
-    &.arrive {
+    &.true {
       width: 10px;
       height: 10px;
-      background-color: #21b965;
+      background-color: #b9f6ca;
     }
-    /* &.yet {
-      width: 10px;
-      height: 10px;
-      background-color: #ffd600;
-    } */
     &.leave{
       width: 10px;
       height: 10px;
       margin: 0px;
-      background-color: #d50000;
+      background-color: #ff8a80;
     }
   }
 `
@@ -405,6 +431,9 @@ const List2 = styled.div`
   align-items: center;
   background-color: #ffffff;
   /* border: solid red 1px; */
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const Li = styled.div`
   width: 500px;
@@ -414,6 +443,9 @@ const Li = styled.div`
   align-items: center;
   margin-top: 10px;
   border-bottom: solid black 1px;
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const NameBox = styled.div`
   width: 200px;
@@ -424,14 +456,11 @@ const NameBox = styled.div`
   margin: 0 5px;
   border-radius: 5px;
   &.true {
-    background-color: #21b965;
-  }
-  &.false {
-    /* background-color: #ffd600; */
+    background-color: #b9f6ca;
   }
   &.leave {
     color: white;
-    background-color: #d50000;
+    background-color: #ff8a80;
   }
 `
 const PosBox = styled.div`
@@ -441,7 +470,8 @@ const PosBox = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 5px;
-  background-color: #448aff;
+  background-color: #eeeeee;
+  color: black;
   border-radius: 5px;
   &.on {
     :hover {
@@ -463,7 +493,8 @@ const ATBox = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 5px;
-  background-color: #448aff;
+  background-color: #eeeeee;
+  color: black;
   border-radius: 5px;
   :hover {
     cursor: default;

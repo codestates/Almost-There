@@ -45,15 +45,16 @@ function App() {
   const watch = useRef({ id: 0 });
   const [alarm, setAlarm] = useState<boolean>(false);
   const [list, setList] = useState<Array<any>>([]);
+  const typeArr = ['', 'invite', 'arrive', 'leave'];
 
   /* IO */
   useEffect(() => {
-    console.log(user);
     const getUserInfo = async () => {
       try {
         const res = await axios.get(`${url}/user/info`, { withCredentials: true });
         const { userId, name, email } = res.data.user;
         setUser({ userId, name, email });
+        socket.emit("login", { userId, name, email });
         setLogin(true);
       } catch (err) {
         if (watch.current.id !== 0)
@@ -61,6 +62,8 @@ function App() {
         setLogin(false);
       }
     };
+    getUserInfo();
+    console.log(user);
     if (login) {
       const getList = async () => {
         const res = await axios.get(`${url}/notification/list`, { withCredentials: true });
@@ -70,24 +73,35 @@ function App() {
         } 
       }
       getList();
-      socket.on("notify", (type, sender, id) => {
-        console.log(type, sender, id);
+      socket.on("notify", (type, sender, notifyId ,groupId, groupName) => {
+        const notifyType = typeArr.indexOf(type);
+        console.log(type, sender, notifyId ,groupId, groupName);
         setAlarm(true);
         setList(
           [{
-            id: id, 
+            id: notifyId, 
             sender: sender,
-            notifyType: type
+            notifyType: notifyType,
+            groupId: groupId,
+            groupName: groupName
           }, 
           ...list]);
         if (type === "invite") {
-          socket.emit("joinGroup", id);
+          socket.emit("joinGroup", groupId);
         }
       })
+    }
+  }, [login]);
+
+  useEffect(() => {
+    console.log(user);
+    if (user.userId) {
       watch.current.id = 
       navigator.geolocation.watchPosition(async(coor) => {
         const x = Math.round(coor.coords.longitude*10000)/10000;
         const y = Math.round(coor.coords.latitude*10000)/10000;
+        // const x = coor.coords.longitude;
+        // const y = coor.coords.latitude;
         if (x !== latlng.current.x || y !== latlng.current.y) {
           console.log('send position to server');
           await axios.post(`${url}/user/latlng`,{
@@ -110,9 +124,7 @@ function App() {
         maximumAge: 0
       });
     }
-    getUserInfo();
-    console.log(watch);
-  }, [login]);
+  }, [user])
 
 
   return (

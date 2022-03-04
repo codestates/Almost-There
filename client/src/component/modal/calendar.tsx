@@ -224,9 +224,7 @@ const Calendar = ({ setModal, time, setTime }:CalendarProps) => {
             <Select />
           </TimeBox>
         </Contents>
-        <div>
-          <button onClick={selectComplete}>선택 완료</button>
-        </div>
+        <Button onClick={selectComplete}>선택 완료</Button>
       </View>
     </Backdrop>
   )
@@ -253,19 +251,29 @@ const View = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  border-radius: 10px;
   background-color: #eeeeee;
+  @media screen and (max-width: 600px) {
+    width: 400px;
+  }
 `
 const Title = styled.div`
   font-size:20px;
   font-weight: bold;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 `
 const Contents = styled.div`
   height: 350px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    overflow: auto;
+  }
 `
 const MonthBox = styled.div`
   width: 300px;
@@ -307,10 +315,11 @@ const Day = styled.div<DayI>`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
-  background-color: ${(props) => props.id===props.select ? 'green' : 'none'};
+  border-radius: 20px;
+  background-color: ${(props) => props.id===props.select ? 'black' : 'none'};
+  color: ${(props) => props.id === props.select ? 'white': 'black'};
   :hover {
-    background-color: wheat;
+    background-color: white;
     cursor: pointer;
   }
 `
@@ -321,13 +330,14 @@ const TimeBox = styled.div`
   display:flex;
   justify-content:space-evenly;
   align-items: center;
-  border: solid blue 1px;
+  border-top: solid black 2px;
+  border-bottom: solid black 2px;
 `
 const MeridiumBox = styled.div`
   width: 80px;
   height: 150px;
   overflow: scroll;
-  border: solid black 1px;
+  /* border: solid black 1px; */
   &::-webkit-scrollbar {
     display:none;
   }
@@ -339,7 +349,7 @@ const HourBox = styled.div`
   width: 80px;
   height: 150px;
   overflow: scroll;
-  border: solid black 1px;
+  /* border: solid black 1px; */
   &::-webkit-scrollbar {
     display:none;
   }
@@ -352,7 +362,7 @@ const MinuteBox = styled.div`
   width: 80px;
   height: 150px;
   overflow: scroll;
-  border: solid black 1px;
+  /* border: solid black 1px; */
   &::-webkit-scrollbar {
     display:none;
   }
@@ -370,7 +380,8 @@ const Option = styled.div<OptionI>`
   align-items: center;
   font-size: 15px;
   font-weight: bold;
-  background-color: ${(props) => props.id===props.select ? 'rgba(52, 106, 255, 0.4)' : 'none'};
+  background-color: ${(props) => props.id===props.select ? '#aaaaaa' : 'none'};
+  color: ${(props) => props.id === props.select ? 'black' : 'black'};
 `
 const Select = styled.div`
   width: 250px;
@@ -378,8 +389,19 @@ const Select = styled.div`
   position: absolute;
   top: 100px;
   left: 0px;
-  border-top: solid red 1px;
-  border-bottom: solid red 1px;
+  /* border-top: solid red 1px;
+  border-bottom: solid red 1px; */
   z-index:-1;
+`
+
+const Button = styled.div`
+  width: 120px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background-color: #aaaaaa;
+
 `
 export default Calendar
