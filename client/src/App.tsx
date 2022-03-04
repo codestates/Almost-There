@@ -7,7 +7,8 @@ import SignUpModal from './component/modal/signupmodal';
 import axios from 'axios';
 import url from './url';
 /* IO */ import { socket, SocketContext } from './context';
-
+// import Globalstyle from './Styles/Globalstyle';
+// import GlobalFont from './Styles/GlobalFonts';
 
 
 
@@ -149,7 +150,7 @@ function App() {
                   <Route path='/*' element={<Navigate to='/' />} />
                 </>
             }
-            <Route path= '/' element={<Home setLogin={setLogin} setUser={setUser}/> } />
+            <Route path= '/' element={<Home setLogin={setLogin} setUser={setUser} login={login} /> } />
           </Routes>
           {
             show.login

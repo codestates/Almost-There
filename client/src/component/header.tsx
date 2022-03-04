@@ -117,6 +117,7 @@ const Background = styled.div`
   top: 0;
   background-color: #eceff1;
   justify-content: space-between;
+  background-color:#edf0f2;
   align-items: center;
   height: 7vh;
   z-index: 2;

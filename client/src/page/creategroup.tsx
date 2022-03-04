@@ -238,6 +238,7 @@ const Container = styled.div`
   background-color: #eceff1;
   border: solid black 1px;
   border-radius: 5px;
+  vertical-align:middle;
   @media screen and (max-width: 600px) {
     width: 400px;
     height: 93vh;
