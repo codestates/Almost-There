@@ -240,7 +240,7 @@ const Option = styled.div<OptionI>`
   align-items: center;
   font-size: 15px;
   font-weight: bold;
-  background-color: ${(props) => props.id===props.select ? 'rgba(52, 106, 255, 0.4)' : 'none'};
+  background-color: ${(props) => props.id===props.select ? '#dddddd' : 'none'};
 `
 const ButtonBox = styled.div`
   width: 250px;
@@ -255,11 +255,14 @@ const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #6868ff;
+  font-weight: 500;
+  background-color: #aaaaaa;
+  border-radius: 20px;
   :hover {
     transform: translate(-1px, -1px);
     box-shadow: 2px 2px black;
-    background-color: #7a7afc;
+    background-color: black;
+    color: white;
     cursor: pointer;
   }
 `

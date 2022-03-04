@@ -61,7 +61,7 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm
         <StyledLink to='/'>
           <Logo>
             <Img src={atlogo}/>
-            Almost There
+            <div>Almost There</div>
           </Logo>
         </StyledLink> 
       </Taps>
@@ -115,15 +115,14 @@ const Background = styled.div`
   display: flex;
   position: sticky;
   top: 0;
-  background-color: white;
+  background-color: #eceff1;
   justify-content: space-between;
   align-items: center;
   height: 7vh;
   z-index: 2;
   box-shadow: 0px 1px 2px black;
-  @media screen and (max-width: 760px) {
+  @media screen and (max-width: 480px) {
     
-    color: black;
   }
 `
 const Taps = styled.div`
@@ -134,7 +133,7 @@ const Taps = styled.div`
 `
 const Logo = styled.div`
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   font-weight: bold;
   :hover {
@@ -146,11 +145,20 @@ const Logo = styled.div`
     left: 30%;
     right: 30%;
   }
+  @media screen and (max-width: 480px) {
+    position: fixed;
+    top: 14px;
+    left: 30%;
+    right: 30%;
+  }
 `
 const Img = styled.img`
   height: 50px;
   :hover {
     color: white;
+  }
+  @media screen and (max-width: 480px) {
+    display: none;
   }
 `
 interface MenuI {
@@ -176,7 +184,7 @@ interface DirectionI {
 }
 const Direction = styled.div<DirectionI>`
   display: flex;
-  width: 400px;
+  width: ${(props) => props.login ? '400px' : '260px'};
   @media screen and (max-width: 760px) {
     width: 100px;
     position: fixed;
@@ -184,8 +192,9 @@ const Direction = styled.div<DirectionI>`
     top: 7vh;
     left: 0;
     display: ${(props) => props.show ? 'flex' : 'none'};
-    background-color: white;
+    background-color: #eceff1;
     border-top: solid black 1px;
+    box-shadow: 1px 1px 3px black;
   }
 `
 const Tap = styled.div`
@@ -212,6 +221,9 @@ const Tap = styled.div`
 `
 const LastTap = styled.div`
   width: 130px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 10px 0px;
   margin-right: 20px;
   font-weight: bold;
@@ -222,12 +234,10 @@ const LastTap = styled.div`
     color: white;
     cursor: pointer;
   }
-  /* @media screen and (max-width: 760px) {
-    position: fixed;
-    top: 0;
-    right: 0;
-    padding: 13px 20px 10px 20px; */
-  /* } */
+  @media screen and (max-width: 760px) {
+    width : 100px;
+    margin-right: 0px;
+  }
 `
 interface AlarmI {
   show: boolean
@@ -249,6 +259,9 @@ const Alarm = styled.div<AlarmI>`
 const StyledLink = styled(Link)`
   color: black;
   text-decoration: none;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
   @media screen and (max-width: 760px) {
     color: black;
   }

@@ -64,8 +64,8 @@ const View = styled.div`
 const Search = styled.div`
   position: fixed;
   z-index: 15;
-  left: 30%;
-  right: 30%;
+  left: 10%;
+  right: 10%;
   display: flex;
   justify-content: center;
 `

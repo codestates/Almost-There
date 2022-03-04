@@ -28,8 +28,8 @@ function Timer () {
 
     const now = new Date();
     setBoo(true)
-    setDay(Math.floor((setDate.getTime() - now.getTime())/(1000*60*60*24)))
-    setHours(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60*24))/(1000*60*60))) ;
+    setDay(Math.floor((setDate.getTime() - now.getTime() - 32400000)/(1000*60*60*24)))
+    setHours(Math.floor(((setDate.getTime() - now.getTime() - 32400000) % (1000*60*60*24))/(1000*60*60))) ;
     setMinutes(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60))/(1000*60)))
     setSeconds(Math.floor((setDate.getTime() - now.getTime())%(1000*60)/(1000)))
     console.log(setDate.getTime()-now.getTime())
@@ -122,9 +122,11 @@ const Contents2 = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #eeeeee;
-  background-color: black;
-  border: solid red 1px;
+  color: black;
+  background-color: #eeeeee;
+  @media screen and (max-width: 600px) {
+    width: 380px;
+  }
 `
 const TimeBox = styled.div`
   width: 150px;

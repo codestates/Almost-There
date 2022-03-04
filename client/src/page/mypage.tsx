@@ -84,25 +84,28 @@ function Mypage ({user,setUser}:mypageprops) {
   return (  
   <MypageStyle>
     <UserGroup>
-      <Userinfo>
+      {isOpenModal && (
+        <EditInfo setUser={setUser} user={user} setOpenModal={setOpenModal}/>
+      )}
+      {isOpenModalPW && (
+        <EditPW setOpenModalPW={setOpenModalPW}/>
+      )}
+      {isOpenModalDeact && (
+        <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
+        </Deactivate>
+      )}
+      {/* <Userinfo>
         <UserinfoTitle> {user.name}님 환영합니다</UserinfoTitle>     
         <UserinfoDetail>
           <div> id : {user.userId}</div>
           <div> email : {user.email} </div>
         </UserinfoDetail>
         <Buttons>
-          {isOpenModal && (
-            <EditInfo setUser={setUser} user={user} setOpenModal={setOpenModal}/>
-          )}
+         
           <DialogButton onClick={onClickToggleModal}>회원정보 수정</DialogButton>  
-          {isOpenModalPW && (
-            <EditPW setOpenModalPW={setOpenModalPW}/>
-          )}
+          
           <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
-          {isOpenModalDeact && (
-              <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
-              </Deactivate>
-            )}
+          
           <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
         </Buttons>
         <Delete>
@@ -110,9 +113,30 @@ function Mypage ({user,setUser}:mypageprops) {
             
           </div>
         </Delete>
-      </Userinfo>
+      </Userinfo> */}
       <Groupinfo>
-        <GroupTitle>그룹 리스트</GroupTitle>
+        <GroupListTitle>
+          {user.name}님 환영합니다.
+        </GroupListTitle>
+        <GroupListTitle2>
+          <div>
+            {user.userId} 
+          </div>
+          <div>
+            {user.email}
+          </div>
+          <Icon>
+            <div onClick={onClickToggleModal}>
+              <i className="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div onClick={onClickToggleModalPW}>
+              <i className="fa-solid fa-key"></i>
+            </div>
+            <div onClick={onClickToggleModalDeact}>
+              <i className="fa-solid fa-user-slash"></i>
+            </div>
+          </Icon>
+        </GroupListTitle2>
         {_groups.length === 0
           ? <EmptyBox>
               <div>소속된 그룹이 없습니다.</div>
@@ -122,22 +146,27 @@ function Mypage ({user,setUser}:mypageprops) {
               {_groups.map((el)=>{
                 return (
                   <Box key={el.id}>
-                    <GroupName onClick={() => clickGroup(el.id)}>
-                      <GroupNameText>
-                        <GroupI>
-                          <div>{el.name}</div>
-                          <div className='place'>{el.place}</div>
-                          <div className='time'>{el.time}</div>
-                        </GroupI>
+                    <GroupInfoBox>
+                      <GroupNameText onClick={() => clickGroup(el.id)}>
+                        <div>{el.name}</div>
                       </GroupNameText>
-                    </GroupName>
-                    <Group2 id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}>
-                      <div className="out"> 그룹나가기 </div>
-                      <div className="icon" id={el.id}>
-                        {/* <i className="fa-solid fa-arrow-right-from-bracket" id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)} /> */}
-                        <i className="fa-solid fa-trash-can"></i>
-                      </div>
-                    </Group2>
+                      <GroupI>
+                        <div className='place'>{el.place}</div>
+                        <div className='time'>{el.time}</div>
+                      </GroupI>
+                    </GroupInfoBox>
+                    <ButtonList>
+                      <Button onClick={() => clickGroup(el.id)}>
+                        <div className='icon'>
+                          <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                        </div>
+                      </Button>
+                      <Button id={el.id} onClick={ e => DeleteGrouplist(e.currentTarget.id)}>
+                        <div className="icon" id={el.id}>
+                          <i className="fa-solid fa-trash-can"></i>
+                        </div>
+                      </Button>
+                    </ButtonList>
                   </Box>
                 )
               })}
@@ -148,6 +177,262 @@ function Mypage ({user,setUser}:mypageprops) {
   </MypageStyle>
   )
 }
+
+const MypageStyle = styled.div`
+  background-color: #fefefe;
+  width: 100vw;
+  height: 93vh;
+  @media screen and (max-width: 760px) {
+    height: 100%;
+  }
+`
+const UserGroup =styled.div`
+  display:flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100%;
+  margin: 0px 15px 0px 0px;
+  border-radius : 5px;
+  /* border: solid blue; */
+  @media screen and (max-width: 760px){
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`
+const Userinfo = styled.div`
+  width: 300px;
+  height: 440px;
+  background-color: #eeeeee;
+  display: flex;
+  /* justify-content:space-around; */
+  align-items: center;
+  flex-direction: column;
+  border-radius : 1px;
+  border: solid black;
+  margin: 10px;
+  padding: 0px 0px 0px 0px;
+  @media screen and (max-width: 760px) { 
+    width: 450px;
+    height: 300px;
+  }
+`
+const UserinfoTitle = styled.div`
+  padding: 15px 0px 15px 0px;
+  font-size: 30px;
+  border-radius : 1px;
+  /* border: solid yellow; */
+`
+const UserinfoDetail = styled.div`
+  width: 300px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 0px 15px 0px;
+  font-size: 20px;
+  text-align: left;
+  border-radius : 5px;
+  /* border: solid blue; */
+  div {
+    padding: 10px;
+  }
+`
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 300px;
+  height: 100%;
+  padding: 15px 0px 15px 0px;
+  border-radius : 1px;
+  /* border: solid red; */
+  @media screen and (max-width: 760px) {
+    flex-direction: row;
+  }
+`
+const Delete = styled.div`
+  /* position: absolute; */
+  width: 300px;
+  height: 100px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  font-size: 20px;
+  /* background-color: blue; */
+  /* border: solid black 1px; */
+`
+const Groupinfo = styled.div`
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius : 1px;
+  /* border: solid pink; */
+`
+const GroupListTitle = styled.div`
+  padding: 15px 0px 15px 0px;
+  font-size: 30px;
+`
+const GroupListTitle2 = styled.div`
+  width : 360px;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-evenly;
+`
+const Icon = styled.div`
+  width: 100px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  div {
+    :hover {
+      cursor: pointer;
+    }
+  }
+`
+const GroupBox = styled.div`
+  padding: 15px;
+  overflow-y: scroll;
+  /* width: 58vw; */
+  width: 880px;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: solid black 1px;
+  border-bottom: solid black 1px;
+  @media screen and (max-width: 960px){
+    width: 590px;
+  }
+  @media screen and (max-width: 760px){
+    width: 400px;
+  }
+`
+const Box = styled.div`
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 240px;
+  height: 360px;
+  margin: 20px;
+  box-shadow: 0px 0px 5px black;
+  border-radius: 10px;
+  :hover {
+    transition: 1s;
+    transform: translateY(-10px);
+  }
+  @media screen and (max-width: 760px){
+    width: 380px;
+    height: 400px;
+  }
+`
+const GroupInfoBox = styled.div`
+  width: 240px;
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  
+  align-items: center;
+  border-bottom: solid black 1px;
+  border-radius: 10px 10px 0px 0px;
+  background-color: #eceff1;
+  @media screen and (max-width: 760px){
+    width: 330px;
+  }
+`
+const GroupNameText = styled.div`
+  width: fit-content;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius : 20px;
+  margin-top: 5px;
+  padding: 10px;
+  font-size: 25px;
+  font-weight: 900;
+  :hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+`
+const GroupI = styled.div`
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  /* border: solid black 1px; */
+  height: 210px;
+  div {
+    margin: 10px;
+    &.place {
+      width: 100%;
+      padding: 0px 20px;
+      height: 60px;
+      font-size: 20px;
+      /* border: solid black 1px; */
+    }
+    &.time {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+`
+const ButtonList = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #fefefe;
+  border-radius: 0px 0px 10px 10px;
+  width: 100%;
+`
+const Button =styled.div`
+  width: 80px;
+  height: 45px;
+  font-size: 15px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  background-color: #aaaaaa;
+  border-radius: 10px;
+  :hover {
+    cursor: pointer;
+    transform: translateY(-1px);
+    box-shadow: 5px 5px 4px #757575;
+  }
+  div {
+    margin: 5px;
+    &.icon {
+      font-size: 30px;
+    }
+  }
+  @media screen and (max-width: 760px) {
+    
+  }
+`
+
+const EmptyBox = styled.div`
+  height: 50vh;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 15px;
+  border-top: solid black 1px;
+  border-bottom: solid black 1px;
+  @media screen and (max-width: 1080px){
+    width: 600px;
+  }
+  @media screen and (max-width: 960px){
+    width: 450px;
+  }
+  @media screen and (max-width: 760px){
+    width: 400px;
+  }
+`
 
 const DialogButton = styled.button`
   width: 120px;
@@ -169,232 +454,5 @@ const DialogButton = styled.button`
   }
 `;
 
-const UserinfoDetail = styled.div`
-  width: 300px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  padding: 15px 0px 15px 0px;
-  font-size: 20px;
-  text-align: left;
-  border-radius : 5px;
-  /* border: solid blue; */
-  div {
-    padding: 10px;
-  }
-`
-const MypageStyle = styled.div`
-  background-color: #fefefe;
-  width: 100vw;
-  height: 93vh;
-  @media screen and (max-width: 760px) {
-    height: 100%;
-  }
-`
-const UserinfoTitle = styled.div`
-  padding: 15px 0px 15px 0px;
-  font-size: 30px;
-  border-radius : 1px;
-  /* border: solid yellow; */
-`
-const Userinfo = styled.div`
-  width: 300px;
-  height: 440px;
-  background-color: #eeeeee;
-  display: flex;
-  /* justify-content:space-around; */
-  align-items: center;
-  flex-direction: column;
-  border-radius : 1px;
-  border: solid black;
-  margin: 10px;
-  padding: 0px 0px 0px 0px;
-  @media screen and (max-width: 760px) { 
-    width: 450px;
-    height: 300px;
-  }
-`
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  width: 300px;
-  height: 100%;
-  padding: 15px 0px 15px 0px;
-  border-radius : 1px;
-  /* border: solid red; */
-  @media screen and (max-width: 760px) {
-    flex-direction: row;
-  }
-`
-const Groupinfo = styled.div`
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius : 1px;
-  /* border: solid pink; */
-`
-const GroupBox = styled.div`
-  padding: 15px;
-  height: 50vh;
-  overflow-y: scroll;
-  /* width: 58vw; */
-  width: 800px;
-  border-top: solid black 1px;
-  border-bottom: solid black 1px;
-  @media screen and (max-width: 1080px){
-    width: 600px;
-  }
-  @media screen and (max-width: 960px){
-    width: 450px;
-  }
-  @media screen and (max-width: 760px){
-    width: 400px;
-  }
-`
-const GroupTitle = styled.div`
-  padding: 15px 0px 15px 0px;
-  font-size: 30px;
-`
-const GroupName = styled.div`
-  display: flex;
-  justify-content: space-between;  
-  border: solid black 1px;
-  &:hover {
-    cursor: pointer;
-    transform: translateY(-1px);
-    box-shadow: 5px 5px 4px #757575;
-  }
-`
-const GroupNameText = styled.div`
-  border-radius : 1px;
-  /* border: solid yellow; */
-`
-const GroupI = styled.div`
-  display:flex;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 600px;
-  height: 80px;
-  div {
-    font-size: 20px;
-    width: 150px;
-    &.place {
-      font-size: 20px;
-    }
-    &.time {
-      font-size: 20px;
-    }
-  }
-  @media screen and (max-width: 1080px){
-    width: 400px;
-    div {
-      &.place {
-        display: none;
-      }
-    }
-  }
-  @media screen and (max-width: 960px){
-    width: 300px;
-    div {
-      &.place {
-        display: none;
-      }
-    }
-  }
-  @media screen and (max-width: 760px){
-    width: 300px;
-    div {
-      &.place {
-        display: none;
-      }
-      &.time {
-        /* display: none; */
-      }
-    }
-  }
-`
-const Delete = styled.div`
-  /* position: absolute; */
-  width: 300px;
-  height: 100px;
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  font-size: 20px;
-  /* background-color: blue; */
-  /* border: solid black 1px; */
-`
-const Box = styled.div`
-  display:flex;
-  /* justify-content:space-between; */
-`
-const Group2 =styled.div`
-  width: 180px;
-  font-size: 15px;
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  background-color: #aaaaaa;
-  border-radius: 10px;
-  :hover {
-    cursor: pointer;
-    transform: translateY(-1px);
-    box-shadow: 5px 5px 4px #757575;
-  }
-  div {
-    margin: 5px;
-    &.icon {
-      font-size: 30px;
-    }
-  }
-  @media screen and (max-width: 960px) {
-    width: 100px;
-    background-color: #aaaaaa;
-    div {
-      &.out {
-        display: none;
-      }
-    }
-  }
-`
-const UserGroup =styled.div`
-  display:flex;
-  width: 100vw;
-  height: 100%;
-  flex-direction: row;
-  justify-content: space-evenly;
-  margin: 0px 15px 0px 0px;
-  border-radius : 5px;
-  /* border: solid blue; */
-  @media screen and (max-width: 760px){
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-`
-const EmptyBox = styled.div`
-  height: 50vh;
-  width: 800px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 15px;
-  border-top: solid black 1px;
-  border-bottom: solid black 1px;
-  @media screen and (max-width: 1080px){
-    width: 600px;
-  }
-  @media screen and (max-width: 960px){
-    width: 450px;
-  }
-  @media screen and (max-width: 760px){
-    width: 400px;
-  }
-`
 
 export default Mypage;

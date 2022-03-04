@@ -78,7 +78,6 @@ module.exports = function (server) {
       await users.update(updateData, {
         where: { userId: payload.user.userId }
       });
-      console.log('a');
       // 도착 여부 판별
       const groups = await users_groups.findAll({
         where: {
@@ -87,15 +86,13 @@ module.exports = function (server) {
         },
         include: _groups
       });
-      console.log('b');
-      console.log(groups);
       // 도착시간과 현재시간 비교
       const filter = groups.filter((el) => {
         const a = new Date(el.dataValues._group.dataValues.time).getTime();
         const b = new Date().getTime();
-        return Number(Math.floor((a - b) / (1000 * 60))) < 10;
+        return (Number(Math.floor((a - b) / (1000 * 60))) - 540)< 10;
       });
-      console.log(filter);
+      // console.log(filter);
 
       // 목적지와 현재위치 비교
       filter.forEach(async (el) => {
@@ -116,15 +113,17 @@ module.exports = function (server) {
             }
           });
           for (let i = 0; i < groupMembers.length; i++) {
-            await notifications_users.create({
+            const notice = await notifications_users.create({
               sender: el.dataValues.userId,
               receiver: groupMembers[i].dataValues.userId,
               notifyId: 3,
-              groupId: groupId
+              groupId: el.dataValues.groupId //groupId => el.dataValues.groupId
             });
+            io.to(`notice ${groupMembers[i].dataValues.userId}`)
+            .emit('notify', 'arrive', payload.userId, notice.dataValues.id, el.dataValues.groupId, el.dataValues._group.dataValues.groupName);
           }
-          io.to(`group ${el.dataValues.groupId}`).emit('arrive', el.dataValues.groupId, el.dataValues.userId, 'true');
-          io.to(`group ${el.dataValues.groupId}`).emit('notify', 'arrive', el.dataValues.userId, el.dataValues.groupId);
+          console.log('send arrive');
+          io.to(`group ${el.dataValues.groupId}`).emit('arrive', `${el.dataValues.groupId}`, el.dataValues.userId, 'true');
         }
       });
 
@@ -154,54 +153,56 @@ module.exports = function (server) {
     // ! notify / 알림
     socket.on('notify', async (type, sender, groupId) => {
       const group = await _groups.findOne({ where: { id: groupId } });
-      const groupName = group.dataValues.name;
-      const groupMembers = await users_groups.findAll({
-        where: {
-          groupId: groupId,
-          userId: { [Op.ne]: sender },
-          arrive: { [Op.ne]: 'leave' }
+      if (group) {
+        const groupName = group.dataValues.name;
+        const groupMembers = await users_groups.findAll({
+          where: {
+            groupId: groupId,
+            userId: { [Op.ne]: sender },
+            arrive: { [Op.ne]: 'leave' }
+          }
+        });
+  
+        // 초대 알림
+        if (type === 'invite') {
+          for (let i = 0; i < groupMembers.length; i++) {
+            const notice = await notifications_users.create({
+              sender: sender,
+              receiver: groupMembers[i].dataValues.userId,
+              notifyId: 1,
+              groupId: groupId
+            });
+            io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          }
         }
-      });
-
-      // 초대 알림
-      if (type === 'invite') {
-        for (let i = 0; i < groupMembers.length; i++) {
-          const notice = await notifications_users.create({
-            sender: sender,
-            receiver: groupMembers[i].dataValues.userId,
-            notifyId: 1,
-            groupId: groupId
-          });
-          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+  
+        // 도착 알림
+        if (type === 'arrive') {
+          for (let i = 0; i < groupMembers.length; i++) {
+            const notice = await notifications_users.create({
+              sender: sender,
+              receiver: groupMembers[i].dataValues.userId,
+              notifyId: 2,
+              groupId: groupId
+            });
+            io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          }
         }
-      }
-
-      // 도착 알림
-      if (type === 'arrive') {
-        for (let i = 0; i < groupMembers.length; i++) {
-          const notice = await notifications_users.create({
-            sender: sender,
-            receiver: groupMembers[i].dataValues.userId,
-            notifyId: 2,
-            groupId: groupId
-          });
-          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+  
+        // 탈퇴 알림
+        if (type === 'leave') {
+          for (let i = 0; i < groupMembers.length; i++) {
+            const notice = await notifications_users.create({
+              sender: sender,
+              receiver: groupMembers[i].dataValues.userId,
+              notifyId: 3,
+              groupId: groupId
+            });
+            io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
+          }
+          socket.leave(`group ${groupId}`);
+          io.to(`group ${groupId}`).emit('leave', groupId, sender, 'leave');
         }
-      }
-
-      // 탈퇴 알림
-      if (type === 'leave') {
-        for (let i = 0; i < groupMembers.length; i++) {
-          const notice = await notifications_users.create({
-            sender: sender,
-            receiver: groupMembers[i].dataValues.userId,
-            notifyId: 3,
-            groupId: groupId
-          });
-          io.to(`notice ${groupMembers[i].dataValues.userId}`).emit('notify', type, sender, notice.dataValues.id, groupId, groupName);
-        }
-        socket.leave(`group ${groupId}`);
-        io.to(`group ${groupId}`).emit('leave', groupId, sender, 'leave');
       }
     });
 
