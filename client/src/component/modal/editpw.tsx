@@ -102,9 +102,13 @@ function EditPW ({
         />
       </div>
 
-      <button className="mypage-button" onClick={handlePW} > 
+      <Button1 className="mypage-button" onClick={handlePW} > 
           변경완료
-      </button>
+      </Button1>
+
+      {/* <button className="mypage-button" onClick={handlePW} > 
+          변경완료
+      </button> */}
       <div>{PWerrorMessage}</div>
 
     </div>
@@ -116,7 +120,7 @@ function EditPW ({
 
 
 const DialogBox = styled.dialog`
-  width: 800px;
+  width: 600px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -127,6 +131,10 @@ const DialogBox = styled.dialog`
   box-sizing: border-box;
   background-color: white;
   z-index: 10000;
+  @media screen and (max-width: 600px){
+    width:100vw
+  }
+
 `;
 
 const Backdrop = styled.div`
@@ -165,6 +173,19 @@ const PWCheck = styled.input`
   border-bottom: 2px solid rgb(165, 165, 165);
   margin: 10px 0px 90px 0px;
 `;
+
+
+  const Button1 = styled.div`
+    font-size: 40px;
+    background-color: white;
+    vertical-align:middle;
+    :hover {
+    background-color: #1a1a1a;
+    color: white;
+    cursor: pointer;
+  }
+
+`
 
 
 export default EditPW;

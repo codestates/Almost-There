@@ -134,9 +134,13 @@ function EditInfo ({
               value={users.name}
             />
           </div>
-          <button className="mypage-button" onClick={handleUserinfo}> 
+          <Button1 className="mypage-button" onClick={handleUserinfo}> 
               변경완료
-          </button>
+          </Button1>
+
+          {/* <button className="mypage-button" onClick={handleUserinfo}> 
+              변경완료
+          </button> */}
     {/* </div> */}
       </DialogBox>
 
@@ -159,7 +163,7 @@ function EditInfo ({
 // `;
 
 const DialogBox = styled.dialog`
-  width: 800px;
+  width: 600px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -170,6 +174,10 @@ const DialogBox = styled.dialog`
   box-sizing: border-box;
   background-color: white;
   z-index: 10000;
+  @media screen and (max-width: 600px){
+    width:100vw
+  }
+
 `;
 
 const Backdrop = styled.div`
@@ -201,7 +209,17 @@ const NameInput = styled.input`
   margin: 0px 0px 120px 0px;
 `;
 
+const Button1 = styled.div`
+font-size: 40px;
+background-color: white;
+vertical-align:middle;
+:hover {
+background-color: #1a1a1a;
+color: white;
+cursor: pointer;
+}
 
+`
 
 
 export default EditInfo;
