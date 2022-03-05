@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 
 
-function Timerf () {
+function Timerd () {
 
   const [boo, setBoo] = useState<boolean>(false);
   const[day,setDay] = useState<any>(0)
@@ -133,4 +133,4 @@ const TextBox = styled.div`
   align-items: center;
 `
 
-export default Timerf;
+export default Timerd;

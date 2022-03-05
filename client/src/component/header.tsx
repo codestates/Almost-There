@@ -123,7 +123,7 @@ const Background = styled.div`
   z-index: 2;
   box-shadow: 0px 1px 2px black;
   @media screen and (max-width: 480px) {
-    
+    width: 100vw;
   }
 `
 const Taps = styled.div`

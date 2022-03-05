@@ -96,8 +96,18 @@ module.exports = function (server) {
 
       // 목적지와 현재위치 비교
       filter.forEach(async (el) => {
-        if ((Math.floor(payload.position.x * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.x * 100) / 100) &&
-        (Math.floor(payload.position.y * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.y * 100) / 100)) {
+        // 위도 1도 110,000m, 경도 1도 88,740m
+        const mx = payload.position.x;
+        const my = payload.position.y;
+        const tx = Math.floor(Number(el.dataValues._group.dataValues.x) * 10000) / 10000;
+        const ty = Math.floor(Number(el.dataValues._group.dataValues.y) * 10000) / 10000;
+        // Math.sqrt((Math.pow((mx - tx) * 88740)) + Math.pow(my-ty) * 110,000) 
+        // console.log(Math.pow(((mx - tx) * 88740), 2), my, ty);
+        console.log(el.dataValues._group.dataValues.place);
+        console.log( Math.sqrt( Math.pow(((mx - tx) * 88740), 2) + Math.pow(((my - ty) * 110,000), 2) ) );
+        // if ((Math.floor(payload.position.x * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.x * 100) / 100) &&
+        // (Math.floor(payload.position.y * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.y * 100) / 100)) {
+        if ( Math.sqrt( Math.pow(((mx - tx) * 88740), 2) + Math.pow(((my - ty) * 110,000), 2) ) < 50) {
           await users_groups.update({ arrive: 'true' },
             {
               where: {

@@ -28,13 +28,20 @@ function Timer () {
 
     const now = new Date();
     setBoo(true)
-    setDay(Math.floor((setDate.getTime() - now.getTime() - 32400000)/(1000*60*60*24)))
-    setHours(Math.floor(((setDate.getTime() - now.getTime() - 32400000) % (1000*60*60*24))/(1000*60*60))) ;
-    setMinutes(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60))/(1000*60)))
-    setSeconds(Math.floor((setDate.getTime() - now.getTime())%(1000*60)/(1000)))
-    console.log(setDate.getTime()-now.getTime())
+    if (Math.floor((setDate.getTime() - now.getTime() - 32400000)) > 0) {
+      setDay(Math.floor((setDate.getTime() - now.getTime() - 32400000)/(1000*60*60*24)));
+      setHours(Math.floor(((setDate.getTime() - now.getTime() - 32400000) % (1000*60*60*24))/(1000*60*60))) ;
+      setMinutes(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60))/(1000*60)));
+      setSeconds(Math.floor((setDate.getTime() - now.getTime())%(1000*60)/(1000)));
+      console.log(setDate.getTime()-now.getTime());
+    } else {
+      setDay(0);
+      setHours(0);
+      setMinutes(0);
+      setSeconds(0);
+      setBoo(false);
+    }
     // console.log()
-    
   }
 
   function minusOne (){
