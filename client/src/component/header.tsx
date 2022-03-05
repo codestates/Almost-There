@@ -100,7 +100,7 @@ const Header = ({ login, setLogin, show, setShow, user, setUser, watch, setAlarm
             </Menu>
             <Direction login={login} show={display}
               onClick={() => setDisplay(false)}>
-              <StyledLink to='/'>
+              <StyledLink to='/exp1'>
                 <Tap>체험하기</Tap>
               </StyledLink>
               <Tap onClick={clickSignin}>회원가입</Tap>
@@ -153,7 +153,7 @@ const Logo = styled.div`
   }
 `
 const Img = styled.img`
-  height: 50px;
+  height: 7vh;
   :hover {
     color: white;
   }

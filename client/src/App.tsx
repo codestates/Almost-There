@@ -1,6 +1,6 @@
-import { createContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { Home, Mypage, CreateGroup, Group, Map, Complete} from './page/index';
+import { Home, Mypage, CreateGroup, Group, Map, Complete, Exp1, Exp2, Exp3, Mapd } from './page/index';
 import { Header, LoginModal, Notify } from './component/index';
 import { Routes, Route, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import SignUpModal from './component/modal/signupmodal';
@@ -145,7 +145,10 @@ function App() {
                     <Route path='/complete' element={<Complete />} />
                 </>
               : <>
-                  <Route path='/complete' element={<Complete />} />
+                  <Route path='/exp1' element={<Exp1 />} />
+                  <Route path='/exp2' element={<Exp2 />} />
+                  <Route path='/exp3' element={<Exp3 />} />
+                  <Route path='/mapd' element={<Mapd />} />
                   <Route path='/*' element={<Navigate to='/' />} />
                 </>
             }

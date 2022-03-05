@@ -1,18 +1,8 @@
-import axios from 'axios';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Calendar, Invite, Location } from '../component/index'
-import { socket, SocketContext } from '../context';
-import url from '../url';
+import { Calendar, Location, MsgModal } from '../component';
 
-declare global {
-  interface Show {
-    calendar: boolean,
-    location: boolean,
-    invite: boolean
-  }
-}
 interface Time {
   year: number,
   month: number,
@@ -27,12 +17,7 @@ interface Place {
   y: string
 }
 
-type CreateGroupProps = {
-  user: User
-}
-
-function CreateGroup ({ user }: CreateGroupProps) {
-  const socket = useContext(SocketContext);
+const Exp1 = () => {
   const [modal, setModal] = useState<Show>({
     calendar: false,
     location: false,
@@ -55,7 +40,13 @@ function CreateGroup ({ user }: CreateGroupProps) {
     x: '',
     y: ''
   });
-  const [inviteList, setInviteList] = useState<Array<string>>([]);
+  const [inviteList, setInviteList] = useState<Array<string>>([
+    'dummy1',
+    'dummy2',
+    'dummy3'
+  ]);
+  const [show, setShow] = useState<boolean>(false);
+  const [msg, setMsg] = useState<string>('');
   const navigate = useNavigate();
 
   const handleGroupName = (boo:boolean) => {
@@ -83,36 +74,16 @@ function CreateGroup ({ user }: CreateGroupProps) {
   }
   
   const handleInvite = () => {
-    setModal({
-      ...modal,
-      invite: true
-    })
+    setMsg('체험하기에서 이용할 수 없는 기능입니다.');
+    setShow(true);
   }
 
   const handleDelete = (idx: number) => {
     setInviteList([...inviteList.slice(0,idx), ...inviteList.slice(idx+1)])
   }
-  const handleCreateButton = async () => {
+  const handleCreateButton = () => {
     if (groupName && place.name) {
-      let hour;
-      if (time.meridium === '오후') {
-        hour = time.hour + 12;
-      } else {
-        hour = time.hour;
-      }
-      const { year, month, day, minute } = time;
-      const res = await axios.post(`${url}/group/create`, {
-        name: groupName,
-        time: `${year}.${month}.${day} ${hour}:${minute}:00`,
-        place: place.name,
-        inviteId: inviteList,
-        x: place.x,
-        y: place.y
-      }, {withCredentials: true});
-      const id = res.data.data;
-      socket.emit("joinGroup", id);
-      socket.emit("notify", "invite", user.userId, id);
-      navigate(`/group/${id}`);
+      navigate(`/exp2`);
     } else if (!groupName) {
       setEdit(true);
     } else {
@@ -134,8 +105,8 @@ function CreateGroup ({ user }: CreateGroupProps) {
           : <></>
       }
       {
-        modal.invite
-          ? <Invite setModal={setModal} inviteList={inviteList} setInviteList={setInviteList} user={user}/>
+        show
+          ? <MsgModal setView={setShow} msg={msg}/>
           : <></>
       }
       <Container>
@@ -217,7 +188,6 @@ function CreateGroup ({ user }: CreateGroupProps) {
     </>
   )
 }
-
 const Background = styled.div`
   width: 100%;
   height: 93vh;
@@ -471,4 +441,4 @@ const Button2 = styled.div`
   }
 `
 
-export default CreateGroup;
+export default Exp1;

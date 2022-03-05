@@ -1,13 +1,9 @@
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { AddTime, MsgModal, Timer } from '../component';
-import React, { useContext, useRef } from 'react';
-import '../App.css';
-import { useState, useCallback,useEffect } from "react";
-import url from '../url';
-import axios from "axios";
-import { useNavigate, useParams } from 'react-router-dom';
-import '@fortawesome/fontawesome-free/js/all.js'
-import { socket, SocketContext } from '../context';
+import { MsgModal, Timerd } from '../component';
+import AddTimed from '../component/modal/addtimed';
+import '@fortawesome/fontawesome-free/js/all'
 
 interface GroupInfo {
   name: string,
@@ -24,186 +20,83 @@ interface Member {
   name: string
 }
 
-type GroupProps = {
-  user: User
-}
-
-function Group ({ user }: GroupProps) {
-  const socket = useContext(SocketContext);
+const Exp2 = () => {
   const [timeModal, setTimeModal] = useState(false);
-  const [groupInfo, setGroupInfo] = useState<GroupInfo>();
-  const [member, setMember] = useState<Array<Member>>([]);
+  const [groupInfo, setGroupInfo] = useState<GroupInfo>({
+    name: '그룹 체험',
+    place: '서울역',
+    time: new Date().toString(),
+    leaderId: 'me',
+    x: '126.9706',
+    y: '37.5546'
+  });
+  const [member, setMember] = useState<Array<Member>>([
+    {
+      userId: 'me',
+      name: '사용자',
+      overtime: '00:00:00',
+      arrive: 'false'
+    },
+    {
+      userId: 'dummy1',
+      name: '김코딩',
+      overtime: '00:00:00',
+      arrive: 'true'
+    },
+    {
+      userId: 'dummy2',
+      name: '박해커',
+      overtime: '00:05:00',
+      arrive: 'leave'
+    },
+    {
+      userId: 'dummy3',
+      name: '이데브',
+      overtime: '00:00:00',
+      arrive: 'false'
+    }
+  ]);
   const [showMsg, setShowMsg] = useState(false);
-  const timeleft = useRef({
-    left: 30
-  })
   const [checkloc, setCheckloc] = useState<boolean>(false);
   const navigate = useNavigate();
-  const params= useParams();
-  let date: Array<any>;
-  const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  const monthLength2 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  const getGroupInfo = async () => {
-    const res = await axios.get(`${url}/group/memberInfo?groupId=${params.id}`,{withCredentials:true});
-    const { name, place, leaderId, x, y } = res.data.groupInfo;
-    date = res.data.groupInfo.time.split(/[TZ\:\.-]/);
-    const lastDay = Number(date[0])%4 === 0 ? monthLength2[Number(date[1]) - 1] : monthLength[Number(date[1]) - 1];
-    timeleft.current.left = Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime() - 32400000)/1000);
-    if (Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime())/(1000*60)) < 10) {
-      setCheckloc(true);
-    }
-    // if (Number(date[3]) + 9 > 24) {
-    //   if (Number(date[2]) === lastDay) {
-    //     date[2] = 1;
-    //     date[1] = Number(date[1]) + 1;
-    //   } else {
-    //     date[2] = Number(date[2]) + 1;
-    //   }
-    // } 
-    let ampm = '';
-    date[3] = Number(date[3]);
-    // date[3] = date[3] + 9 > 24 ? date[3] + 9 - 24 : date[3] + 9
-    if (date[3] > 12) {
-      date[3] = date[3] - 12;
-      ampm = '오후'
-      if (date[3] < 10) {
-        date[3] = '0' + date[3];
-      }
-      if (date[3] === 12) ampm = '오전'
-    } else {
-      if (date[3] === 12) {
-        ampm = '오후'
-      } else {
-        if (date[3] < 10) {
-          date[3] = '0' + date[3];
-        }
-        ampm = '오전'
-      }
-    }
-    const time = `${Number(date[1])}월 ${Number(date[2])}일  ${ampm} ${date[3]}시 ${date[4]}분`;
-    setGroupInfo({name, place, time, leaderId, x, y});
-    const mapping = res.data.member.map((el:any) => {
-      return { userId: el.userId, overtime: el.overtime, name: el.name, arrive: el.arrive}
-    })
-    // setMember([...res.data.member]);
-    setMember([...mapping])
-  }
   const clickMap = () => {
-    navigate(`/map/${params.id}`);
+    navigate('/mapd')
   }
 
   const checkPosition = (userId: string) => {
-    navigate(`/map/${params.id}/${userId}`);
+    setShowMsg(true);
   }
 
   const addTime = () => {
     setTimeModal(true);
   }
 
-  useEffect(() => {     
-    getGroupInfo();
-    
-    let id = setInterval(() => {
-      if (timeleft.current.left < 600 ) {
-        setCheckloc(true);
-      }
-      timeleft.current.left = timeleft.current.left - 1;
-    }, 1000);
-    return () => clearInterval(id)
-  },[]);  
-  
+  const handleComplete = () => {
+    navigate('/exp3')
+  }
+
   useEffect(() => {
-    let id: any;
-    if (member.length > 0) {
-      socket.on("arrive", (groupId, userId, arrive) => {
-        if (groupId.toString() === params.id) {
-          console.log(member);
-          const update = member.map((el) => {
-            console.log(el);
-            if (userId === el.userId) {
-              return {
-                userId: el.userId,
-                overtime: el.overtime,
-                name: el.name,
-                arrive: arrive
-              }
-            } else {
-              return el
-            }
-          })
-          console.log(update);
-          setMember([...update]);
-        }
-      })
-      socket.on("leave", (groupId, userId, arrive) => {
-        if (groupId === params.id) {
-          const update = member.map((el) => {
-            if (userId === el.userId) {
-              return {
-                userId: el.userId,
-                overtime: el.overtime,
-                name: el.name,
-                arrive: arrive
-              }
-            } else {
-              return el
-            }
-          })
-          setMember([...update]);
-        }
-      })
-      socket.on("overtime", (groupId, userId, overtime) => {
-        console.log("time");
-        if (groupId === params.id) {
-          console.log(member);
-          const arr = overtime.split(':');
-          arr[0] = Number(arr[0]) > 9 ? arr[0] : `0${arr[0]}`;
-          arr[1] = Number(arr[1]) > 9 ? arr[1] : `0${arr[1]}`;
-          arr[2] = Number(arr[2]) > 9 ? arr[2] : `0${arr[2]}`;
-          const nOvertime = arr.join(':');
-          const update = member.map((el) => {
-            // console.log(userId);
-            if (userId === el.userId) {
-              return {
-                userId: el.userId,
-                overtime: nOvertime,
-                name: el.name,
-                arrive: el.arrive
-              }
-            } else {
-              return el;
-            }
-          })
-          // console.log(update);
-          setMember([...update]);
-        }
-      })
-      const check = member.every((el) => {
-        return (el.arrive === 'leave' || el.arrive === 'true')
-      })
-      if (check) {
-        id = setTimeout(() => {
-          navigate('/complete');
-        }, 5000);
-      }
-    }
+    let id = setTimeout(() => {
+      setCheckloc(true);
+    }, 30000)
     return () => clearTimeout(id);
-  }, [member])
-    
+  }, []);
+
   return (
     <Background>
       {timeModal
-        ? <AddTime user={user} setTimeModal={setTimeModal}/>
+        ? <AddTimed setTimeModal={setTimeModal} member={member} setMember={setMember}/>
         : <></>
       }
       {showMsg
-        ? <MsgModal setView={setShowMsg} msg={'약속 시간 10분 전부터 확인할 수 있습니다.'} />
+        ? <MsgModal setView={setShowMsg} msg={'체험하기에서 사용할 수 없는 기능입니다.'} />
         : <></>
       }
+      <CompleteButton onClick={handleComplete}>모두 도착 완료</CompleteButton>
       <Container>
         <Contents1>
-            <Title1 onClick={getGroupInfo} >{groupInfo?.name}</Title1>
+            <Title1>{groupInfo?.name}</Title1>
           {/* <List1>
           </List1> */}
           <List1>
@@ -236,13 +129,13 @@ function Group ({ user }: GroupProps) {
                     </NameBox>
                     {checkloc
                       ? <PosBox className='on' onClick={() => checkPosition(el.userId)}>
-                          <i className={`fa-solid fa-earth-asia`}></i>
+                          <i className="fa-solid fa-earth-asia" ></i>
                         </PosBox>
                       : <PosBox className='off' onClick={() => setShowMsg(true)}>
-                          <i className={`fa-solid fa-earth-asia`}></i>
+                          <i className="fa-solid fa-earth-asia"></i>
                         </PosBox>
                     }
-                    {el.userId === user.userId 
+                    {el.userId === 'me'
                       ? <ATBox className="add" onClick={addTime}>+{el.overtime}</ATBox>
                       : <ATBox>+{el.overtime}</ATBox>
                     }
@@ -252,7 +145,7 @@ function Group ({ user }: GroupProps) {
             }
           </List2>
         </Contents3>
-        <Timer />
+        <Timerd />
       </Container>
       {/* <Leave onClick={leaveGroup}>
         <div>그룹 나가기</div>
@@ -494,47 +387,25 @@ const ATBox = styled.div`
     }
   }
 `
-const Leave = styled.div`
-  width : 80px;
-  height: 40px;
+const CompleteButton = styled.div`
   position: fixed;
-  bottom: 10px;
-  right: 10px;
-  font-size: 15px;  
+  top: 8vh;
+  right: 1vw;
+  width: 120px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #448aff;
-  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 20px;
+  background-color: #aaaaaa;
   :hover {
-    cursor: pointer;
-  }
-`
-const MyPage = styled.div`
-  width : 80px;
-  height: 40px;
-  position: fixed;
-  bottom: 10px;
-  right: 100px;
-  font-size: 15px;  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #448aff;
-  border-radius: 10px;
-  :hover {
+    background-color: black;
+    color: white;
     cursor: pointer;
   }
 `
 
-const GroupBox = styled.div`
-`
-const Box = styled.div`
-`
-const GroupName = styled.div`
-`
 
-
-
-
-export default Group;
+export default Exp2;
