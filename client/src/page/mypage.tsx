@@ -185,6 +185,9 @@ const MypageStyle = styled.div`
   @media screen and (max-width: 760px) {
     height: 100%;
   }
+  @media screen and (max-width: 400px) {
+    width: 100vw;
+  }
 `
 const UserGroup =styled.div`
   display:flex;
@@ -279,6 +282,15 @@ const GroupListTitle2 = styled.div`
   font-size: 20px;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
+  div {
+    margin: 0px 5px;
+  }
+  @media screen and (max-width: 550px) {
+    font-size: 15px;
+    flex-direction: column;
+    
+  }
 `
 const Icon = styled.div`
   width: 100px;
@@ -305,6 +317,9 @@ const GroupBox = styled.div`
   }
   @media screen and (max-width: 760px){
     width: 400px;
+  }
+  @media screen and (max-width: 400px) {
+    width: 90vw;
   }
 `
 const Box = styled.div`
@@ -431,6 +446,9 @@ const EmptyBox = styled.div`
   }
   @media screen and (max-width: 760px){
     width: 400px;
+  }
+  @media screen and (max-width: 400px) {
+    width: 90vw;
   }
 `
 

@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
-import '../App.tsx';
 import styled from "styled-components";
-import {useParams } from 'react-router-dom';
-import url from '../url';
-import axios from "axios";
 
 
 
-function Timer () {
+
+function Timerd () {
 
   const [boo, setBoo] = useState<boolean>(false);
   const[day,setDay] = useState<any>(0)
@@ -15,33 +12,15 @@ function Timer () {
   const [minutes,setMinutes] =useState<any> (0);
   const [hours,setHours] = useState<any>(0);
   // Math.floor((1 % (1000*60*60*24))/(1000*60*60));
-  const [groupTime, setGroupTime] = useState<Array<any>>([]);
-  const params= useParams();
 
   const getGroupTime = async () => {
-    const res = await axios.get(`${url}/group/list`,{withCredentials:true});
-    const filtered = res.data.groups.filter((el:any)=>{
-      return el.groupId === Number(params.id);    
-    });
-    console.log(filtered[0]?._group.time);
-    let setDate = new Date(filtered[0]?._group.time);
-
-    const now = new Date();
-    setBoo(true)
-    if (Math.floor((setDate.getTime() - now.getTime() - 32400000)) > 0) {
-      setDay(Math.floor((setDate.getTime() - now.getTime() - 32400000)/(1000*60*60*24)));
-      setHours(Math.floor(((setDate.getTime() - now.getTime() - 32400000) % (1000*60*60*24))/(1000*60*60))) ;
-      setMinutes(Math.floor(((setDate.getTime() - now.getTime()) % (1000*60*60))/(1000*60)));
-      setSeconds(Math.floor((setDate.getTime() - now.getTime())%(1000*60)/(1000)));
-      console.log(setDate.getTime()-now.getTime());
-    } else {
-      setDay(0);
-      setHours(0);
-      setMinutes(0);
-      setSeconds(0);
-      setBoo(false);
-    }
+    setBoo(true);
+    setDay(0);
+    setHours(0);
+    setMinutes(10);
+    setSeconds(30);
     // console.log()
+    
   }
 
   function minusOne (){
@@ -99,20 +78,20 @@ function Timer () {
     <>
       <Contents2>
         <TimeBox>
+          <TextBox>D</TextBox>
           <IntBox>{day}</IntBox>
-          <TextBox>일</TextBox>
         </TimeBox>
         <TimeBox>
+          <TextBox>H</TextBox>
           <IntBox>{hours}</IntBox>
-          <TextBox>시간</TextBox>
         </TimeBox>
         <TimeBox>
+          <TextBox>M</TextBox>
           <IntBox>{minutes}</IntBox>
-          <TextBox>분</TextBox>
         </TimeBox>
         <TimeBox>
+          <TextBox>S</TextBox>
           <IntBox>{seconds}</IntBox>
-          <TextBox>초</TextBox>
         </TimeBox>
       </Contents2>
     </>
@@ -154,4 +133,4 @@ const TextBox = styled.div`
   align-items: center;
 `
 
-export default Timer;
+export default Timerd;

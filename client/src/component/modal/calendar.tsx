@@ -402,6 +402,10 @@ const Button = styled.div`
   align-items: center;
   border-radius: 20px;
   background-color: #aaaaaa;
-
+  :hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+  }
 `
 export default Calendar
