@@ -38,8 +38,8 @@ function Home ({setLogin, setUser, login }: HomeProps) {
   const text1 = " 30분째 거의 다 왔다고만 \n하는 친구 때문에 \n  답답했던 경험 있으시죠? "
   // const text11 = "약속시간 10분 전부터 \n 친구의 위치를 파악할 수 있습니다."
   
-  const text2 = "나의 도착여부를 친구들에게 알릴 수 있어요 "
-  const text21 = "약속장소에 도착한 후 \n 그룹원에게 자동으로 도착알림이 도착합니다."
+  const text2 = "나의 도착여부를 \n 친구들에게 알릴 수 있어요 "
+  const text21 = "\n 약속장소에 도착한 후 \n 그룹원에게 자동으로 도착알림이 도착합니다."
 
   // const text3 = " 친구가 지금 어디에 있는지 \n 실시간으로 알 수 있습니다. "
   const text31 = "실시간 위치파악기능을 통해 \n 친구의 위치를 파악할 수 있습니다."
@@ -785,7 +785,7 @@ const Text2 = styled.div`
   /* background-color:#ffffff; */
   /* background-color: #fff9c4; */
 
-  font-size:30px;
+  font-size:50px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
@@ -801,7 +801,7 @@ const Text2 = styled.div`
 
 const Text21 = styled.div`
 
-  font-size:20px;
+  font-size:30px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
@@ -816,13 +816,13 @@ const Text3 = styled.div`
   /* background-color: #fce4ec; */
   /* background-color:#ffffff; */
 
-  font-size:40px;
+  font-size:50px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
-  @media screen and (max-width: 1450px){
+  /* @media screen and (max-width: 1450px){
     font-size:30px;
-  }
+  } */
   @media screen and (max-width: 1300px){
     font-size:28px;
   }
@@ -839,7 +839,7 @@ const Text3 = styled.div`
 
 const Text31 = styled.div`
 
-font-size:30px;
+font-size:50px;
 text-align:center;
 vertical-align:middle;
 white-space: pre-line;
