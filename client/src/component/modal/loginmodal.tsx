@@ -254,6 +254,7 @@ const Img = styled.img`
 const GImg = styled.img`
   width: 200px;
   height: 45px;
+  cursor: pointer;
 `
 
 export default LoginModal;

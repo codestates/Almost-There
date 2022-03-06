@@ -94,26 +94,6 @@ function Mypage ({user,setUser}:mypageprops) {
         <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
         </Deactivate>
       )}
-      {/* <Userinfo>
-        <UserinfoTitle> {user.name}님 환영합니다</UserinfoTitle>     
-        <UserinfoDetail>
-          <div> id : {user.userId}</div>
-          <div> email : {user.email} </div>
-        </UserinfoDetail>
-        <Buttons>
-         
-          <DialogButton onClick={onClickToggleModal}>회원정보 수정</DialogButton>  
-          
-          <DialogButton onClick={onClickToggleModalPW}>비밀번호 변경</DialogButton>  
-          
-          <DialogButton onClick={onClickToggleModalDeact}>회원탈퇴</DialogButton>  
-        </Buttons>
-        <Delete>
-          <div >
-            
-          </div>
-        </Delete>
-      </Userinfo> */}
       <Groupinfo>
         <GroupListTitle>
           {user.name}님 환영합니다.
@@ -185,6 +165,9 @@ const MypageStyle = styled.div`
   @media screen and (max-width: 760px) {
     height: 100%;
   }
+  @media screen and (max-width: 400px) {
+    width: 100vw;
+  }
 `
 const UserGroup =styled.div`
   display:flex;
@@ -199,68 +182,6 @@ const UserGroup =styled.div`
     justify-content: center;
     align-items: center;
   }
-`
-const Userinfo = styled.div`
-  width: 300px;
-  height: 440px;
-  background-color: #eeeeee;
-  display: flex;
-  /* justify-content:space-around; */
-  align-items: center;
-  flex-direction: column;
-  border-radius : 1px;
-  border: solid black;
-  margin: 10px;
-  padding: 0px 0px 0px 0px;
-  @media screen and (max-width: 760px) { 
-    width: 450px;
-    height: 300px;
-  }
-`
-const UserinfoTitle = styled.div`
-  padding: 15px 0px 15px 0px;
-  font-size: 30px;
-  border-radius : 1px;
-  /* border: solid yellow; */
-`
-const UserinfoDetail = styled.div`
-  width: 300px;
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  padding: 15px 0px 15px 0px;
-  font-size: 20px;
-  text-align: left;
-  border-radius : 5px;
-  /* border: solid blue; */
-  div {
-    padding: 10px;
-  }
-`
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  width: 300px;
-  height: 100%;
-  padding: 15px 0px 15px 0px;
-  border-radius : 1px;
-  /* border: solid red; */
-  @media screen and (max-width: 760px) {
-    flex-direction: row;
-  }
-`
-const Delete = styled.div`
-  /* position: absolute; */
-  width: 300px;
-  height: 100px;
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  font-size: 20px;
-  /* background-color: blue; */
-  /* border: solid black 1px; */
 `
 const Groupinfo = styled.div`
   height: 80vh;
@@ -279,6 +200,15 @@ const GroupListTitle2 = styled.div`
   font-size: 20px;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
+  div {
+    margin: 0px 5px;
+  }
+  @media screen and (max-width: 550px) {
+    font-size: 15px;
+    flex-direction: column;
+    
+  }
 `
 const Icon = styled.div`
   width: 100px;
@@ -295,16 +225,23 @@ const GroupBox = styled.div`
   padding: 15px;
   overflow-y: scroll;
   /* width: 58vw; */
-  width: 880px;
+  width: 900px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: start;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media screen and (max-width: 960px){
-    width: 590px;
+    width: 620px;
   }
   @media screen and (max-width: 760px){
     width: 400px;
+  }
+  @media screen and (max-width: 400px) {
+    width: 90vw;
   }
 `
 const Box = styled.div`
@@ -323,7 +260,9 @@ const Box = styled.div`
   }
   @media screen and (max-width: 760px){
     width: 380px;
-    height: 400px;
+  }
+  @media screen and (max-width: 400px) {
+    width: 70vw;
   }
 `
 const GroupInfoBox = styled.div`
@@ -338,6 +277,9 @@ const GroupInfoBox = styled.div`
   background-color: #eceff1;
   @media screen and (max-width: 760px){
     width: 330px;
+  }
+  @media screen and (max-width: 400px) {
+    width: 70vw;
   }
 `
 const GroupNameText = styled.div`
@@ -423,6 +365,8 @@ const EmptyBox = styled.div`
   padding: 15px;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
+  font-size: 20px;
+  font-weight: bold;
   @media screen and (max-width: 1080px){
     width: 600px;
   }
@@ -431,6 +375,9 @@ const EmptyBox = styled.div`
   }
   @media screen and (max-width: 760px){
     width: 400px;
+  }
+  @media screen and (max-width: 400px) {
+    width: 90vw;
   }
 `
 

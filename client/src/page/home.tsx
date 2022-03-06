@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import url from '../url';
 import styled from "styled-components";
@@ -135,20 +135,6 @@ function Home ({setLogin, setUser, login }: HomeProps) {
     gsap.set(elem, {autoAlpha: 0});
   }
   
-  // document.addEventListener("DOMContentLoaded",function() {
-  //   gsap.registerPlugin(ScrollTrigger);
-    
-  //   gsap.utils.toArray(".gs_reveal").forEach(function(elem:any) {
-  //     hide(elem); // assure that the element is hidden when scrolled into view
-  //     // console.log(elem);
-  //     ScrollTrigger.create({
-  //       trigger: elem,
-  //       onEnter: function() { animateFrom(elem) }, 
-  //       onEnterBack: function() { animateFrom(elem, -1) },
-  //       onLeave: function() { hide(elem) } // assure that the element is hidden when scrolled into view
-  //     });
-  //   });
-  // });
   useEffect(() => {
     function foo() {
       gsap.registerPlugin(ScrollTrigger);
@@ -259,24 +245,23 @@ const IntroduceMain = styled.div`
   /* background-color: #e1bee7; */
   /* background-color:#ffffff; */
   /* background-color:#b6c4d9; */
-    flex-direction:row;
-
-  height: 800px;
+  height: 700px;
   display:flex;
   /* justify-content:space-evenly; */
   align-items:center;
 
   @media screen and (max-width: 960px){
     /* width: 450px;     */
-    flex-direction:row;
   }
   @media screen and (max-width: 720px){
     /* width: 450px;     */
     flex-direction:column;
     height:1000px;
   }
-
-  padding: 30px 0px 0px 0px;
+  @media screen and (max-width: 400px){
+    flex-direction:column;
+    height:650px;
+  }
 
 `
 
@@ -315,6 +300,10 @@ const Introduce2 = styled.div`
     flex-direction:column;
     height: 700px;
   }
+  @media screen and (max-width: 400px){
+    flex-direction:column;
+    height: 400px;
+  }
 
 
   display:flex;
@@ -337,6 +326,11 @@ const Introduce3 = styled.div`
     height: 700px;
 
   }
+  @media screen and (max-width: 400px){
+    flex-direction:column-reverse;
+    height: 400px;
+
+  }
   
 
 `
@@ -350,6 +344,7 @@ const MainLeft = styled.div`
   display:flex;
   flex-direction:column;
   justify-content:center;
+  align-items: center;
   @media screen and (max-width: 720px){
     width: 30vw;
   }
@@ -371,6 +366,7 @@ const MainRight = styled.div`
   }
   @media screen and (max-width: 400px){
     width: 100vw;
+    height:300px;
   }
 `
 
@@ -441,26 +437,33 @@ const Slogan = styled.div`
 const Title = styled.div`
   border-radius : 1px;
   /* border: solid blue; */
-  height:450px;
+  height:400px;
   font-size:90px;
   text-align:center;
   @media screen and (max-width: 1300px){
-    font-size:40px;
+    font-size:60px;
     height:300px;
   }
 
   @media screen and (max-width: 1100px){
-    font-size:40px;
+    font-size:60px;
     height:300px;
   }
   flex-direction:column;
   @media screen and (max-width: 960px){
-    height:250px;
+    height:300px;
   }
   @media screen and (max-width: 840px){
     font-size:30px;
     text-align:center
   }
+  @media screen and (max-width: 480px){
+    height: 200px;
+    font-size:30px;
+    text-align:center
+  }
+
+
 `
 
   const Logo = styled.div`
@@ -492,12 +495,16 @@ const Title = styled.div`
 }
 `
 const Start = styled.div`
-  border-radius : 1px;
+  border-radius : 20px;
   /* border: solid blue; */
-  height:60px;
+  height:80px;
   /* width: 20vw; */
-  font-size:30px;
-  align-items:center;
+  font-size:40px;
+  width: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #aaaaaa;
   @media screen and (max-width: 1300px){
     height: 50px;
     }
@@ -586,6 +593,7 @@ const Image2 = styled.div`
     height: 400px;
     width:300px;
     }
+    
   .scale-down{
     width: 700px; height: 800px;
     object-fit: scale-down;
@@ -639,6 +647,10 @@ const Image3 = styled.div`
     height: 300px;
     width:400px;
     }
+    @media screen and (max-width: 400px){
+    width:100vw;
+    }
+
   .scale-down{
     width: 600px; height: 800px;
     object-fit: scale-down;
@@ -684,7 +696,7 @@ const TextBox1 = styled.div`
   align-items: center;
   /* vertical-align:middle; */
   @media screen and (max-width: 1300px){
-    width: 300px;    
+    width: 400px;    
   }
 
 
@@ -703,14 +715,15 @@ const TextBox1 = styled.div`
 `
 const TextBox2 = styled.div`
   border-radius : 1px;
-  /* border: solid yellow; */
-  /* background-color:#ffffff; */
-  /* background-color: #fff9c4; */
-
-  /* background-color: #f8bbd0; */
   height: 350px;
   width: 40vw;
-  /* margin: 70px 150px 70px 50px;    */
+  @media screen and (max-width: 1300px){
+    width: 400px;    
+  }
+  @media screen and (max-width: 400px){
+    width: 200px;    
+  }
+
   display:flex;
   align-items: center;
   justify-content: center;
@@ -723,11 +736,18 @@ const TextBox3 = styled.div`
 
   height: 350px;
   width: 47vw;
-  @media screen and (max-width: 1450px){
+  @media screen and (max-width: 1300px){
+    width: 400px;    
+  }
+  @media screen and (max-width: 400px){
+    width: 200px;
+    height: 150px;    
+  }
+
+  /* @media screen and (max-width: 1450px){
     width: 38vw;
 
-  }
-  /* margin: 70px 50px 70px 150px;    */
+  } */
   display:flex;
   align-items: center;
   justify-content: center;
@@ -739,15 +759,19 @@ const TextBox3 = styled.div`
 const Text1 = styled.div`
   border-radius : 1px;
   text-align:center;
-  @media screen and (max-width: 1450px){
-    font-size:30px;
+  @media screen and (max-width: 1400px){
+    font-size:35px;
   }
   @media screen and (max-width: 1300px){
-    font-size:30px;
+    font-size:35px;
   }
   @media screen and (max-width: 960px){
     font-size:25px;
   }
+  @media screen and (max-width: 700px){
+    font-size:20px;
+  }
+
   font-size:50px;
   text-align:center;
   vertical-align:middle;
@@ -784,11 +808,17 @@ const Text2 = styled.div`
   vertical-align:middle;
   white-space: pre-line;
   @media screen and (max-width: 1400px){
-    font-size:28px;
+    font-size:35px;
+  }
+  @media screen and (max-width: 960px){
+    font-size:25px;
   }
 
   @media screen and (max-width: 700px){
-    font-size:25px;
+    font-size:20px;
+  }
+  @media screen and (max-width: 400px){
+    font-size:19px;
   }
 
   `
@@ -799,37 +829,35 @@ const Text21 = styled.div`
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
+  @media screen and (max-width: 1400px){
+    font-size:25px;
+  }
+  @media screen and (max-width: 1400px){
+    font-size:15px;
+  }
+
+  @media screen and (max-width: 700px){
+    font-size:15px;
+  }
+
 `
-
-
-
-const Text3 = styled.div`
+/* const Text3 = styled.div`
   border-radius : 1px;
-
-  /* border: solid yellow; */
-  /* background-color: #fce4ec; */
-  /* background-color:#ffffff; */
-
   font-size:50px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
-  /* @media screen and (max-width: 1450px){
-    font-size:30px;
-  } */
   @media screen and (max-width: 1300px){
     font-size:28px;
   }
-
   @media screen and (max-width: 960px){
     font-size:25px;
   }
-
   @media screen and (max-width: 700px){
     font-size:20px;
   }
 
-  `
+  ` */
 
 const Text31 = styled.div`
 
@@ -837,15 +865,21 @@ font-size:50px;
 text-align:center;
 vertical-align:middle;
 white-space: pre-line;
-@media screen and (max-width: 1450px){
-    font-size:25px;
+@media screen and (max-width: 1400px){
+    font-size:35px;
+  }
+  @media screen and (max-width: 1300px){
+    font-size:30px;
   }
 @media screen and (max-width: 960px){
-  font-size:23px;
+  font-size:22px;
 }
 
 @media screen and (max-width: 700px){
   font-size:20px;
+}
+@media screen and (max-width: 400px){
+  font-size:18px;
 }
 
 
