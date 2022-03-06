@@ -225,13 +225,17 @@ const GroupBox = styled.div`
   padding: 15px;
   overflow-y: scroll;
   /* width: 58vw; */
-  width: 880px;
+  width: 900px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: start;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media screen and (max-width: 960px){
-    width: 590px;
+    width: 620px;
   }
   @media screen and (max-width: 760px){
     width: 400px;
@@ -361,6 +365,8 @@ const EmptyBox = styled.div`
   padding: 15px;
   border-top: solid black 1px;
   border-bottom: solid black 1px;
+  font-size: 20px;
+  font-weight: bold;
   @media screen and (max-width: 1080px){
     width: 600px;
   }

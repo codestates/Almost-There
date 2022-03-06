@@ -250,24 +250,19 @@ const IntroduceMain = styled.div`
   /* background-color: #e1bee7; */
   /* background-color:#ffffff; */
   /* background-color:#b6c4d9; */
-    flex-direction:row;
-
-  height: 800px;
+  height: 700px;
   display:flex;
   /* justify-content:space-evenly; */
   align-items:center;
 
   @media screen and (max-width: 960px){
     /* width: 450px;     */
-    flex-direction:row;
   }
   @media screen and (max-width: 720px){
     /* width: 450px;     */
     flex-direction:column;
     height:1000px;
   }
-
-  padding: 30px 0px 0px 0px;
 
 `
 
@@ -341,6 +336,7 @@ const MainLeft = styled.div`
   display:flex;
   flex-direction:column;
   justify-content:center;
+  align-items: center;
   @media screen and (max-width: 720px){
     width: 30vw;
   }
@@ -432,23 +428,28 @@ const Slogan = styled.div`
 const Title = styled.div`
   border-radius : 1px;
   /* border: solid blue; */
-  height:450px;
+  height:400px;
   font-size:90px;
   text-align:center;
   @media screen and (max-width: 1300px){
-    font-size:40px;
+    font-size:60px;
     height:300px;
   }
 
   @media screen and (max-width: 1100px){
-    font-size:40px;
+    font-size:60px;
     height:300px;
   }
   flex-direction:column;
   @media screen and (max-width: 960px){
-    height:250px;
+    height:300px;
   }
   @media screen and (max-width: 840px){
+    font-size:30px;
+    text-align:center
+  }
+  @media screen and (max-width: 480px){
+    height: 200px;
     font-size:30px;
     text-align:center
   }
@@ -484,12 +485,16 @@ const Title = styled.div`
 }
 `
 const Start = styled.div`
-  border-radius : 1px;
+  border-radius : 20px;
   /* border: solid blue; */
-  height:60px;
+  height:80px;
   /* width: 20vw; */
-  font-size:30px;
-  align-items:center;
+  font-size:40px;
+  width: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #aaaaaa;
   @media screen and (max-width: 1300px){
     height: 50px;
     }
