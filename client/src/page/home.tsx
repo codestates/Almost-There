@@ -243,11 +243,6 @@ function Home ({setLogin, setUser, login }: HomeProps) {
 
 
       </Introduce2>
-
-
-
-
-    <footer></footer>
     </div>
     </>
   )
@@ -466,9 +461,8 @@ const Title = styled.div`
     font-size:30px;
     text-align:center
   }
-
-
 `
+
   const Logo = styled.div`
   border-radius : 1px;
   /* border: solid red; */
@@ -858,6 +852,9 @@ white-space: pre-line;
 
 
 `
+
+
+
 export default Home;
 
 
