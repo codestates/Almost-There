@@ -15,7 +15,6 @@ function Timer () {
   const [minutes,setMinutes] =useState<any> (0);
   const [hours,setHours] = useState<any>(0);
   // Math.floor((1 % (1000*60*60*24))/(1000*60*60));
-  const [groupTime, setGroupTime] = useState<Array<any>>([]);
   const params= useParams();
 
   const getGroupTime = async () => {
@@ -75,17 +74,17 @@ function Timer () {
   }
 
   useEffect(() => {
-    if(boo){
-
-      let ID = setTimeout(minusOne, 1000);
+    let ID: any;
+    if (boo) {
+      ID = setTimeout(minusOne, 1000);
       if(day<=0 && hours <= 0 && minutes <=0 && seconds<=0 ){
         setDay(0)
         setHours(0)
         setMinutes(0)
         setSeconds(0)
         setBoo(false)
-        clearTimeout(ID)
-    }        
+        // clearTimeout(ID)
+      }        
       return () => clearTimeout(ID)      
     }
   }, [seconds]);
@@ -104,7 +103,7 @@ function Timer () {
         </TimeBox>
         <TimeBox>
           <IntBox>{hours}</IntBox>
-          <TextBox>시간</TextBox>
+          <TextBox>시</TextBox>
         </TimeBox>
         <TimeBox>
           <IntBox>{minutes}</IntBox>
@@ -120,9 +119,6 @@ function Timer () {
   
 }
 
-const Title = styled.div`
-  background-color: #ffcdd2;
-`
 const Contents2 = styled.div`
   width: 500px;
   height: 120px;

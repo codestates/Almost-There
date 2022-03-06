@@ -1,18 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { MsgModal, Timerd } from '../component';
 import AddTimed from '../component/modal/addtimed';
 import '@fortawesome/fontawesome-free/js/all'
 
-interface GroupInfo {
-  name: string,
-  place: string,
-  time: string,
-  leaderId: string,
-  x: string,
-  y: string
-}
 interface Member {
   userId: string,
   overtime: string,
@@ -22,14 +14,14 @@ interface Member {
 
 const Exp2 = () => {
   const [timeModal, setTimeModal] = useState(false);
-  const [groupInfo, setGroupInfo] = useState<GroupInfo>({
+  const groupInfo = {
     name: '그룹 체험',
     place: '서울역',
     time: new Date().toString(),
     leaderId: 'me',
     x: '126.9706',
     y: '37.5546'
-  });
+  };
   const [member, setMember] = useState<Array<Member>>([
     {
       userId: 'me',
@@ -96,17 +88,17 @@ const Exp2 = () => {
       <CompleteButton onClick={handleComplete}>모두 도착 완료</CompleteButton>
       <Container>
         <Contents1>
-            <Title1>{groupInfo?.name}</Title1>
+            <Title1>{groupInfo.name}</Title1>
           {/* <List1>
           </List1> */}
           <List1>
             <Title3>
-              {groupInfo?.place}
+              {groupInfo.place}
               <Icon onClick={clickMap}><i className="fa-solid fa-earth-asia" ></i></Icon>
             </Title3>
           </List1>
           <List1>
-            <Title3>{groupInfo?.time}</Title3>
+            <Title3>{groupInfo.time}</Title3>
           </List1>
         </Contents1>
         <Contents3>

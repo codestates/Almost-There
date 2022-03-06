@@ -1,25 +1,16 @@
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
-import url from '../url';
-import axios from "axios";
-import { useNavigate, useParams } from 'react-router-dom';
-import { socket } from '../context';
+import { useEffect, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 
-
-interface Pos {
-  x: number,
-  y: number
-}
 //전역객체
 const { kakao } = window;
 
 function Mapd () {
-  const [target, setTarget] = useState<Pos>({
+  const target = {
     x: 126.9706,
     y: 37.5546
-  })
+  }
   const mapRef = useRef<HTMLDivElement>(null);
-  const params= useParams();
   const navigate = useNavigate();
 
   const handleBack = () => {

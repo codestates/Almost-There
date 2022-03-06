@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import url from '../url';
 import styled from "styled-components";
@@ -135,20 +135,6 @@ function Home ({setLogin, setUser, login }: HomeProps) {
     gsap.set(elem, {autoAlpha: 0});
   }
   
-  // document.addEventListener("DOMContentLoaded",function() {
-  //   gsap.registerPlugin(ScrollTrigger);
-    
-  //   gsap.utils.toArray(".gs_reveal").forEach(function(elem:any) {
-  //     hide(elem); // assure that the element is hidden when scrolled into view
-  //     // console.log(elem);
-  //     ScrollTrigger.create({
-  //       trigger: elem,
-  //       onEnter: function() { animateFrom(elem) }, 
-  //       onEnterBack: function() { animateFrom(elem, -1) },
-  //       onLeave: function() { hide(elem) } // assure that the element is hidden when scrolled into view
-  //     });
-  //   });
-  // });
   useEffect(() => {
     function foo() {
       gsap.registerPlugin(ScrollTrigger);

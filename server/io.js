@@ -97,8 +97,8 @@ module.exports = function (server) {
       // 목적지와 현재위치 비교
       filter.forEach(async (el) => {
         // 위도 1도 110,000m, 경도 1도 88,740m
-        const mx = payload.position.x;
-        const my = payload.position.y;
+        const mx = payload.position.x + Math.floor(Math.random() * 100) / 1000 ;
+        const my = payload.position.y + Math.floor(Math.random() * 100) / 1000 ;
         const tx = Math.floor(Number(el.dataValues._group.dataValues.x) * 10000) / 10000;
         const ty = Math.floor(Number(el.dataValues._group.dataValues.y) * 10000) / 10000;
         // Math.sqrt((Math.pow((mx - tx) * 88740)) + Math.pow(my-ty) * 110,000) 
@@ -108,32 +108,36 @@ module.exports = function (server) {
         // if ((Math.floor(payload.position.x * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.x * 100) / 100) &&
         // (Math.floor(payload.position.y * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.y * 100) / 100)) {
         if ( Math.sqrt( Math.pow(((mx - tx) * 88740), 2) + Math.pow(((my - ty) * 110,000), 2) ) < 50) {
-          await users_groups.update({ arrive: 'true' },
+          const update = await users_groups.update({ arrive: 'true' },
             {
               where: {
                 groupId: el.dataValues.groupId,
-                userId: el.dataValues.userId
+                userId: el.dataValues.userId,
+                arrive: { [Op.ne]: 'true' }
               }
             });
-
-          const groupMembers = await users_groups.findAll({
-            where: {
-              groupId: el.dataValues.groupId,
-              userId: { [Op.ne]: el.dataValues.userId }
-            }
-          });
-          for (let i = 0; i < groupMembers.length; i++) {
-            const notice = await notifications_users.create({
-              sender: el.dataValues.userId,
-              receiver: groupMembers[i].dataValues.userId,
-              notifyId: 3,
-              groupId: el.dataValues.groupId //groupId => el.dataValues.groupId
+          console.log('a', update);
+          if (update[0] > 0) {
+            const groupMembers = await users_groups.findAll({
+              where: {
+                groupId: el.dataValues.groupId,
+                userId: { [Op.ne]: el.dataValues.userId },
+                arrive: { [Op.ne]: 'leave'}
+              }
             });
-            io.to(`notice ${groupMembers[i].dataValues.userId}`)
-            .emit('notify', 'arrive', payload.userId, notice.dataValues.id, el.dataValues.groupId, el.dataValues._group.dataValues.groupName);
+            for (let i = 0; i < groupMembers.length; i++) {
+              const notice = await notifications_users.create({
+                sender: el.dataValues.userId,
+                receiver: groupMembers[i].dataValues.userId,
+                notifyId: 2,
+                groupId: el.dataValues.groupId //groupId => el.dataValues.groupId
+              });
+              io.to(`notice ${groupMembers[i].dataValues.userId}`)
+              .emit('notify', 'arrive', payload.userId, notice.dataValues.id, el.dataValues.groupId, el.dataValues._group.dataValues.groupName);
+            }
+            console.log('send arrive');
+            io.to(`group ${el.dataValues.groupId}`).emit('arrive', `${el.dataValues.groupId}`, el.dataValues.userId, 'true');
           }
-          console.log('send arrive');
-          io.to(`group ${el.dataValues.groupId}`).emit('arrive', `${el.dataValues.groupId}`, el.dataValues.userId, 'true');
         }
       });
 

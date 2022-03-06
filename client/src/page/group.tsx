@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { AddTime, MsgModal, Timer } from '../component';
-import React, { useContext, useRef } from 'react';
+import { useContext, useRef } from 'react';
 import '../App.css';
-import { useState, useCallback,useEffect } from "react";
+import { useState,useEffect } from "react";
 import url from '../url';
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/js/all.js'
-import { socket, SocketContext } from '../context';
+import { SocketContext } from '../context';
 
 interface GroupInfo {
   name: string,
@@ -41,14 +41,14 @@ function Group ({ user }: GroupProps) {
   const navigate = useNavigate();
   const params= useParams();
   let date: Array<any>;
-  const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  const monthLength2 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  // const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  // const monthLength2 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   const getGroupInfo = async () => {
     const res = await axios.get(`${url}/group/memberInfo?groupId=${params.id}`,{withCredentials:true});
     const { name, place, leaderId, x, y } = res.data.groupInfo;
     date = res.data.groupInfo.time.split(/[TZ\:\.-]/);
-    const lastDay = Number(date[0])%4 === 0 ? monthLength2[Number(date[1]) - 1] : monthLength[Number(date[1]) - 1];
+    // const lastDay = Number(date[0])%4 === 0 ? monthLength2[Number(date[1]) - 1] : monthLength[Number(date[1]) - 1];
     timeleft.current.left = Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime() - 32400000)/1000);
     if (Math.floor((new Date(res.data.groupInfo.time).getTime() - new Date().getTime())/(1000*60)) < 10) {
       setCheckloc(true);
@@ -254,12 +254,6 @@ function Group ({ user }: GroupProps) {
         </Contents3>
         <Timer />
       </Container>
-      {/* <Leave onClick={leaveGroup}>
-        <div>그룹 나가기</div>
-      </Leave>
-      <MyPage onClick={() => navigate('/mypage')}>
-        <div>마이페이지</div>
-      </MyPage> */}
     </Background>
   )
 }
@@ -494,47 +488,5 @@ const ATBox = styled.div`
     }
   }
 `
-const Leave = styled.div`
-  width : 80px;
-  height: 40px;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  font-size: 15px;  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #448aff;
-  border-radius: 10px;
-  :hover {
-    cursor: pointer;
-  }
-`
-const MyPage = styled.div`
-  width : 80px;
-  height: 40px;
-  position: fixed;
-  bottom: 10px;
-  right: 100px;
-  font-size: 15px;  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #448aff;
-  border-radius: 10px;
-  :hover {
-    cursor: pointer;
-  }
-`
-
-const GroupBox = styled.div`
-`
-const Box = styled.div`
-`
-const GroupName = styled.div`
-`
-
-
-
 
 export default Group;

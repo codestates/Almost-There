@@ -78,20 +78,20 @@ function Timerd () {
     <>
       <Contents2>
         <TimeBox>
-          <TextBox>D</TextBox>
           <IntBox>{day}</IntBox>
+          <TextBox>일</TextBox>
         </TimeBox>
         <TimeBox>
-          <TextBox>H</TextBox>
           <IntBox>{hours}</IntBox>
+          <TextBox>시</TextBox>
         </TimeBox>
         <TimeBox>
-          <TextBox>M</TextBox>
           <IntBox>{minutes}</IntBox>
+          <TextBox>분</TextBox>
         </TimeBox>
         <TimeBox>
-          <TextBox>S</TextBox>
           <IntBox>{seconds}</IntBox>
+          <TextBox>초</TextBox>
         </TimeBox>
       </Contents2>
     </>
@@ -99,9 +99,6 @@ function Timerd () {
   
 }
 
-const Title = styled.div`
-  background-color: #ffcdd2;
-`
 const Contents2 = styled.div`
   width: 500px;
   height: 120px;
