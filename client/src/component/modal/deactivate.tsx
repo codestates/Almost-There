@@ -4,16 +4,23 @@ import { PropsWithChildren } from "react";
 import styled from "styled-components";
 import url from "../../url";
 import '@fortawesome/fontawesome-free/js/all'
+import { useNavigate } from 'react-router-dom';
+import { setFlagsFromString } from 'v8';
 
 
 interface ModalDefaultType {
   onClickToggleModalDeact: () => void;
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>,
+  setAlarm: React.Dispatch<React.SetStateAction<boolean>>,
+  setUser: React.Dispatch<React.SetStateAction<User>>,
 }
 
 function Deactivate ({
   onClickToggleModalDeact,
   children,
+  setLogin, setAlarm, setUser
 }: PropsWithChildren<ModalDefaultType>) {
+  const navigate = useNavigate();
   const deactivateID = () => {
     console.log('회원탈퇴')
     // const { PW, newPW} = changePW;
@@ -23,11 +30,17 @@ function Deactivate ({
         {withCredentials:true}
         // url 변수로 변경예정        
         ,
-        
       )
       // async/await 변경
       .then(() => {
         console.log("password successfully deleted");
+        onClickToggleModalDeact();
+        setAlarm(false);
+        setUser({
+          userId: '', name: '', email: ''
+        })
+        setLogin(false);
+        navigate('/');
       })
       .catch((err) => {
         if (err) throw err;

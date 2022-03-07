@@ -16,10 +16,13 @@ interface User {
 }
 
 type mypageprops = {
-  user:User, setUser:React.Dispatch<React.SetStateAction<User>>
+  user:User, 
+  setUser:React.Dispatch<React.SetStateAction<User>>,
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>,
+  setAlarm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function Mypage ({user,setUser}:mypageprops) {
+function Mypage ({user,setUser, setLogin, setAlarm}:mypageprops) {
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const [isOpenModalPW, setOpenModalPW] = useState<boolean>(false);
   const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
@@ -91,7 +94,7 @@ function Mypage ({user,setUser}:mypageprops) {
         <EditPW setOpenModalPW={setOpenModalPW}/>
       )}
       {isOpenModalDeact && (
-        <Deactivate onClickToggleModalDeact={onClickToggleModalDeact}>
+        <Deactivate onClickToggleModalDeact={onClickToggleModalDeact} setLogin={setLogin} setAlarm={setAlarm} setUser={setUser}>
         </Deactivate>
       )}
       <Groupinfo>

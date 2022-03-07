@@ -138,7 +138,7 @@ function App() {
             {
               login 
               ? <>
-                    <Route path='/mypage' element={<Mypage setUser={setUser} user={user} />}  />     
+                    <Route path='/mypage' element={<Mypage setUser={setUser} user={user} setAlarm={setAlarm} setLogin={setLogin}/>}  />     
                     <Route path='/creategroup' element={<CreateGroup user={user}/>} /> 
                     <Route path='/group/:id' element={<Group user={user}/>} />
                     <Route path='/map/:groupId/:userId' element={<Map user={user}/>} />

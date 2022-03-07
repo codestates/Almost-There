@@ -229,11 +229,6 @@ function Home ({setLogin, setUser, login }: HomeProps) {
 
 
       </Introduce2>
-
-
-
-
-    <footer></footer>
     </div>
     </>
   )
@@ -262,6 +257,10 @@ const IntroduceMain = styled.div`
     /* width: 450px;     */
     flex-direction:column;
     height:1000px;
+  }
+  @media screen and (max-width: 400px){
+    flex-direction:column;
+    height:650px;
   }
 
 `
@@ -301,6 +300,10 @@ const Introduce2 = styled.div`
     flex-direction:column;
     height: 700px;
   }
+  @media screen and (max-width: 400px){
+    flex-direction:column;
+    height: 400px;
+  }
 
 
   display:flex;
@@ -321,6 +324,11 @@ const Introduce3 = styled.div`
   @media screen and (max-width: 720px){
     flex-direction:column-reverse;
     height: 700px;
+
+  }
+  @media screen and (max-width: 400px){
+    flex-direction:column-reverse;
+    height: 400px;
 
   }
   
@@ -358,6 +366,7 @@ const MainRight = styled.div`
   }
   @media screen and (max-width: 400px){
     width: 100vw;
+    height:300px;
   }
 `
 
@@ -456,6 +465,7 @@ const Title = styled.div`
 
 
 `
+
   const Logo = styled.div`
   border-radius : 1px;
   /* border: solid red; */
@@ -583,6 +593,7 @@ const Image2 = styled.div`
     height: 400px;
     width:300px;
     }
+    
   .scale-down{
     width: 700px; height: 800px;
     object-fit: scale-down;
@@ -636,6 +647,10 @@ const Image3 = styled.div`
     height: 300px;
     width:400px;
     }
+    @media screen and (max-width: 400px){
+    width:100vw;
+    }
+
   .scale-down{
     width: 600px; height: 800px;
     object-fit: scale-down;
@@ -681,7 +696,7 @@ const TextBox1 = styled.div`
   align-items: center;
   /* vertical-align:middle; */
   @media screen and (max-width: 1300px){
-    width: 300px;    
+    width: 400px;    
   }
 
 
@@ -700,14 +715,15 @@ const TextBox1 = styled.div`
 `
 const TextBox2 = styled.div`
   border-radius : 1px;
-  /* border: solid yellow; */
-  /* background-color:#ffffff; */
-  /* background-color: #fff9c4; */
-
-  /* background-color: #f8bbd0; */
   height: 350px;
   width: 40vw;
-  /* margin: 70px 150px 70px 50px;    */
+  @media screen and (max-width: 1300px){
+    width: 400px;    
+  }
+  @media screen and (max-width: 400px){
+    width: 200px;    
+  }
+
   display:flex;
   align-items: center;
   justify-content: center;
@@ -720,11 +736,18 @@ const TextBox3 = styled.div`
 
   height: 350px;
   width: 47vw;
-  @media screen and (max-width: 1450px){
+  @media screen and (max-width: 1300px){
+    width: 400px;    
+  }
+  @media screen and (max-width: 400px){
+    width: 200px;
+    height: 150px;    
+  }
+
+  /* @media screen and (max-width: 1450px){
     width: 38vw;
 
-  }
-  /* margin: 70px 50px 70px 150px;    */
+  } */
   display:flex;
   align-items: center;
   justify-content: center;
@@ -736,15 +759,19 @@ const TextBox3 = styled.div`
 const Text1 = styled.div`
   border-radius : 1px;
   text-align:center;
-  @media screen and (max-width: 1450px){
-    font-size:30px;
+  @media screen and (max-width: 1400px){
+    font-size:35px;
   }
   @media screen and (max-width: 1300px){
-    font-size:30px;
+    font-size:35px;
   }
   @media screen and (max-width: 960px){
     font-size:25px;
   }
+  @media screen and (max-width: 700px){
+    font-size:20px;
+  }
+
   font-size:50px;
   text-align:center;
   vertical-align:middle;
@@ -781,11 +808,17 @@ const Text2 = styled.div`
   vertical-align:middle;
   white-space: pre-line;
   @media screen and (max-width: 1400px){
-    font-size:28px;
+    font-size:35px;
+  }
+  @media screen and (max-width: 960px){
+    font-size:25px;
   }
 
   @media screen and (max-width: 700px){
-    font-size:25px;
+    font-size:20px;
+  }
+  @media screen and (max-width: 400px){
+    font-size:19px;
   }
 
   `
@@ -796,37 +829,35 @@ const Text21 = styled.div`
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
+  @media screen and (max-width: 1400px){
+    font-size:25px;
+  }
+  @media screen and (max-width: 1400px){
+    font-size:15px;
+  }
+
+  @media screen and (max-width: 700px){
+    font-size:15px;
+  }
+
 `
-
-
-
-const Text3 = styled.div`
+/* const Text3 = styled.div`
   border-radius : 1px;
-
-  /* border: solid yellow; */
-  /* background-color: #fce4ec; */
-  /* background-color:#ffffff; */
-
   font-size:50px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
-  /* @media screen and (max-width: 1450px){
-    font-size:30px;
-  } */
   @media screen and (max-width: 1300px){
     font-size:28px;
   }
-
   @media screen and (max-width: 960px){
     font-size:25px;
   }
-
   @media screen and (max-width: 700px){
     font-size:20px;
   }
 
-  `
+  ` */
 
 const Text31 = styled.div`
 
@@ -834,21 +865,30 @@ font-size:50px;
 text-align:center;
 vertical-align:middle;
 white-space: pre-line;
-@media screen and (max-width: 1450px){
-    font-size:25px;
+@media screen and (max-width: 1400px){
+    font-size:35px;
+  }
+  @media screen and (max-width: 1300px){
+    font-size:30px;
   }
 @media screen and (max-width: 960px){
-  font-size:23px;
+  font-size:22px;
 }
 
 @media screen and (max-width: 700px){
   font-size:20px;
+}
+@media screen and (max-width: 400px){
+  font-size:18px;
 }
 
 
 
 
 `
+
+
+
 export default Home;
 
 
