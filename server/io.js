@@ -108,32 +108,36 @@ module.exports = function (server) {
         // if ((Math.floor(payload.position.x * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.x * 100) / 100) &&
         // (Math.floor(payload.position.y * 100) / 100) === (Math.floor(el.dataValues._group.dataValues.y * 100) / 100)) {
         if ( Math.sqrt( Math.pow(((mx - tx) * 88740), 2) + Math.pow(((my - ty) * 110,000), 2) ) < 50) {
-          await users_groups.update({ arrive: 'true' },
+          const update = await users_groups.update({ arrive: 'true' },
             {
               where: {
                 groupId: el.dataValues.groupId,
-                userId: el.dataValues.userId
+                userId: el.dataValues.userId,
+                arrive: { [Op.ne]: 'true' }
               }
             });
-
-          const groupMembers = await users_groups.findAll({
-            where: {
-              groupId: el.dataValues.groupId,
-              userId: { [Op.ne]: el.dataValues.userId }
-            }
-          });
-          for (let i = 0; i < groupMembers.length; i++) {
-            const notice = await notifications_users.create({
-              sender: el.dataValues.userId,
-              receiver: groupMembers[i].dataValues.userId,
-              notifyId: 3,
-              groupId: el.dataValues.groupId //groupId => el.dataValues.groupId
+          console.log('a', update);
+          if (update[0] > 0) {
+            const groupMembers = await users_groups.findAll({
+              where: {
+                groupId: el.dataValues.groupId,
+                userId: { [Op.ne]: el.dataValues.userId },
+                arrive: { [Op.ne]: 'leave'}
+              }
             });
-            io.to(`notice ${groupMembers[i].dataValues.userId}`)
-            .emit('notify', 'arrive', payload.userId, notice.dataValues.id, el.dataValues.groupId, el.dataValues._group.dataValues.groupName);
+            for (let i = 0; i < groupMembers.length; i++) {
+              const notice = await notifications_users.create({
+                sender: el.dataValues.userId,
+                receiver: groupMembers[i].dataValues.userId,
+                notifyId: 2,
+                groupId: el.dataValues.groupId //groupId => el.dataValues.groupId
+              });
+              io.to(`notice ${groupMembers[i].dataValues.userId}`)
+              .emit('notify', 'arrive', payload.userId, notice.dataValues.id, el.dataValues.groupId, el.dataValues._group.dataValues.groupName);
+            }
+            console.log('send arrive');
+            io.to(`group ${el.dataValues.groupId}`).emit('arrive', `${el.dataValues.groupId}`, el.dataValues.userId, 'true');
           }
-          console.log('send arrive');
-          io.to(`group ${el.dataValues.groupId}`).emit('arrive', `${el.dataValues.groupId}`, el.dataValues.userId, 'true');
         }
       });
 

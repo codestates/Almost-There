@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Calendar, Invite, Location } from '../component/index'
-import { socket, SocketContext } from '../context';
+import { SocketContext } from '../context';
 import url from '../url';
 
 declare global {

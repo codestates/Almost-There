@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
 import url from "../../url";
+import '@fortawesome/fontawesome-free/js/all'
 
 
 interface ModalDefaultType {
@@ -46,20 +47,20 @@ function Deactivate ({
         }}
       >
       <DialogBox onClick={(e) => e.stopPropagation()}>
-
-      <div className="mypage-input-box">  
-    <div> 정말로 회원탈퇴하시겠습니까?</div>
-      <button onClick={deactivateID} > 
-          회원탈퇴
-      </button>
-
-    </div>
-    
-
+        <Message1 className="mypage-input-box"> 
+            정말로 회원탈퇴하시겠습니까?
+            <Icon>
+              <i className="fa-solid fa-circle-exclamation fa-2x"></i>
+            </Icon>
+        </Message1>
+        <div className="mypage-input-box">  
+        {/* <div> 정말로 회원탈퇴하시겠습니까?</div> */}
+        <Button1 onClick={deactivateID}> 
+            회원탈퇴
+        </Button1>
+      </div>
       </DialogBox>
-
-        
-      </Backdrop>
+    </Backdrop>
 
     
     </div> 
@@ -68,7 +69,7 @@ function Deactivate ({
 
 
 const DialogBox = styled.dialog`
-  width: 800px;
+  width: 600px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -79,6 +80,13 @@ const DialogBox = styled.dialog`
   box-sizing: border-box;
   background-color: white;
   z-index: 10000;
+  vertical-align:middle;
+  display: flex;
+  justify-content: center;
+  @media screen and (max-width: 600px) {
+    width:100vw
+  }
+
 `;
 
 const Backdrop = styled.div`
@@ -93,6 +101,27 @@ const Backdrop = styled.div`
   z-index: 9999;
   background-color: rgba(0, 0, 0, 0.2);
 `;
+
+const Message1 = styled.div`
+font-size: 40px;
+background-color: white;
+margin-bottom: 60px;
+`
+
+const Icon = styled.div`
+
+`
+  const Button1 = styled.div`
+    font-size: 40px;
+    background-color: white;
+    vertical-align:middle;
+    :hover {
+    background-color: #1a1a1a;
+    color: white;
+    cursor: pointer;
+  }
+
+`
 
 
 export default Deactivate;

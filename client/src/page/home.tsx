@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import url from '../url';
 import styled from "styled-components";
@@ -38,10 +38,10 @@ function Home ({setLogin, setUser, login }: HomeProps) {
   const text1 = " 30분째 거의 다 왔다고만 \n하는 친구 때문에 \n  답답했던 경험 있으시죠? "
   // const text11 = "약속시간 10분 전부터 \n 친구의 위치를 파악할 수 있습니다."
   
-  const text2 = "나의 도착여부를 친구들에게 알릴 수 있어요 "
-  const text21 = "약속장소에 도착한 후 \n 그룹원에게 자동으로 도착알림이 도착합니다."
+  const text2 = "나의 도착여부를 \n 친구들에게 알릴 수 있어요 "
+  const text21 = "\n 약속장소에 도착한 후 \n 그룹원에게 자동으로 도착알림이 도착합니다."
 
-  const text3 = " 친구가 지금 어디에 있는지 \n 실시간으로 알 수 있습니다. "
+  // const text3 = " 친구가 지금 어디에 있는지 \n 실시간으로 알 수 있습니다. "
   const text31 = "실시간 위치파악기능을 통해 \n 친구의 위치를 파악할 수 있습니다."
 
   const clickHome = () => {
@@ -135,20 +135,6 @@ function Home ({setLogin, setUser, login }: HomeProps) {
     gsap.set(elem, {autoAlpha: 0});
   }
   
-  // document.addEventListener("DOMContentLoaded",function() {
-  //   gsap.registerPlugin(ScrollTrigger);
-    
-  //   gsap.utils.toArray(".gs_reveal").forEach(function(elem:any) {
-  //     hide(elem); // assure that the element is hidden when scrolled into view
-  //     // console.log(elem);
-  //     ScrollTrigger.create({
-  //       trigger: elem,
-  //       onEnter: function() { animateFrom(elem) }, 
-  //       onEnterBack: function() { animateFrom(elem, -1) },
-  //       onLeave: function() { hide(elem) } // assure that the element is hidden when scrolled into view
-  //     });
-  //   });
-  // });
   useEffect(() => {
     function foo() {
       gsap.registerPlugin(ScrollTrigger);
@@ -180,15 +166,14 @@ function Home ({setLogin, setUser, login }: HomeProps) {
               <Logo>
               <img alt="profile" className="scale-down" src={gps} />
               </Logo>
-
             </Title>
-            {/* <Start> */}
-              {login 
+            {login 
               ? <Start
               onClick={clickHome}
               >시작하기</Start>
               : <Start> 체험하기</Start>
               }
+
             {/* </Start> */}
           </MainLeft>
           <div></div>
@@ -214,9 +199,9 @@ function Home ({setLogin, setUser, login }: HomeProps) {
       </Introduce1>
       <Introduce3>
         <TextBox3 className='gs_reveal gs_reveal_fromLeft'>
-          <Text3>
+          {/* <Text3>
             {text3}
-          </Text3>
+          </Text3> */}
           <Text31>
             {text31}
           </Text31>
@@ -244,11 +229,6 @@ function Home ({setLogin, setUser, login }: HomeProps) {
 
 
       </Introduce2>
-
-
-
-
-    <footer></footer>
     </div>
     </>
   )
@@ -265,20 +245,23 @@ const IntroduceMain = styled.div`
   /* background-color: #e1bee7; */
   /* background-color:#ffffff; */
   /* background-color:#b6c4d9; */
-    flex-direction:row;
-
-  height: 800px;
+  height: 700px;
   display:flex;
+  /* justify-content:space-evenly; */
+  align-items:center;
+
   @media screen and (max-width: 960px){
     /* width: 450px;     */
-    flex-direction:row;
   }
-  @media screen and (max-width: 400px){
+  @media screen and (max-width: 720px){
     /* width: 450px;     */
     flex-direction:column;
+    height:1000px;
   }
-
-  padding: 30px 0px 0px 0px;
+  @media screen and (max-width: 400px){
+    flex-direction:column;
+    height:650px;
+  }
 
 `
 
@@ -317,6 +300,10 @@ const Introduce2 = styled.div`
     flex-direction:column;
     height: 700px;
   }
+  @media screen and (max-width: 400px){
+    flex-direction:column;
+    height: 400px;
+  }
 
 
   display:flex;
@@ -339,6 +326,11 @@ const Introduce3 = styled.div`
     height: 700px;
 
   }
+  @media screen and (max-width: 400px){
+    flex-direction:column-reverse;
+    height: 400px;
+
+  }
   
 
 `
@@ -351,16 +343,15 @@ const MainLeft = styled.div`
   width:50vw;
   display:flex;
   flex-direction:column;
+  justify-content:center;
+  align-items: center;
   @media screen and (max-width: 720px){
-
+    width: 30vw;
   }
   @media screen and (max-width: 400px){
-    width: 400px;
-    height:400px;
+    width: 100vw;
+    /* height:400px; */
   }
-
-
-
 `
 
 const MainRight = styled.div`
@@ -368,16 +359,19 @@ const MainRight = styled.div`
   /* border: solid blue; */
   /* height:490px; */
   width:50vw;
-
+  display:flex;
+  /* justify-content:center; */
+  @media screen and (max-width: 1300px){
+    height:500px;
+  }
+  @media screen and (max-width: 400px){
+    width: 100vw;
+    height:300px;
+  }
 `
+
 const MainRightImage = styled.div`
   border-radius : 1px;
-  /* border: solid blue; */
-
-  /* background-color:gray; */
-  /* background-color:#b6c4d9; */
-  /* background-color:#ffffff; */
-
   height:450px;
   width:35vw;
   margin: 0px 0px 250px 0px;
@@ -416,52 +410,120 @@ const Slogan = styled.div`
   height:100px;
   font-size:30px;
   white-space: pre-line;
+    @media screen and (max-width: 1300px){
+    font-size:25px;
+    }
+
   @media screen and (max-width: 1100px){
-    font-size:20px
+    font-size:25px
   }
+  @media screen and (max-width: 960px){
+    font-size:22px;
+    height:70px;
+  }
+
   @media screen and (max-width: 840px){
     font-size:20px
   }
-
-
+  @media screen and (max-width: 720px){
+    font-size:16px
+  }
 
 `
+
+
+
+
 const Title = styled.div`
   border-radius : 1px;
   /* border: solid blue; */
   height:400px;
   font-size:90px;
   text-align:center;
+  @media screen and (max-width: 1300px){
+    font-size:60px;
+    height:300px;
+  }
 
   @media screen and (max-width: 1100px){
-    font-size:50px
+    font-size:60px;
+    height:300px;
   }
   flex-direction:column;
   @media screen and (max-width: 960px){
-    /* width: 450px;     */
+    height:300px;
   }
   @media screen and (max-width: 840px){
+    font-size:30px;
+    text-align:center
+  }
+  @media screen and (max-width: 480px){
+    height: 200px;
     font-size:30px;
     text-align:center
   }
 
 
 `
+
   const Logo = styled.div`
   border-radius : 1px;
   /* border: solid red; */
   height:250px;
   font-size:90px;
+
+  @media screen and (max-width: 1300px){
+    height: 250px;
+    }
+
+  @media screen and (max-width: 1300px){
+    height: 160px;
+  }
+  
+
   .scale-down{
     width: 200px; height: 300px;
     object-fit: scale-down;
-  }
+    @media screen and (max-width: 1300px){
+    height: 200px;
+    }
+    @media screen and (max-width: 840px){
+      height:150px;
+    }
+
+
+}
 `
 const Start = styled.div`
-  border-radius : 1px;
+  border-radius : 20px;
   /* border: solid blue; */
-  height:50px;
-  font-size:30px;
+  height:80px;
+  /* width: 20vw; */
+  font-size:40px;
+  width: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #aaaaaa;
+  @media screen and (max-width: 1300px){
+    height: 50px;
+    }
+    @media screen and (max-width: 840px){
+      height:40px;
+      font-size:25px;
+    }
+    @media screen and (max-width: 720px){
+      height:20px;
+      font-size:20px;
+    }
+
+
+  :hover {
+    background-color: #1a1a1a;
+    color: white;
+    cursor: pointer;
+  }
+
 `
 
 const Image1 = styled.div`
@@ -481,9 +543,13 @@ const Image1 = styled.div`
   .scale-down{
     width: 700px; height: 800px;
     object-fit: scale-down;
+    @media screen and (max-width: 1450px){
+    width: 550px;
+    }
+
     @media screen and (max-width: 1300px){
     height: 500px;
-    width: 500px;
+    width: 450px;
     }
     @media screen and (max-width: 960px){
       height: 400px;
@@ -527,6 +593,7 @@ const Image2 = styled.div`
     height: 400px;
     width:300px;
     }
+    
   .scale-down{
     width: 700px; height: 800px;
     object-fit: scale-down;
@@ -565,8 +632,13 @@ const Image3 = styled.div`
   border-radius : 1px;
   /* border: solid yellow; */
   height: 800px;
-  width: 40vw;
+  width: 35vw;
   /* margin: 70px 50px 70px 50px; */
+  @media screen and (max-width: 1450px){
+    height: 400px;
+    width: 35vw;
+    }
+
   @media screen and (max-width: 1300px){
     height: 400px;
     width: 400px;
@@ -575,12 +647,22 @@ const Image3 = styled.div`
     height: 300px;
     width:400px;
     }
+    @media screen and (max-width: 400px){
+    width:100vw;
+    }
+
   .scale-down{
-    width: 700px; height: 800px;
+    width: 600px; height: 800px;
     object-fit: scale-down;
+
+    @media screen and (max-width: 1450px){
+    width: 550px;
+    height: 550px;
+    }    
+
     @media screen and (max-width: 1300px){
-    height: 400px;
-    width: 400px;
+    height: 450px;
+    width: 460px;
     }
     @media screen and (max-width: 960px){
       height: 400px;
@@ -614,7 +696,7 @@ const TextBox1 = styled.div`
   align-items: center;
   /* vertical-align:middle; */
   @media screen and (max-width: 1300px){
-    width: 300px;    
+    width: 400px;    
   }
 
 
@@ -633,14 +715,15 @@ const TextBox1 = styled.div`
 `
 const TextBox2 = styled.div`
   border-radius : 1px;
-  /* border: solid yellow; */
-  /* background-color:#ffffff; */
-  /* background-color: #fff9c4; */
-
-  /* background-color: #f8bbd0; */
   height: 350px;
   width: 40vw;
-  /* margin: 70px 150px 70px 50px;    */
+  @media screen and (max-width: 1300px){
+    width: 400px;    
+  }
+  @media screen and (max-width: 400px){
+    width: 200px;    
+  }
+
   display:flex;
   align-items: center;
   justify-content: center;
@@ -653,7 +736,18 @@ const TextBox3 = styled.div`
 
   height: 350px;
   width: 47vw;
-  /* margin: 70px 50px 70px 150px;    */
+  @media screen and (max-width: 1300px){
+    width: 400px;    
+  }
+  @media screen and (max-width: 400px){
+    width: 200px;
+    height: 150px;    
+  }
+
+  /* @media screen and (max-width: 1450px){
+    width: 38vw;
+
+  } */
   display:flex;
   align-items: center;
   justify-content: center;
@@ -664,25 +758,19 @@ const TextBox3 = styled.div`
 
 const Text1 = styled.div`
   border-radius : 1px;
-  /* border: solid yellow; */
   text-align:center;
-  /* line-height: center; */
-  /* background-color: #f8bbd0; */
-  /* background-color:#ffffff; */
-  /* background-color:#a1dec5; */
-  @media screen and (max-width: 1450px){
-    font-size:30px;
+  @media screen and (max-width: 1400px){
+    font-size:35px;
   }
-
   @media screen and (max-width: 1300px){
-    font-size:30px;
+    font-size:35px;
   }
-
   @media screen and (max-width: 960px){
     font-size:25px;
   }
-
-
+  @media screen and (max-width: 700px){
+    font-size:20px;
+  }
 
   font-size:50px;
   text-align:center;
@@ -715,43 +803,92 @@ const Text2 = styled.div`
   /* background-color:#ffffff; */
   /* background-color: #fff9c4; */
 
-  font-size:30px;
+  font-size:50px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
+  @media screen and (max-width: 1400px){
+    font-size:35px;
+  }
+  @media screen and (max-width: 960px){
+    font-size:25px;
+  }
+
+  @media screen and (max-width: 700px){
+    font-size:20px;
+  }
+  @media screen and (max-width: 400px){
+    font-size:19px;
+  }
+
   `
 
 const Text21 = styled.div`
 
-  font-size:20px;
-  text-align:center;
-  vertical-align:middle;
-  white-space: pre-line;
-`
-
-
-
-const Text3 = styled.div`
-  border-radius : 1px;
-
-  /* border: solid yellow; */
-  /* background-color: #fce4ec; */
-  /* background-color:#ffffff; */
-
   font-size:30px;
   text-align:center;
   vertical-align:middle;
   white-space: pre-line;
+  @media screen and (max-width: 1400px){
+    font-size:25px;
+  }
+  @media screen and (max-width: 1400px){
+    font-size:15px;
+  }
 
-  `
+  @media screen and (max-width: 700px){
+    font-size:15px;
+  }
+
+`
+/* const Text3 = styled.div`
+  border-radius : 1px;
+  font-size:50px;
+  text-align:center;
+  vertical-align:middle;
+  white-space: pre-line;
+  @media screen and (max-width: 1300px){
+    font-size:28px;
+  }
+  @media screen and (max-width: 960px){
+    font-size:25px;
+  }
+  @media screen and (max-width: 700px){
+    font-size:20px;
+  }
+
+  ` */
 
 const Text31 = styled.div`
 
-font-size:20px;
+font-size:50px;
 text-align:center;
 vertical-align:middle;
 white-space: pre-line;
+@media screen and (max-width: 1400px){
+    font-size:35px;
+  }
+  @media screen and (max-width: 1300px){
+    font-size:30px;
+  }
+@media screen and (max-width: 960px){
+  font-size:22px;
+}
+
+@media screen and (max-width: 700px){
+  font-size:20px;
+}
+@media screen and (max-width: 400px){
+  font-size:18px;
+}
+
+
+
+
 `
+
+
+
 export default Home;
 
 
