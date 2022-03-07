@@ -43,7 +43,6 @@ function Group ({ user }: GroupProps) {
   let date: Array<any>;
   // const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   // const monthLength2 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
   const getGroupInfo = async () => {
     const res = await axios.get(`${url}/group/memberInfo?groupId=${params.id}`,{withCredentials:true});
     const { name, place, leaderId, x, y } = res.data.groupInfo;

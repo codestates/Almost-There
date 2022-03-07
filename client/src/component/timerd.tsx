@@ -99,6 +99,7 @@ function Timerd () {
   
 }
 
+
 const Contents2 = styled.div`
   width: 500px;
   height: 120px;

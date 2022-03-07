@@ -97,8 +97,8 @@ module.exports = function (server) {
       // 목적지와 현재위치 비교
       filter.forEach(async (el) => {
         // 위도 1도 110,000m, 경도 1도 88,740m
-        const mx = payload.position.x + Math.floor(Math.random() * 100) / 1000 ;
-        const my = payload.position.y + Math.floor(Math.random() * 100) / 1000 ;
+        const mx = payload.position.x;
+        const my = payload.position.y;
         const tx = Math.floor(Number(el.dataValues._group.dataValues.x) * 10000) / 10000;
         const ty = Math.floor(Number(el.dataValues._group.dataValues.y) * 10000) / 10000;
         // Math.sqrt((Math.pow((mx - tx) * 88740)) + Math.pow(my-ty) * 110,000) 
