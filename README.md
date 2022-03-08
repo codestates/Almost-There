@@ -19,7 +19,7 @@
   - 가입 전에 Almost There의 기능을 체험해볼 수 있습니다.
 
 ## :toolbox: 사용한 기술
-![Almost There](https://user-images.githubusercontent.com/89420103/153975765-00541300-a5e5-4f6b-afc4-b799b44253e7.png)
+![Almost There](https://user-images.githubusercontent.com/89420103/156972666-c57e6704-a7f1-422d-88f9-87cfe9c69448.png)
 
 ## :wrench: 프로젝트 제작자
 ### :punch: TEAM JDE
