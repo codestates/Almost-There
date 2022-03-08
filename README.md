@@ -1,6 +1,8 @@
 # Almost There
-:point_right: [지금 바로 이용하기](https://client.almosthere.tk)
+
 <img alt="logo" src="https://user-images.githubusercontent.com/91545626/153361050-e065c1b8-69c1-4056-8c4d-4b99bb3d5bd2.png" width="400" height="300" />
+
+:point_right: [지금 바로 이용하기](https://client.almosthere.tk)
 
 ### 친구들이 약속한 대로 잘 오고 있는지, 약속한 장소에 도착했는지 확인해보세요
 - :people_holding_hands: **그룹을 생성하여 약속을 잡으세요.**
