@@ -31,4 +31,4 @@
 | [**전상인**](https://github.com/jeonsangin) | :black_flag: **Backend**  |
 
 ## :gear: For project details
-:point_right: [**checkout WIKI**](https://github.com/codestates/Almost-There/wiki) :point_left:
+:point_right: [**checkout WIKI**](https://github.com/codestates/Almost-There/wiki)
