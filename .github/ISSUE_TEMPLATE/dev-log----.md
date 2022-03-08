@@ -1,7 +1,7 @@
 ---
 name: Dev log 템플릿
 about: Dev log 템플릿
-title: ''
+title: "[Dev log] 이름 / 2022-02-00"
 labels: ''
 assignees: ''
 
