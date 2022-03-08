@@ -28,7 +28,7 @@ function Mypage ({user,setUser, setLogin, setAlarm}:mypageprops) {
   const [isOpenModalDeact, setOpenModalDeact] = useState<boolean>(false);
   const [_groups, setGroups] = useState<Array<any>>([])
   const navigate = useNavigate();
-  const month = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  // const month = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   
   const onClickToggleModal = () => {
     setOpenModal(!isOpenModal);
@@ -49,11 +49,9 @@ function Mypage ({user,setUser, setLogin, setAlarm}:mypageprops) {
   const getGrouplist = async () => {
     const res = await axios.get(`${url}/group/list`,{withCredentials:true})
     const filter = res.data.groups.map((el:any)=>{
-      const date = new Date(el._group.time);
-      const arr = date.toString().split(' ');
-      arr[1] = month.indexOf(arr[1]).toString();
-      const time = `${arr[1]}월 ${arr[2]}일 ${arr[4].slice(0, 5)}`;
-      console.log(date)
+      const date = el._group.time;
+      const arr = date.toString().split(/[TZ\.-]/);
+      const time = `${arr[1]}월 ${arr[2]}일 ${arr[3].slice(0, 5)}`;
       //Sun Jan 02 2022 00:00:00 GMT+0900 (한국 표준시)
       return {
         name : el._group.name,
@@ -62,14 +60,12 @@ function Mypage ({user,setUser, setLogin, setAlarm}:mypageprops) {
         time
       }
     })
-    console.log(filter)
     // console.log(res.data.groups[0]._group.name)
     // console.log(res.data.groups)
     setGroups([...filter])    
   }
 
   const DeleteGrouplist = async (e:string) => {
-    console.log(e);    
     await axios.delete(`${url}/group/${e}`, { withCredentials:true })
     const filter = _groups.filter((el)=>{
       return String(el.id)!== e

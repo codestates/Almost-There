@@ -12,11 +12,6 @@ import Home3 from "../data/Home3.png"
 import gps from "../data/gps.png"
 
 
-// import {Home2} from "../data/index"
-// import Homeaa from "../data/Homeaa.png"
-
-
-
 interface User {
   userId: string,
   email: string,
@@ -46,6 +41,10 @@ function Home ({setLogin, setUser, login }: HomeProps) {
 
   const clickHome = () => {
     navigate('/creategroup');
+  }
+
+  const clickHomeLogout = () => {
+    navigate('/exp1');
   }
 
 
@@ -168,11 +167,9 @@ function Home ({setLogin, setUser, login }: HomeProps) {
               </Logo>
             </Title>
             {login 
-              ? <Start
-              onClick={clickHome}
-              >시작하기</Start>
-              : <Start> 체험하기</Start>
-              }
+              ? <Start onClick={clickHome}>시작하기</Start>
+              : <Start onClick={clickHomeLogout}>체험하기</Start>
+            }
 
             {/* </Start> */}
           </MainLeft>
